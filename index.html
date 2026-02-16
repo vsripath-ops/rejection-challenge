@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Rejection Challenge</title>
-  <meta name="description" content="A public 30-day rejection practice challenge: generate in-person asks, track streaks, share a card, export your log. No login." />
+  <meta name="description" content="A public 30-day rejection practice challenge: generate in-person asks, track streaks, earn XP, complete quests, unlock badges, export your log. No login." />
 
   <!-- Simple favicon (no emoji) -->
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23121a2a'/%3E%3Ctext x='50%25' y='56%25' text-anchor='middle' font-family='Arial' font-size='28' fill='%23e8eefc'%3ERR%3C/text%3E%3C/svg%3E">
@@ -37,7 +37,7 @@
       margin-bottom:14px;
     }
     .brand{display:flex; flex-direction:column; gap:6px}
-    .title{display:flex; align-items:center; gap:10px; font-size:22px; font-weight:900; letter-spacing:.2px}
+    .title{display:flex; align-items:center; gap:10px; font-size:22px; font-weight:900; letter-spacing:.2px; flex-wrap:wrap}
     .pill{
       font-family:var(--mono);
       font-size:12px; color:rgba(232,238,252,.9);
@@ -133,38 +133,30 @@
     th{color:var(--muted); font-weight:900; text-align:left; font-size:12px}
 
     .muted{color:var(--muted)}
+
+    /* Game UI */
     .q{
-  padding:12px;
-  border-radius:14px;
-  background:rgba(11,15,25,.45);
-  border:1px solid rgba(255,255,255,.10);
-  display:flex;
-  align-items:flex-start;
-  justify-content:space-between;
-  gap:10px;
-}
-.q .t{font-weight:1000; line-height:1.25}
-.q .d{color:var(--muted); font-size:12px; line-height:1.35; margin-top:4px}
+      padding:12px;
+      border-radius:14px;
+      background:rgba(11,15,25,.45);
+      border:1px solid rgba(255,255,255,.10);
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:10px;
+    }
+    .q .t{font-weight:1000; line-height:1.25}
+    .q .d{color:var(--muted); font-size:12px; line-height:1.35; margin-top:4px}
+    .badge{
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(18,26,42,.55);
+      padding:6px 10px;
+      border-radius:999px;
+      font-family:var(--mono);
+      font-size:12px;
+    }
+    .badge.locked{opacity:.45}
 
-.badge{
-  border:1px solid rgba(255,255,255,.12);
-  background:rgba(18,26,42,.55);
-  padding:6px 10px;
-  border-radius:999px;
-  font-family:var(--mono);
-  font-size:12px;
-}
-.badge.locked{opacity:.45}
-
-.footer{
-  margin-top:14px;
-  color:var(--muted);
-  font-size:12px;
-  display:flex;
-  justify-content:space-between;
-  gap:10px;
-  flex-wrap:wrap;
-}
     .footer{
       margin-top:14px;
       color:var(--muted);
@@ -209,7 +201,7 @@
       display:flex; justify-content:space-between; gap:10px; align-items:flex-start; flex-wrap:wrap;
     }
     .shareCard .app{
-      font-weight:1000; letter-spacing:.2px; display:flex; gap:8px; align-items:center;
+      font-weight:1000; letter-spacing:.2px; display:flex; gap:8px; align-items:center; flex-wrap:wrap;
     }
     .shareCard .big{
       font-size:18px; font-weight:1000; margin:10px 0 8px; line-height:1.25;
@@ -347,6 +339,14 @@
       background:rgba(11,15,25,.45);
     }
     .scriptText{color:var(--text); line-height:1.45; max-width:78ch}
+
+    @media print{
+      header, .grid, #tracker { display:none !important; }
+      body{ background:#fff !important; color:#000 !important; }
+      .card, .hero, .miniCard, .dayCard{ box-shadow:none !important; background:#fff !important; color:#000 !important; border:1px solid #ddd !important; }
+      .muted{ color:#333 !important; }
+      .tag, .pill, .badge{ border:1px solid #ddd !important; background:#fff !important; color:#000 !important; }
+    }
   </style>
 </head>
 
@@ -354,13 +354,19 @@
   <div class="wrap">
     <header>
       <div class="brand">
-        <div class="title">Rejection Challenge <span class="pill">public</span> <span class="pill">no login</span> <span class="pill">shareable</span> <span class="pill">exportable</span></div>
+        <div class="title">
+          Rejection Challenge
+          <span class="pill">public</span>
+          <span class="pill">no login</span>
+          <span class="pill">shareable</span>
+          <span class="pill">exportable</span>
+        </div>
         <div class="sub">
-          Generate an in-person ask designed to feel slightly uncomfortable (politely). Log what happened, build a rejection streak, export proof.
+          Generate an in-person ask designed to feel slightly uncomfortable (politely). Log what happened, build a rejection streak, earn XP, unlock badges.
         </div>
       </div>
       <div class="row" style="justify-content:flex-end; min-width:280px">
-        <button class="btn small" id="resetBtn" title="Clears logs + streak">Reset</button>
+        <button class="btn small" id="resetBtn" title="Clears logs + streak + game">Reset</button>
         <button class="btn small" id="exportBtn" title="Download CSV of your logs">Export CSV</button>
         <button class="btn small" id="shareAppBtn" title="Share the app">Share App</button>
       </div>
@@ -377,7 +383,7 @@
 
       <h1>Train your brain to handle rejection in 30 days.</h1>
       <p>
-        Most people avoid "no" so hard they stop taking shots in career and life. This challenge turns rejection into a skill:
+        Most people avoid no so hard they stop taking shots in career and life. This challenge turns rejection into a skill:
         one small in-person ask per day, logged in a simple tracker, so confidence grows through reps.
       </p>
 
@@ -392,17 +398,19 @@
         <a class="btn cta" href="#plan">See the 30-day plan</a>
         <a class="btn ghost" href="#tracker">Open the tracker</a>
         <button class="btn ghost" id="printPlanBtn" type="button">Print plan</button>
+        <button class="btn ghost" id="startTodayBtn" type="button">Start today's rep</button>
       </div>
     </section>
 
     <section class="section cols">
       <div class="miniCard">
-        <h2 class="sectionTitle">What counts as a rep</h2>
+        <h2 class="sectionTitle">Rules</h2>
         <ul class="smallList">
           <li>It must be in person (not online or phone).</li>
-          <li>A rep counts if you asked something specific and you felt slightly vulnerable.</li>
-          <li>A rep counts if they say no. You thank them and stop.</li>
-          <li>No ridiculous asks. Keep it human and safe.</li>
+          <li>A rep counts if you asked something specific and felt slightly vulnerable.</li>
+          <li>No means stop. No arguing. No guilt.</li>
+          <li>Consent required for photos or video.</li>
+          <li>Pick challenges that are safe and legal in your setting.</li>
         </ul>
       </div>
 
@@ -457,7 +465,7 @@
           <li>What did I learn and what is my next rep?</li>
         </ul>
         <div class="muted" style="margin-top:10px; line-height:1.55">
-          The goal is not "get yes." The goal is "take reps without spiraling."
+          The goal is not get yes. The goal is take reps without spiraling.
         </div>
       </div>
     </section>
@@ -469,7 +477,7 @@
           <div>
             <h2 class="sectionTitle" style="margin:0">30-day plan</h2>
             <div class="muted" style="margin-top:6px; line-height:1.5">
-              Days 1-5: low-stakes reps | Days 6-15: social/career reps | Days 16-30: stretch reps (negotiation + bigger asks).
+              Days 1-5: low stakes | Days 6-15: social or career | Days 16-30: stretch reps (negotiation + bigger asks).
               Click Start to load the day's prompt into the tracker.
             </div>
           </div>
@@ -551,7 +559,7 @@
             </div>
             <div class="row" style="flex:0 0 auto">
               <button class="btn small" id="copyLinkBtn">Copy link</button>
-              <button class="btn small" id="todayBtn" title="Deterministic for today">Todays</button>
+              <button class="btn small" id="todayBtn" title="Deterministic for today">Today's</button>
               <button class="btn primary" id="newBtn">Generate</button>
             </div>
           </div>
@@ -594,7 +602,7 @@
 
           <div class="footer">
             <div>Tip: polite, specific, and slightly uncomfortable.</div>
-            <div>Shortcuts: <span class="kbd">G</span> generate | <span class="kbd">T</span> todays | <span class="kbd">R</span> log rejected</div>
+            <div>Shortcuts: <span class="kbd">G</span> generate | <span class="kbd">T</span> today's | <span class="kbd">R</span> log rejected</div>
           </div>
         </div>
 
@@ -630,22 +638,57 @@
       <!-- Right -->
       <div class="card">
         <h2>Your stats</h2>
+
         <div class="statgrid">
           <div class="stat">
             <div class="k">Rejection streak (days)</div>
             <div class="v" id="streak">0</div>
+            <div class="muted" style="font-size:11px; margin-top:6px" id="streakHint">Log 1 rejection today to extend.</div>
           </div>
+
           <div class="stat">
-            <div class="k">Total logs</div>
-            <div class="v" id="total">0</div>
+            <div class="k">Level</div>
+            <div class="v"><span id="level">1</span></div>
+            <div class="muted" style="font-size:11px; margin-top:6px"><span id="xp">0</span> XP</div>
           </div>
+
           <div class="stat">
-            <div class="k">Rejection rate</div>
-            <div class="v" id="rate">0%</div>
+            <div class="k">Shields</div>
+            <div class="v"><span id="shields">0</span></div>
+            <div class="muted" style="font-size:11px; margin-top:6px">Prevents streak loss once.</div>
           </div>
         </div>
 
-        <div class="muted" style="font-size:12px; margin-top:10px; line-height:1.4">
+        <div class="card" style="margin-top:12px">
+          <h2>Daily quests</h2>
+          <div class="muted" style="font-size:12px; margin-top:-6px">Complete quests for bonus XP.</div>
+          <div id="quests" style="margin-top:10px; display:grid; gap:10px"></div>
+        </div>
+
+        <div class="card" style="margin-top:12px">
+          <h2>Badges</h2>
+          <div class="muted" style="font-size:12px; margin-top:-6px">Earned locally in your browser.</div>
+          <div id="badges" style="margin-top:10px; display:flex; gap:8px; flex-wrap:wrap"></div>
+        </div>
+
+        <div class="card" style="margin-top:12px">
+          <h2>Weekly boss</h2>
+          <div class="muted" style="font-size:12px; margin-top:-6px">One bigger ask per week. High reward.</div>
+          <div class="challenge" style="margin-top:10px">
+            <div class="meta">
+              <span class="tag" id="bossWeekTag">week</span>
+              <span class="tag">boss</span>
+              <span class="tag" id="bossRewardTag">+0 XP</span>
+            </div>
+            <div class="text" id="bossText">Boss challenge will load here.</div>
+            <div class="row" style="margin-top:10px">
+              <button class="btn small" id="loadBossBtn" type="button">Load into tracker</button>
+              <button class="btn small" id="markBossBtn" type="button">Mark completed</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="muted" style="font-size:12px; margin-top:12px; line-height:1.4">
           Stored in your browser (localStorage). No account required.
           <br><b>Streak updates only</b> on days you log at least one <b>Rejected</b>.
         </div>
@@ -664,6 +707,17 @@
               <tr><td colspan="3" class="muted">No logs yet.</td></tr>
             </tbody>
           </table>
+        </div>
+
+        <div class="row" style="margin-top:10px">
+          <div class="stat" style="flex:1 1 auto">
+            <div class="k">Total logs</div>
+            <div class="v" id="total">0</div>
+          </div>
+          <div class="stat" style="flex:1 1 auto">
+            <div class="k">Rejection rate</div>
+            <div class="v" id="rate">0%</div>
+          </div>
         </div>
       </div>
     </div>
@@ -712,6 +766,7 @@
   const shareAppBtn = $("shareAppBtn");
   const copyImageBtn = $("copyImageBtn");
   const downloadImageBtn = $("downloadImageBtn");
+  const startTodayBtn = $("startTodayBtn");
 
   // Share card
   const shareCard = $("shareCard");
@@ -739,15 +794,67 @@
   const toast = $("toast");
 
   // Storage
-  const STORAGE_KEY = "rr_logs_v3";
-  const STREAK_KEY = "rr_rej_streak_v3";
-  const LAST_REJ_DAY_KEY = "rr_last_rej_day_v3";
-  const PLAN_DONE_KEY = "rr_plan_done_v2";
+  const STORAGE_KEY = "rr_logs_v4";
+  const STREAK_KEY = "rr_rej_streak_v4";
+  const LAST_REJ_DAY_KEY = "rr_last_rej_day_v4";
+  const PLAN_DONE_KEY = "rr_plan_done_v3";
 
   let currentChallenge = null;
   let currentMode = "random"; // random | today
   let timer = null;
   let timerEndsAt = null;
+
+  // Helpers
+  function nowISO() { return new Date().toISOString(); }
+  function dayKey(d = new Date()) { return d.toISOString().slice(0,10); }
+
+  function toastMsg(msg){
+    toast.textContent = msg;
+    toast.style.display = "block";
+    clearTimeout(toast._t);
+    toast._t = setTimeout(()=> toast.style.display="none", 1900);
+  }
+
+  function hash32(str){
+    let h = 2166136261;
+    for (let i=0;i<str.length;i++){
+      h ^= str.charCodeAt(i);
+      h = Math.imul(h, 16777619);
+    }
+    return h >>> 0;
+  }
+  function seededIndex(n, seedStr){
+    const seed = hash32(seedStr);
+    const x = (Math.imul(seed, 1664525) + 1013904223) >>> 0;
+    return n ? (x % n) : 0;
+  }
+
+  function escapeHtml(s){
+    return String(s)
+      .replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;")
+      .replaceAll('"',"&quot;").replaceAll("'","&#039;");
+  }
+
+  // Logs storage
+  function loadLogs(){
+    try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]"); }
+    catch { return []; }
+  }
+  function saveLogs(logs){ localStorage.setItem(STORAGE_KEY, JSON.stringify(logs)); }
+
+  // Streak storage
+  function loadStreak(){
+    try { return JSON.parse(localStorage.getItem(STREAK_KEY) || "0"); }
+    catch { return 0; }
+  }
+  function saveStreak(n){ localStorage.setItem(STREAK_KEY, JSON.stringify(n)); }
+
+  // Plan storage
+  function loadPlanDone(){
+    try { return JSON.parse(localStorage.getItem(PLAN_DONE_KEY) || "{}"); }
+    catch { return {}; }
+  }
+  function savePlanDone(obj){ localStorage.setItem(PLAN_DONE_KEY, JSON.stringify(obj)); }
 
   // Packs
   const packFilters = {
@@ -803,48 +910,7 @@
     {cat:"career", diff:5, text:"Ask a professional for feedback on your 15-second intro on the spot."}
   ];
 
-  function nowISO() { return new Date().toISOString(); }
-  function dayKey(d = new Date()) { return d.toISOString().slice(0,10); }
-
-  function loadLogs(){
-    try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]"); }
-    catch { return []; }
-  }
-  function saveLogs(logs){ localStorage.setItem(STORAGE_KEY, JSON.stringify(logs)); }
-
-  function loadStreak(){
-    try { return JSON.parse(localStorage.getItem(STREAK_KEY) || "0"); }
-    catch { return 0; }
-  }
-  function saveStreak(n){ localStorage.setItem(STREAK_KEY, JSON.stringify(n)); }
-
-  function loadPlanDone(){
-    try { return JSON.parse(localStorage.getItem(PLAN_DONE_KEY) || "{}"); }
-    catch { return {}; }
-  }
-  function savePlanDone(obj){ localStorage.setItem(PLAN_DONE_KEY, JSON.stringify(obj)); }
-
-  function toastMsg(msg){
-    toast.textContent = msg;
-    toast.style.display = "block";
-    clearTimeout(toast._t);
-    toast._t = setTimeout(()=> toast.style.display="none", 1900);
-  }
-
-  function hash32(str){
-    let h = 2166136261;
-    for (let i=0;i<str.length;i++){
-      h ^= str.charCodeAt(i);
-      h = Math.imul(h, 16777619);
-    }
-    return h >>> 0;
-  }
-  function seededIndex(n, seedStr){
-    const seed = hash32(seedStr);
-    const x = (Math.imul(seed, 1664525) + 1013904223) >>> 0;
-    return n ? (x % n) : 0;
-  }
-
+  // Share link encoding
   function encodeChallenge(ch){
     const payload = {cat:ch.cat, diff:ch.diff, text:ch.text, mode: currentMode, pack: pack.value};
     const b64 = btoa(unescape(encodeURIComponent(JSON.stringify(payload))));
@@ -860,12 +926,7 @@
     } catch { return null; }
   }
 
-  function escapeHtml(s){
-    return String(s)
-      .replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;")
-      .replaceAll('"',"&quot;").replaceAll("'","&#039;");
-  }
-
+  // UI tags update
   function updateTags(){
     diffLabel.textContent = difficulty.value;
     beforeLabel.textContent = before.value;
@@ -955,6 +1016,41 @@
     timerEndsAt = null;
   }
 
+  // Streak: only updates on days with at least one rejection
+  function updateRejectionStreakOnRejectedLog(){
+    const today = dayKey();
+    const last = localStorage.getItem(LAST_REJ_DAY_KEY);
+    let streak = loadStreak();
+
+    if (!last){
+      streak = 1;
+    } else {
+      const lastDate = new Date(last + "T00:00:00");
+      const todayDate = new Date(today + "T00:00:00");
+      const diffDays = Math.round((todayDate - lastDate) / (24*60*60*1000));
+
+      if (diffDays === 0){
+        // already counted today
+      } else if (diffDays === 1){
+        streak += 1;
+      } else {
+        streak = 1;
+      }
+    }
+    localStorage.setItem(LAST_REJ_DAY_KEY, today);
+    saveStreak(streak);
+  }
+
+  function clearLogFields(){
+    where.value = "";
+    who.value = "";
+    note.value = "";
+    before.value = "3";
+    after.value = "3";
+    beforeLabel.textContent = "3";
+    afterLabel.textContent = "3";
+  }
+
   function updateStats(){
     const logs = loadLogs();
     totalEl.textContent = logs.length;
@@ -965,6 +1061,7 @@
 
     streakEl.textContent = loadStreak();
     renderLogs(logs);
+    renderGameUI();
   }
 
   function renderLogs(logs){
@@ -1003,107 +1100,6 @@
       `;
     }).join("");
     logBody.innerHTML = rows;
-  }
-
-  // Streak: only updates on days with at least one rejection
-  function updateRejectionStreakOnRejectedLog(){
-    const today = dayKey();
-    const last = localStorage.getItem(LAST_REJ_DAY_KEY);
-    let streak = loadStreak();
-
-    if (!last){
-      streak = 1;
-    } else {
-      const lastDate = new Date(last + "T00:00:00");
-      const todayDate = new Date(today + "T00:00:00");
-      const diffDays = Math.round((todayDate - lastDate) / (24*60*60*1000));
-
-      if (diffDays === 0){
-        // already counted today
-      } else if (diffDays === 1){
-        streak += 1;
-      } else {
-        streak = 1;
-      }
-    }
-    localStorage.setItem(LAST_REJ_DAY_KEY, today);
-    saveStreak(streak);
-  }
-
-  function clearLogFields(){
-    where.value = "";
-    who.value = "";
-    note.value = "";
-    before.value = "3";
-    after.value = "3";
-    beforeLabel.textContent = "3";
-    afterLabel.textContent = "3";
-  }
-
-  function logResult(result){
-    if (!currentChallenge){
-      toastMsg("Generate a challenge first.");
-      return;
-    }
-    const logs = loadLogs();
-    const entry = {
-      time: nowISO(),
-      result,
-      mode: currentMode,
-      pack: pack.value,
-      cat: currentChallenge.cat,
-      diff: currentChallenge.diff,
-      challenge: currentChallenge.text,
-      where: where.value.trim(),
-      who: who.value.trim(),
-      before: parseInt(before.value,10),
-      after: parseInt(after.value,10),
-      note: note.value.trim()
-    };
-    logs.push(entry);
-    saveLogs(logs);
-
-    if (result === "rejected"){
-      updateRejectionStreakOnRejectedLog();
-      toastMsg("Logged: rejected (streak updated if first rejection today).");
-    } else {
-      toastMsg("Logged: accepted.");
-    }
-
-    clearLogFields();
-    updateStats();
-  }
-
-  function exportCSV(){
-    const logs = loadLogs();
-    if (!logs.length){ toastMsg("Nothing to export yet."); return; }
-
-    const header = ["time_iso","result","mode","pack","category","difficulty","challenge","where","who","feeling_before","feeling_after","note"];
-    const rows = logs.map(l => [
-      l.time,
-      l.result,
-      l.mode || "",
-      l.pack || "",
-      l.cat,
-      String(l.diff),
-      (l.challenge || "").replaceAll('"','""'),
-      (l.where || "").replaceAll('"','""'),
-      (l.who || "").replaceAll('"','""'),
-      String(l.before ?? ""),
-      String(l.after ?? ""),
-      (l.note || "").replaceAll('"','""')
-    ]);
-
-    const csv = [header.join(","), ...rows.map(r => r.map(v => `"${v}"`).join(","))].join("\n");
-    const blob = new Blob([csv], {type:"text/csv;charset=utf-8"});
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "rejection-challenge-logs.csv";
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    URL.revokeObjectURL(url);
   }
 
   async function copyCurrentLink(){
@@ -1151,7 +1147,6 @@
         await navigator.clipboard.write([new ClipboardItem({"image/png": blob})]);
         toastMsg("Copied share card as image.");
       } else {
-        // fallback
         const url = URL.createObjectURL(blob);
         const a = document.createElement("a");
         a.href = url;
@@ -1183,28 +1178,377 @@
     toastMsg("Downloaded PNG.");
   }
 
-  function resetAll(){
-    if (!confirm("Reset logs, streak, and plan progress?")) return;
-    localStorage.removeItem(STORAGE_KEY);
-    localStorage.removeItem(STREAK_KEY);
-    localStorage.removeItem(LAST_REJ_DAY_KEY);
-    localStorage.removeItem(PLAN_DONE_KEY);
-    toastMsg("Reset complete.");
-    renderPlan();
-    updateHeroProgress();
+  function exportCSV(){
+    const logs = loadLogs();
+    if (!logs.length){ toastMsg("Nothing to export yet."); return; }
+
+    const header = ["time_iso","result","mode","pack","category","difficulty","challenge","where","who","feeling_before","feeling_after","note"];
+    const rows = logs.map(l => [
+      l.time,
+      l.result,
+      l.mode || "",
+      l.pack || "",
+      l.cat,
+      String(l.diff),
+      (l.challenge || "").replaceAll('"','""'),
+      (l.where || "").replaceAll('"','""'),
+      (l.who || "").replaceAll('"','""'),
+      String(l.before ?? ""),
+      String(l.after ?? ""),
+      (l.note || "").replaceAll('"','""')
+    ]);
+
+    const csv = [header.join(","), ...rows.map(r => r.map(v => `"${v}"`).join(","))].join("\n");
+    const blob = new Blob([csv], {type:"text/csv;charset=utf-8"});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "rejection-challenge-logs.csv";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  }
+
+  // ======================
+  // Game system
+  // ======================
+  const GAME_KEY = "rr_game_v1";
+
+  function defaultGame(){
+    return {
+      xp: 0,
+      level: 1,
+      shields: 1,
+      lastShieldWeek: null,
+      badges: {},
+      questDay: null,
+      quests: [],
+      questDone: {},
+      bossWeek: null,
+      bossDone: false
+    };
+  }
+  function loadGame(){
+    try { return JSON.parse(localStorage.getItem(GAME_KEY) || "null") || defaultGame(); }
+    catch { return defaultGame(); }
+  }
+  function saveGame(g){ localStorage.setItem(GAME_KEY, JSON.stringify(g)); }
+
+  function isoWeekKey(date = new Date()){
+    const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+    const dayNum = d.getUTCDay() || 7;
+    d.setUTCDate(d.getUTCDate() + 4 - dayNum);
+    const yearStart = new Date(Date.UTC(d.getUTCFullYear(),0,1));
+    const weekNo = Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
+    return `${d.getUTCFullYear()}-W${String(weekNo).padStart(2,"0")}`;
+  }
+
+  function xpForLog(entry){
+    const base = (entry.result === "rejected") ? 25 : 10;
+    const diffBonus = (entry.diff || 3) * 6;
+    const catBonus = (entry.cat === "negotiation" || entry.cat === "career") ? 6 : 0;
+    return base + diffBonus + catBonus;
+  }
+
+  function levelForXP(xp){
+    let lvl = 1;
+    let need = 100;
+    let spent = 0;
+    while (xp >= spent + need){
+      spent += need;
+      lvl += 1;
+      need = Math.floor(need * 1.2) + 20;
+    }
+    return {level: lvl, into: xp - spent, need};
+  }
+
+  function awardXP(amount, reason){
+    const g = loadGame();
+    g.xp += amount;
+    const beforeLevel = g.level;
+    const lv = levelForXP(g.xp);
+    g.level = lv.level;
+    saveGame(g);
+    renderGameUI();
+    if (g.level > beforeLevel){
+      toastMsg(`Level up: ${beforeLevel} -> ${g.level}`);
+    } else if (reason){
+      toastMsg(`${reason}: +${amount} XP`);
+    }
+  }
+
+  function unlockBadge(id, name){
+    const g = loadGame();
+    if (!g.badges[id]){
+      g.badges[id] = {name, at: nowISO()};
+      saveGame(g);
+      renderGameUI();
+      toastMsg(`Badge unlocked: ${name}`);
+    }
+  }
+
+  function buildDailyQuests(){
+    const today = dayKey();
+    const g = loadGame();
+    if (g.questDay === today && g.quests?.length) return;
+
+    const seed = "quests|" + today;
+    const cats = ["social","help","food","career","negotiation","weird"];
+    const catPick = cats[seededIndex(cats.length, seed)];
+    const quests = [
+      {id:"q_rej", title:"Get 1 rejection today", desc:"Log at least one Rejected result today.", reward: 60},
+      {id:"q_newcat", title:`Try category: ${catPick}`, desc:"Log any result in the category of the day.", reward: 40, cat: catPick},
+      {id:"q_hard", title:"Do a difficulty 4+ rep", desc:"Log any result at difficulty 4 or 5.", reward: 50}
+    ];
+
+    g.questDay = today;
+    g.quests = quests;
+    g.questDone = g.questDone || {};
+    saveGame(g);
+  }
+
+  function checkQuestCompletionOnLog(){
+    const g = loadGame();
+    if (g.questDay !== dayKey()) buildDailyQuests();
+
+    const today = dayKey();
+    const doneKey = (qid) => `${today}:${qid}`;
+    const markDone = (qid) => { g.questDone[doneKey(qid)] = true; };
+
+    const logs = loadLogs();
+    const todayLogs = logs.filter(l => (l.time || "").slice(0,10) === today);
+
+    if (!g.questDone[doneKey("q_rej")] && todayLogs.some(l => l.result === "rejected")){
+      markDone("q_rej");
+      awardXP(60, "Quest complete");
+    }
+
+    const qCat = g.quests?.find(q => q.id === "q_newcat")?.cat;
+    if (qCat && !g.questDone[doneKey("q_newcat")] && todayLogs.some(l => l.cat === qCat)){
+      markDone("q_newcat");
+      awardXP(40, "Quest complete");
+    }
+
+    if (!g.questDone[doneKey("q_hard")] && todayLogs.some(l => (l.diff || 0) >= 4)){
+      markDone("q_hard");
+      awardXP(50, "Quest complete");
+    }
+
+    saveGame(g);
+    renderGameUI();
+  }
+
+  function renderQuests(){
+    const host = $("quests");
+    if (!host) return;
+
+    buildDailyQuests();
+    const g = loadGame();
+    const today = dayKey();
+    const doneKey = (qid) => `${today}:${qid}`;
+
+    host.innerHTML = (g.quests || []).map(q => {
+      const done = !!g.questDone?.[doneKey(q.id)];
+      return `
+        <div class="q">
+          <div>
+            <div class="t">${escapeHtml(q.title)}</div>
+            <div class="d">${escapeHtml(q.desc)} <span class="tag" style="margin-left:6px">+${q.reward} XP</span></div>
+          </div>
+          <div class="tag" style="min-width:70px; text-align:center">${done ? "done" : "open"}</div>
+        </div>
+      `;
+    }).join("");
+  }
+
+  function renderBadges(){
+    const host = $("badges");
+    if (!host) return;
+
+    const g = loadGame();
+    const all = [
+      {id:"b_first_no", name:"First No"},
+      {id:"b_three_streak", name:"3-day streak"},
+      {id:"b_week_boss", name:"Boss down"},
+      {id:"b_neg_5", name:"Negotiator"},
+      {id:"b_career_5", name:"Networker"},
+      {id:"b_social_10", name:"Social beast"}
+    ];
+
+    host.innerHTML = all.map(b => {
+      const have = !!g.badges?.[b.id];
+      return `<span class="badge ${have ? "" : "locked"}">${escapeHtml(b.name)}</span>`;
+    }).join("");
+  }
+
+  function renderLevel(){
+    const g = loadGame();
+    const levelEl = $("level");
+    const xpEl = $("xp");
+    const shieldsEl = $("shields");
+    if (levelEl) levelEl.textContent = String(g.level);
+    if (xpEl) xpEl.textContent = String(g.xp);
+    if (shieldsEl) shieldsEl.textContent = String(g.shields || 0);
+  }
+
+  function renderStreakHint(){
+    const el = $("streakHint");
+    if (!el) return;
+    const today = dayKey();
+    const last = localStorage.getItem(LAST_REJ_DAY_KEY);
+
+    if (!last) { el.textContent = "Log 1 rejection today to start your streak."; return; }
+    if (last === today) { el.textContent = "Already counted today. Get another rejection for fun."; return; }
+
+    const lastDate = new Date(last + "T00:00:00");
+    const todayDate = new Date(today + "T00:00:00");
+    const diffDays = Math.round((todayDate - lastDate) / (24*60*60*1000));
+    el.textContent = (diffDays === 1)
+      ? "Log 1 rejection today to extend your streak."
+      : "Your streak will reset unless you log a rejection today.";
+  }
+
+  function bossChallengeForWeek(){
+    const wk = isoWeekKey(new Date());
+    const seedStr = "boss|" + wk;
+    const pool = challenges.filter(c => (c.diff >= 4) && (c.cat === "career" || c.cat === "negotiation" || c.cat === "social"));
+    const chosen = pool[seededIndex(pool.length, seedStr)];
+    const reward = 160 + chosen.diff * 20;
+    return {week: wk, text: chosen.text, cat: chosen.cat, diff: chosen.diff, reward};
+  }
+
+  function renderBoss(){
+    const bossText = $("bossText");
+    const bossWeekTag = $("bossWeekTag");
+    const bossRewardTag = $("bossRewardTag");
+    if (!bossText || !bossWeekTag || !bossRewardTag) return;
+
+    const b = bossChallengeForWeek();
+    const g = loadGame();
+    if (g.bossWeek !== b.week){
+      g.bossWeek = b.week;
+      g.bossDone = false;
+      saveGame(g);
+    }
+
+    bossWeekTag.textContent = b.week;
+    bossRewardTag.textContent = `+${b.reward} XP`;
+    bossText.textContent = g.bossDone ? (b.text + " (completed)") : b.text;
+
+    const loadBtn = $("loadBossBtn");
+    const markBtn = $("markBossBtn");
+
+    if (loadBtn && !loadBtn._wired){
+      loadBtn._wired = true;
+      loadBtn.addEventListener("click", () => {
+        category.value = b.cat;
+        difficulty.value = String(b.diff);
+        currentMode = "today";
+        updateTags();
+        setChallenge({cat:b.cat, diff:b.diff, text: b.text + " (boss)"});
+        startTimer();
+        updateTags();
+        location.hash = "#tracker";
+        toastMsg("Boss loaded into tracker.");
+      });
+    }
+
+    if (markBtn && !markBtn._wired){
+      markBtn._wired = true;
+      markBtn.addEventListener("click", () => {
+        const gg = loadGame();
+        const bb = bossChallengeForWeek();
+        if (gg.bossDone){ toastMsg("Boss already completed this week."); return; }
+        gg.bossDone = true;
+        saveGame(gg);
+        awardXP(bb.reward, "Boss cleared");
+        unlockBadge("b_week_boss", "Boss down");
+        renderGameUI();
+      });
+    }
+  }
+
+  function maybeGrantWeeklyShield(){
+    const g = loadGame();
+    const wk = isoWeekKey(new Date());
+    if (g.lastShieldWeek !== wk){
+      g.lastShieldWeek = wk;
+      g.shields = (g.shields || 0) + 1;
+      saveGame(g);
+      toastMsg("Weekly shield earned.");
+    }
+  }
+
+  function renderGameUI(){
+    maybeGrantWeeklyShield();
+    renderLevel();
+    renderQuests();
+    renderBadges();
+    renderBoss();
+    renderStreakHint();
+  }
+
+  // ======================
+  // Logging with XP + badges
+  // ======================
+  function logResult(result){
+    if (!currentChallenge){
+      toastMsg("Generate a challenge first.");
+      return;
+    }
+    const logs = loadLogs();
+    const entry = {
+      time: nowISO(),
+      result,
+      mode: currentMode,
+      pack: pack.value,
+      cat: currentChallenge.cat,
+      diff: currentChallenge.diff,
+      challenge: currentChallenge.text,
+      where: where.value.trim(),
+      who: who.value.trim(),
+      before: parseInt(before.value,10),
+      after: parseInt(after.value,10),
+      note: note.value.trim()
+    };
+    logs.push(entry);
+    saveLogs(logs);
+
+    // Streak logic
+    if (result === "rejected"){
+      updateRejectionStreakOnRejectedLog();
+      toastMsg("Logged: rejected (streak updates once per day).");
+    } else {
+      toastMsg("Logged: accepted.");
+    }
+
+    // XP + quests
+    awardXP(xpForLog(entry), "Logged");
+    checkQuestCompletionOnLog();
+
+    // Badge checks
+    const allLogs = loadLogs();
+    if (allLogs.some(l => l.result === "rejected")) unlockBadge("b_first_no", "First No");
+
+    const negCount = allLogs.filter(l => l.cat === "negotiation").length;
+    if (negCount >= 5) unlockBadge("b_neg_5", "Negotiator");
+
+    const careerCount = allLogs.filter(l => l.cat === "career").length;
+    if (careerCount >= 5) unlockBadge("b_career_5", "Networker");
+
+    const socialCount = allLogs.filter(l => l.cat === "social").length;
+    if (socialCount >= 10) unlockBadge("b_social_10", "Social beast");
+
+    if (loadStreak() >= 3) unlockBadge("b_three_streak", "3-day streak");
+
+    clearLogFields();
     updateStats();
   }
 
-  function generate(mode){
-    currentMode = mode;
-    updateTags();
-    const ch = (mode === "today") ? pickTodaysChallenge() : pickRandomChallenge();
-    setChallenge(ch);
-    startTimer();
-    updateTags();
-  }
-
-  // Plan (concrete 30 days)
+  // ======================
+  // Plan logic
+  // ======================
   function daySpec(day){
     if (day <= 5) return {diff: 1 + (day >= 3 ? 1 : 0), cat: (day % 2 ? "social" : "help"), label:"low stakes"};
     if (day <= 15) return {diff: 2 + (day >= 10 ? 1 : 0), cat: (day % 3 === 0 ? "career" : "social"), label:"social or career"};
@@ -1271,7 +1615,6 @@
     planProgressFill.style.width = pct + "%";
     planProgressText.textContent = completed + "/30 completed";
 
-    // Wire day checkboxes
     planGrid.querySelectorAll('input[type="checkbox"][data-day]').forEach(cb => {
       cb.addEventListener("change", (e) => {
         const d = parseInt(e.target.getAttribute("data-day"), 10);
@@ -1283,7 +1626,6 @@
       });
     });
 
-    // Start day
     planGrid.querySelectorAll('button[data-start-day]').forEach(btn => {
       btn.addEventListener("click", () => {
         const cat = btn.getAttribute("data-cat");
@@ -1302,7 +1644,6 @@
       });
     });
 
-    // Copy day prompt
     planGrid.querySelectorAll('button[data-copy-day]').forEach(btn => {
       btn.addEventListener("click", async () => {
         const text = btn.getAttribute("data-text") || "";
@@ -1316,7 +1657,7 @@
     });
   }
 
-  // Scripts copy buttons
+  // Script copy buttons
   document.querySelectorAll("button[data-copy]").forEach(btn => {
     btn.addEventListener("click", async () => {
       const key = btn.getAttribute("data-copy");
@@ -1334,6 +1675,31 @@
       }
     });
   });
+
+  // Generate
+  function generate(mode){
+    currentMode = mode;
+    updateTags();
+    const ch = (mode === "today") ? pickTodaysChallenge() : pickRandomChallenge();
+    setChallenge(ch);
+    startTimer();
+    updateTags();
+  }
+
+  // Reset
+  function resetAll(){
+    if (!confirm("Reset logs, streak, plan progress, and game progress?")) return;
+    localStorage.removeItem(STORAGE_KEY);
+    localStorage.removeItem(STREAK_KEY);
+    localStorage.removeItem(LAST_REJ_DAY_KEY);
+    localStorage.removeItem(PLAN_DONE_KEY);
+    localStorage.removeItem(GAME_KEY);
+    toastMsg("Reset complete.");
+    renderPlan();
+    updateHeroProgress();
+    updateStats();
+    renderGameUI();
+  }
 
   // Wire UI
   function syncMeta(){ updateTags(); }
@@ -1354,6 +1720,11 @@
   shareAppBtn.addEventListener("click", shareApp);
   copyImageBtn.addEventListener("click", copyShareCardAsImage);
   downloadImageBtn.addEventListener("click", downloadShareCard);
+
+  startTodayBtn.addEventListener("click", () => {
+    location.hash = "#tracker";
+    generate("today");
+  });
 
   document.addEventListener("keydown", (e) => {
     const k = e.key.toLowerCase();
@@ -1384,7 +1755,7 @@
     setTimeout(() => window.print(), 150);
   });
 
-  // Load from share link
+  // Load from share link if present
   const params = new URLSearchParams(location.search);
   const c = params.get("c");
   if (c){
@@ -1407,8 +1778,11 @@
   renderPlan();
   updateHeroProgress();
   updateStats();
+  renderGameUI();
+
 })();
 </script>
 </body>
 </html>
+
 
