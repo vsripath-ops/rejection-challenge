@@ -188,337 +188,160 @@
     </header>
 
     <!-- How it works + Rules -->
-    <div class="grid" style="grid-template-columns:1fr 1fr; margin-top:0">
-      <div class="card">
-        <h2>How it works</h2>
-        <div class="muted" style="line-height:1.5">
-          1) Pick a pack + difficulty → 2) Generate a challenge (or use “Today’s”) → 3) Do it <b>in person</b> →
-          4) Log <b>Accepted</b> or <b>Rejected</b> → 5) Your streak counts only on days you logged at least one <b>rejection</b>.
-        </div>
-      </div>
-      <div class="card">
-        <h2>Safety rules (no-jerk policy)</h2>
-        <ul class="muted" style="margin:0; padding-left:18px; line-height:1.5">
-          <li>Be respectful, brief, and specific.</li>
-          <li>“No” ends it. No arguing. No guilt.</li>
-          <li>Consent required for photos/videos.</li>
-          <li>Don’t block people working / in a rush.</li>
-          <li>Pick challenges that are safe + legal in your setting.</li>
-        </ul>
-      </div>
-    </div>
+    </header>
 
-    <div class="grid">
-      <!-- Left: Generator + Logger -->
-      <div class="card">
-        <h2>New challenge</h2>
-
-        <div class="row">
-          <div style="min-width:220px">
-            <label for="pack">Challenge pack</label>
-            <select id="pack">
-              <option value="all" selected>All (mixed)</option>
-              <option value="beginner">Beginner Pack</option>
-              <option value="networking">Networking Pack</option>
-              <option value="wholesome">Wholesome Chaos Pack</option>
-              <option value="negotiation">Negotiation Pack</option>
-            </select>
-          </div>
-
-          <div style="min-width:220px">
-            <label for="category">Category</label>
-            <select id="category">
-              <option value="any">Any</option>
-              <option value="food">Food & café</option>
-              <option value="social">Social & compliments</option>
-              <option value="help">Asking for help</option>
-              <option value="negotiation">Negotiation</option>
-              <option value="weird">Wholesome-weird</option>
-              <option value="career">Career & networking</option>
-            </select>
-          </div>
-
-          <div style="min-width:220px">
-            <label for="difficulty">Difficulty: <span id="diffLabel" class="pill">3</span></label>
-            <input id="difficulty" type="range" min="1" max="5" value="3" />
-          </div>
-
-          <div style="min-width:220px">
-            <label for="timebox">Timebox (minutes)</label>
-            <select id="timebox">
-              <option value="0">No timer</option>
-              <option value="5">5</option>
-              <option value="10">10</option>
-              <option value="15" selected>15</option>
-              <option value="30">30</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="challenge" style="margin-top:12px">
-          <div class="headline">
-            <div class="meta">
-              <span class="tag" id="tagPack">pack: all</span>
-              <span class="tag" id="tagCat">any</span>
-              <span class="tag" id="tagDiff">difficulty: 3</span>
-              <span class="tag" id="tagMode">mode: random</span>
-            </div>
-            <div class="row" style="flex:0 0 auto">
-              <button class="btn small" id="copyLinkBtn">Copy link</button>
-              <button class="btn small" id="todayBtn" title="Same challenge for everyone today (deterministic)">Today’s</button>
-              <button class="btn primary" id="newBtn">Generate</button>
-            </div>
-          </div>
-          <div class="text" id="challengeText">Click “Generate” to get your first challenge.</div>
-          <div class="muted" id="timerText" style="margin-top:6px"></div>
-        </div>
-
-        <!-- Logging fields -->
-        <div style="margin-top:12px">
-          <div class="row">
-            <div style="min-width:220px">
-              <label for="where">Where (optional)</label>
-              <input id="where" type="text" placeholder="e.g., coffee shop, campus, gym" />
-            </div>
-            <div style="min-width:220px">
-              <label for="who">Who (optional)</label>
-              <input id="who" type="text" placeholder="e.g., barista, stranger, classmate" />
-            </div>
-          </div>
-
-          <div class="row" style="margin-top:10px">
-            <div style="min-width:220px">
-              <label for="before">Feeling BEFORE (1–5): <span id="beforeLabel" class="pill">3</span></label>
-              <input id="before" type="range" min="1" max="5" value="3" />
-            </div>
-            <div style="min-width:220px">
-              <label for="after">Feeling AFTER (1–5): <span id="afterLabel" class="pill">3</span></label>
-              <input id="after" type="range" min="1" max="5" value="3" />
-            </div>
-          </div>
-
-          <div style="margin-top:10px">
-            <label for="note">Quick note (optional)</label>
-            <textarea id="note" placeholder="What did you say? What did they say? Any funny detail?"></textarea>
-          </div>
-
-          <div class="row" style="margin-top:10px">
-            <button class="btn good" id="acceptedBtn">Accepted 😳</button>
-            <button class="btn bad" id="rejectedBtn">Rejected ✅</button>
-          </div>
-
-          <div class="footer">
-            <div>Tip: “polite, specific, and uncomfortable.”</div>
-            <div>Shortcuts: <span class="kbd">G</span> generate • <span class="kbd">T</span> today’s • <span class="kbd">R</span> log rejected</div>
-          </div>
-        </div>
-
-        <!-- Share card -->
-        <div style="margin-top:14px" class="card">
-          <h2>Share card</h2>
-          <div class="muted" style="font-size:12px; margin-top:-6px">Post this challenge to friends. Copy it as an image (no backend).</div>
-
-          <div id="shareCard" class="shareCard" style="margin-top:10px">
-            <div class="top">
-              <div class="app">🎯 Rejection Roulette <span class="pill" id="shareStamp">today</span></div>
-              <div class="small">
-                <span class="tag" id="sharePack">pack: all</span>
-                <span class="tag" id="shareCat">any</span>
-                <span class="tag" id="shareDiff">d3</span>
-              </div>
-            </div>
-            <div class="big" id="shareText">Generate a challenge to fill this card.</div>
-            <div class="small">
-              <span class="tag">rule: be polite</span>
-              <span class="tag">rule: accept no</span>
-              <span class="tag">in person</span>
-            </div>
-          </div>
-
-          <div class="row" style="margin-top:10px">
-            <button class="btn small" id="copyImageBtn">Copy as image</button>
-            <button class="btn small" id="downloadImageBtn">Download PNG</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Right: Stats + Logs -->
-      <div class="card">
-        <h2>Your stats</h2>
-        <div class="statgrid">
-          <div class="stat">
-            <div class="k">Rejection streak (days)</div>
-            <div class="v" id="streak">0</div>
-          </div>
-          <div class="stat">
-            <div class="k">Total logs</div>
-            <div class="v" id="total">0</div>
-          </div>
-          <div class="stat">
-            <div class="k">Rejection rate</div>
-            <div class="v" id="rate">0%</div>
-          </div>
-        </div>
-
-        <div class="muted" style="font-size:12px; margin-top:10px; line-height:1.4">
-          Stored in your browser (localStorage). No account required.
-          <br><b>Streak only updates</b> on days you log at least one <b>Rejected ✅</b>.
-        </div>
-
-        <h2 style="margin-top:14px">Recent logs</h2>
-        <div style="overflow:auto; margin-top:6px">
-          <table>
-            <thead>
-              <tr>
-                <th style="min-width:140px">Time</th>
-                <th>Challenge</th>
-                <th style="min-width:120px">Result</th>
-              </tr>
-            </thead>
-            <tbody id="logBody">
-              <tr><td colspan="3" class="muted">No logs yet. Go get rejected (respectfully).</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
-    <div class="toast" id="toast"></div>
+<!-- ===================== -->
+<!-- Rejection Challenge Home Base -->
+<!-- ===================== -->
+<section class="hero" id="top">
+  <div class="title" style="font-size:14px; font-weight:900; letter-spacing:.2px; margin-bottom:6px;">
+    Rejection Challenge
+    <span class="pill">30 days</span>
+    <span class="pill">in-person</span>
+    <span class="pill">no login</span>
   </div>
-  
-.hero{
-  padding:18px 16px;
-  border-radius: var(--radius);
-  border:1px solid rgba(255,255,255,.10);
-  background:
-    radial-gradient(1000px 420px at 0% 0%, rgba(124,92,255,.28), transparent 60%),
-    radial-gradient(1000px 420px at 100% 0%, rgba(54,211,153,.18), transparent 60%),
-    rgba(18,26,42,.55);
-  box-shadow: var(--shadow);
-}
-.hero h1{
-  margin:0;
-  font-size:32px;
-  line-height:1.12;
-  letter-spacing:.2px;
-}
-.hero p{
-  margin:10px 0 0;
-  color: var(--muted);
-  max-width: 78ch;
-  line-height:1.5;
-}
-.ctaRow{display:flex; gap:10px; flex-wrap:wrap; margin-top:14px}
-.btn.cta{
-  background:linear-gradient(90deg, rgba(124,92,255,.95), rgba(124,92,255,.70));
-  border-color:rgba(124,92,255,.6);
-}
-.btn.ghost{
-  background:rgba(255,255,255,.06);
-}
-.section{
-  margin-top:14px;
-}
-.sectionTitle{
-  font-size:16px;
-  font-weight:1000;
-  margin:0 0 10px;
-}
-.cols{
-  display:grid;
-  grid-template-columns: 1fr 1fr;
-  gap:14px;
-}
-@media (max-width: 980px){ .cols{grid-template-columns:1fr} }
-.miniCard{
-  padding:14px;
-  border-radius:16px;
-  background:rgba(11,15,25,.45);
-  border:1px solid rgba(255,255,255,.10);
-}
-.miniCard h3{
-  margin:0 0 8px;
-  font-size:13px;
-  letter-spacing:.2px;
-}
-.smallList{
-  margin:0;
-  padding-left:18px;
-  color:var(--muted);
-  line-height:1.55;
-}
-.progressWrap{
-  margin-top:12px;
-  display:flex;
-  align-items:center;
-  gap:10px;
-  flex-wrap:wrap;
-}
-.progressBar{
-  flex:1 1 260px;
-  height:10px;
-  border-radius:999px;
-  background:rgba(255,255,255,.08);
-  border:1px solid rgba(255,255,255,.10);
-  overflow:hidden;
-}
-.progressBar > div{
-  height:100%;
-  width:0%;
-  background:linear-gradient(90deg, rgba(54,211,153,.95), rgba(124,92,255,.85));
-}
-.progressText{font-size:12px; color:var(--muted); font-family:var(--mono)}
-.planGrid{
-  display:grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap:10px;
-}
-@media (max-width: 980px){ .planGrid{grid-template-columns:1fr 1fr} }
-@media (max-width: 620px){ .planGrid{grid-template-columns:1fr} }
 
-.dayCard{
-  padding:12px;
-  border-radius:16px;
-  border:1px solid rgba(255,255,255,.10);
-  background:rgba(11,15,25,.45);
-}
-.dayTop{
-  display:flex;
-  justify-content:space-between;
-  align-items:flex-start;
-  gap:10px;
-}
-.dayTitle{
-  font-weight:1000;
-  letter-spacing:.2px;
-}
-.dayMeta{
-  display:flex;
-  gap:6px;
-  flex-wrap:wrap;
-  margin-top:8px;
-}
-.dayText{
-  margin-top:8px;
-  line-height:1.35;
-}
-.dayActions{
-  display:flex;
-  gap:8px;
-  flex-wrap:wrap;
-  margin-top:10px;
-}
-.script{
-  display:flex;
-  gap:10px;
-  align-items:flex-start;
-  justify-content:space-between;
-  padding:12px;
-  border-radius:16px;
-  border:1px solid rgba(255,255,255,.10);
-  background:rgba(11,15,25,.45);
-}
-.scriptText{color:var(--text); line-height:1.45; max-width: 78ch}
+  <h1>Train your brain to handle rejection in 30 days.</h1>
+  <p>
+    Most people avoid “no” so hard they stop taking shots — in friendships, dating, internships, sales, and life.
+    This challenge turns rejection into a skill: one small in-person ask per day, logged in a simple tracker, so your confidence grows through reps.
+  </p>
+
+  <div class="progressWrap">
+    <div class="progressBar" aria-label="30-day progress">
+      <div id="heroProgressFill"></div>
+    </div>
+    <div class="progressText"><span id="heroProgressText">0/30 days</span> • streak counts only on <b>rejection</b></div>
+  </div>
+
+  <div class="ctaRow">
+    <a class="btn cta" href="#plan">See the 30-Day Plan</a>
+    <a class="btn ghost" href="#tracker">Open the tracker</a>
+    <button class="btn ghost" id="printPlanBtn" type="button">Print plan</button>
+  </div>
+</section>
+
+<section class="section cols">
+  <div class="miniCard">
+    <h2 class="sectionTitle">What counts as a “rejection rep”</h2>
+    <ul class="smallList">
+      <li>It must be <b>in person</b> (not online / phone).</li>
+      <li>A rep counts if you asked something specific and you felt slightly vulnerable.</li>
+      <li>A rep counts if they say <b>no</b>. You thank them and stop.</li>
+      <li>No silly asks (“Can I have a trillion dollars?”). Keep it human.</li>
+    </ul>
+  </div>
+
+  <div class="miniCard">
+    <h2 class="sectionTitle">Why this works (psychology in 20 seconds)</h2>
+    <div class="muted" style="line-height:1.55">
+      Fear of rejection is normal — it’s an old social survival alarm. But repeated, controlled exposure
+      makes that alarm quieter. Over time you learn: “no” is data, not danger.
+      <div style="margin-top:10px">
+        • Less anxiety about asking <br>
+        • More shots on goal (career, friends, dating, sales) <br>
+        • Faster learning because you get real feedback
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section cols">
+  <div class="miniCard">
+    <h2 class="sectionTitle">How it works</h2>
+    <ul class="smallList">
+      <li>Pick a day → do the ask → log the outcome.</li>
+      <li>Your “rejection streak” increases only on days you logged at least one <b>Rejected ✅</b>.</li>
+      <li>Use the scripts below if you freeze.</li>
+      <li>Export CSV if you need proof for class.</li>
+    </ul>
+  </div>
+
+  <div class="miniCard">
+    <h2 class="sectionTitle">Social proof (tiny, but real)</h2>
+    <div class="muted" style="line-height:1.55">
+      People have popularized “rejection practice” challenges — including Jia Jiang’s well-known “100 days” concept.
+      This is a shorter, more structured 30-day version so you can actually finish it.
+      <div style="margin-top:10px"><b>Most people quit after Day 3.</b> If you get to Day 10, you’re already ahead of the pack.</div>
+    </div>
+  </div>
+</section>
+
+<section class="section cols" id="scripts">
+  <div class="miniCard">
+    <h2 class="sectionTitle">Ask scripts (copy-paste to your brain)</h2>
+
+    <div class="script" style="margin-top:10px">
+      <div class="scriptText">
+        <b>Coffee chat</b><br>
+        “Hey — quick one. I’m working on being more proactive. Would you be open to a 10-minute coffee chat sometime this week? Totally okay if not.”
+      </div>
+      <button class="btn small" data-copy="coffee">Copy</button>
+    </div>
+
+    <div class="script" style="margin-top:10px">
+      <div class="scriptText">
+        <b>Feedback</b><br>
+        “I’m trying to improve fast. Could I get 30 seconds of feedback on what I could do better next time?”
+      </div>
+      <button class="btn small" data-copy="feedback">Copy</button>
+    </div>
+
+    <div class="script" style="margin-top:10px">
+      <div class="scriptText">
+        <b>After a ‘no’</b><br>
+        “Totally get it — thanks anyway. If you’re open to sharing: what’s one thing I could improve for next time?”
+      </div>
+      <button class="btn small" data-copy="no">Copy</button>
+    </div>
+  </div>
+
+  <div class="miniCard">
+    <h2 class="sectionTitle">Daily reflection (10 seconds)</h2>
+    <ul class="smallList">
+      <li>What did I fear would happen?</li>
+      <li>What actually happened?</li>
+      <li>What did I learn / what’s my next rep?</li>
+    </ul>
+    <div class="muted" style="margin-top:10px; line-height:1.55">
+      Your goal isn’t “get yes.” Your goal is “take reps without spiraling.”
+    </div>
+  </div>
+</section>
+
+<section class="section" id="plan">
+  <div class="card">
+    <div class="row" style="justify-content:space-between; align-items:flex-start">
+      <div>
+        <h2 class="sectionTitle" style="margin:0">30-Day Plan</h2>
+        <div class="muted" style="margin-top:6px; line-height:1.5">
+          Days 1–5: low-stakes reps • Days 6–15: social/career reps • Days 16–30: stretch reps (negotiation + bigger asks).
+          Click “Start” to load the day’s prompt into the tracker.
+        </div>
+      </div>
+      <div class="row" style="flex:0 0 auto">
+        <button class="btn small" id="markAllDoneBtn" type="button">Mark all done</button>
+        <button class="btn small" id="clearPlanBtn" type="button">Clear plan progress</button>
+      </div>
+    </div>
+
+    <div class="progressWrap" style="margin-top:10px">
+      <div class="progressBar">
+        <div id="planProgressFill"></div>
+      </div>
+      <div class="progressText" id="planProgressText">0/30 completed</div>
+    </div>
+
+    <div class="planGrid" id="planGrid" style="margin-top:12px"></div>
+  </div>
+</section>
+
+<!-- Anchor for tracker -->
+<div id="tracker"></div>
+
+<!-- How it works + Rules -->
+<div class="grid" style="grid-template-columns:1fr 1fr; margin-top:0">
+  <div class="card">
 
 <script>
 (() => {
