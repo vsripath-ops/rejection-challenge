@@ -4,10 +4,16 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Rejection Challenge</title>
-  <meta name="description" content="Spin a quick in-person challenge. Log the result. Build a rejection streak. No login." />
+  <meta name="description" content="Spin an in-person prompt. Log accepted or rejected. Build a rejection streak. No login." />
 
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23150d0a'/%3E%3Ctext x='50%25' y='58%25' text-anchor='middle' font-family='Arial' font-size='24' fill='%23fff2ea'%3ERC%3C/text%3E%3C/svg%3E">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23140b09'/%3E%3Cpath d='M18 38c10 6 18 6 28 0' stroke='%23fff2ea' stroke-width='4' fill='none' stroke-linecap='round'/%3E%3Cpath d='M22 26h0' stroke='%23fff2ea' stroke-width='6' stroke-linecap='round'/%3E%3Cpath d='M42 26h0' stroke='%23fff2ea' stroke-width='6' stroke-linecap='round'/%3E%3C/svg%3E" />
 
+  <!-- Better typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Share-card capture -->
   <script defer src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 
   <style>
@@ -16,7 +22,7 @@
       --card:#1a0f0d;
       --text:#fff2ea;
       --muted:rgba(255,242,234,.72);
-      --muted2:rgba(255,242,234,.55);
+      --muted2:rgba(255,242,234,.56);
 
       --accent:#ff7a59;
       --accent2:#ffb86b;
@@ -24,73 +30,114 @@
       --pink:#ff5b85;
 
       --border:rgba(255,242,234,.10);
-      --shadow: 0 18px 60px rgba(0,0,0,.45);
-      --shadow2: 0 10px 30px rgba(0,0,0,.35);
-      --r:18px;
+      --border2:rgba(255,242,234,.14);
 
+      --shadow: 0 18px 60px rgba(0,0,0,.45);
+      --shadow2: 0 10px 26px rgba(0,0,0,.35);
+
+      --r1:22px;
+      --r2:16px;
+      --r3:12px;
+
+      --display: "Fraunces", ui-serif, Georgia, serif;
+      --sans: "Outfit", ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
       --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+
+      --gap:14px;
     }
 
     *{box-sizing:border-box}
     html,body{height:100%}
     body{
-      margin:0; font-family:var(--sans); color:var(--text);
+      margin:0;
+      font-family:var(--sans);
+      color:var(--text);
       background:
         radial-gradient(900px 520px at 10% 0%, rgba(255,122,89,.35), transparent 60%),
         radial-gradient(900px 520px at 100% 10%, rgba(255,184,107,.22), transparent 55%),
         radial-gradient(700px 420px at 40% 120%, rgba(83,226,176,.12), transparent 60%),
         var(--bg);
+      letter-spacing:.1px;
     }
 
     a{color:inherit; text-decoration:none}
-    .wrap{max-width:1120px; margin:0 auto; padding:22px 16px 80px}
+    .wrap{max-width:1160px; margin:0 auto; padding:22px 16px 80px}
 
-    /* Top bar */
+    /* Top header */
     .topbar{
-      display:flex; align-items:center; justify-content:space-between; gap:12px;
-      margin-bottom:14px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:10px 10px;
+      border-radius:var(--r1);
+      border:1px solid rgba(255,242,234,.10);
+      background:rgba(255,242,234,.04);
+      box-shadow: var(--shadow2);
+      backdrop-filter: blur(10px);
     }
+
     .brand{
-      display:flex; align-items:center; gap:12px; flex-wrap:wrap;
+      display:flex;
+      align-items:center;
+      gap:12px;
+      min-width:240px;
     }
+
     .logo{
-      width:38px; height:38px; border-radius:14px;
+      width:42px; height:42px;
+      border-radius:16px;
+      border:1px solid var(--border);
       background:
         radial-gradient(18px 18px at 30% 30%, rgba(255,184,107,.55), transparent 70%),
         radial-gradient(18px 18px at 70% 70%, rgba(255,122,89,.45), transparent 70%),
         rgba(255,242,234,.08);
-      border:1px solid var(--border);
       box-shadow: var(--shadow2);
+      display:grid; place-items:center;
+      flex:0 0 auto;
     }
-    .title{
-      font-weight:950; letter-spacing:.2px;
-      display:flex; align-items:baseline; gap:10px; flex-wrap:wrap;
+
+    .logo svg{opacity:.95}
+
+    .brandText{display:flex; flex-direction:column; gap:2px}
+    .brandName{
+      font-weight:900;
+      letter-spacing:.2px;
+      display:flex;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
     }
-    .title .name{font-size:18px}
+    .brandName .name{font-size:16px}
+    .brandSub{color:var(--muted); font-size:12px; font-weight:500}
+
+    .pills{display:flex; gap:8px; flex-wrap:wrap}
     .pill{
       font-family:var(--mono);
       font-size:12px;
       padding:5px 9px;
       border-radius:999px;
-      border:1px solid var(--border);
+      border:1px solid rgba(255,242,234,.12);
       background:rgba(255,242,234,.06);
       color:var(--muted);
       white-space:nowrap;
     }
-    .actions{display:flex; gap:10px; flex-wrap:wrap}
+
+    .actions{display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end}
 
     /* Buttons */
     .btn{
-      appearance:none; border:1px solid rgba(255,242,234,.14);
+      appearance:none;
+      border:1px solid rgba(255,242,234,.14);
       background:rgba(255,242,234,.08);
       color:var(--text);
       padding:10px 12px;
       border-radius:14px;
-      font-weight:900;
+      font-weight:750;
       cursor:pointer;
       transition: transform .06s ease, filter .15s ease, background .15s ease;
       user-select:none;
+      text-align:center;
     }
     .btn:hover{filter:brightness(1.06)}
     .btn:active{transform:translateY(1px) scale(.99)}
@@ -107,64 +154,47 @@
       border-color:rgba(255,91,133,.32);
       background:linear-gradient(90deg, rgba(255,91,133,.92), rgba(255,91,133,.62));
     }
-    .btn.ghost{
-      background:rgba(255,242,234,.06);
-    }
+    .btn.ghost{background:rgba(255,242,234,.06)}
 
-    /* Layout */
-    .grid{
-      display:grid;
-      grid-template-columns: 1.1fr .9fr;
-      gap:14px;
-      margin-top:12px;
-    }
-    @media (max-width: 980px){
-      .grid{grid-template-columns:1fr}
-    }
-
-    .card{
-      border:1px solid var(--border);
-      border-radius:var(--r);
-      background: linear-gradient(180deg, rgba(26,15,13,.92), rgba(26,15,13,.72));
-      box-shadow: var(--shadow);
-      padding:16px;
-    }
-
-    /* Hero */
+    /* Sections */
     .hero{
-      border-radius:var(--r);
+      margin-top:var(--gap);
+      border-radius:var(--r1);
       border:1px solid rgba(255,242,234,.10);
       background:
         radial-gradient(1200px 420px at 0% 0%, rgba(255,122,89,.22), transparent 60%),
         radial-gradient(1200px 420px at 100% 0%, rgba(255,184,107,.18), transparent 60%),
         rgba(255,242,234,.04);
       box-shadow: var(--shadow);
-      padding:16px;
+      padding:18px;
     }
+
     .heroTop{
-      display:flex; align-items:flex-start; justify-content:space-between; gap:12px; flex-wrap:wrap;
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:14px;
+      flex-wrap:wrap;
     }
+
     .hero h1{
       margin:0;
-      font-size:30px;
-      line-height:1.08;
+      font-family:var(--display);
+      font-size:36px;
+      line-height:1.03;
       letter-spacing:.2px;
+      max-width:18ch;
     }
+
     .hero p{
-      margin:8px 0 0;
+      margin:10px 0 0;
       color:var(--muted);
-      line-height:1.45;
-      max-width:64ch;
+      line-height:1.55;
+      max-width:70ch;
+      font-weight:500;
+      font-size:15px;
     }
-    .hint{
-      color:var(--muted2);
-      font-size:12px;
-      margin-top:10px;
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      align-items:center;
-    }
+
     .toggle{
       display:flex;
       gap:8px;
@@ -173,6 +203,7 @@
       background:rgba(255,242,234,.06);
       border-radius:999px;
       padding:6px;
+      height:fit-content;
     }
     .chip{
       border:0;
@@ -180,8 +211,10 @@
       color:var(--muted);
       padding:8px 10px;
       border-radius:999px;
-      font-weight:900;
+      font-weight:850;
       cursor:pointer;
+      font-family:var(--sans);
+      letter-spacing:.1px;
     }
     .chip.on{
       color:var(--text);
@@ -189,29 +222,55 @@
       border:1px solid rgba(255,242,234,.12);
     }
 
-    /* Wheel */
+    details{
+      margin-top:12px;
+      border:1px solid rgba(255,242,234,.10);
+      border-radius:18px;
+      background:rgba(0,0,0,.14);
+      padding:10px 12px;
+    }
+    summary{
+      cursor:pointer;
+      font-weight:800;
+      color:var(--text);
+      list-style:none;
+    }
+    summary::-webkit-details-marker{display:none}
+    .smallList{margin:10px 0 0; padding-left:18px; color:var(--muted); line-height:1.55}
+    .smallList li{margin:6px 0}
+
+    /* Main layout */
     .wheelWrap{
+      margin-top:var(--gap);
       display:grid;
       grid-template-columns: 1fr 1fr;
-      gap:14px;
-      margin-top:14px;
-      align-items:center;
+      gap:var(--gap);
+      align-items:stretch;
     }
-    @media (max-width: 760px){
+    @media (max-width: 860px){
       .wheelWrap{grid-template-columns:1fr}
     }
 
+    .card{
+      border:1px solid var(--border);
+      border-radius:var(--r1);
+      background: linear-gradient(180deg, rgba(26,15,13,.92), rgba(26,15,13,.72));
+      box-shadow: var(--shadow);
+      padding:16px;
+    }
+
+    /* Wheel */
     .wheelBox{
       display:flex;
       align-items:center;
       justify-content:center;
       padding:14px;
-      border-radius:var(--r);
+      border-radius:var(--r1);
       border:1px solid rgba(255,242,234,.10);
       background:rgba(0,0,0,.12);
       position:relative;
       overflow:hidden;
-      min-height:280px;
+      min-height:340px;
     }
     .pointer{
       position:absolute;
@@ -223,14 +282,13 @@
       border-right:12px solid transparent;
       border-top:18px solid rgba(255,242,234,.92);
       filter:drop-shadow(0 10px 10px rgba(0,0,0,.35));
-      z-index:3;
+      z-index:6;
     }
-
     .wheel{
-      width:240px; height:240px;
+      width:260px; height:260px;
       border-radius:50%;
       border:1px solid rgba(255,242,234,.14);
-      box-shadow: inset 0 0 0 8px rgba(0,0,0,.18), var(--shadow2);
+      box-shadow: inset 0 0 0 10px rgba(0,0,0,.18), var(--shadow2);
       background:
         conic-gradient(
           rgba(255,122,89,.92),
@@ -241,48 +299,61 @@
           rgba(255,122,89,.92)
         );
       transform: rotate(0deg);
-      transition: transform 1.8s cubic-bezier(.12,.85,.18,1);
+      transition: transform 1.95s cubic-bezier(.10,.88,.16,1);
     }
     .wheelLabel{
       position:absolute;
-      width:240px; height:240px;
+      width:260px; height:260px;
       display:flex;
       align-items:center;
       justify-content:center;
       text-align:center;
       padding:18px;
       pointer-events:none;
-      z-index:2;
+      z-index:7;
     }
     .wheelLabel .inside{
-      width:170px;
-      border-radius:16px;
+      width:198px;
+      border-radius:18px;
       border:1px solid rgba(255,242,234,.14);
-      background:rgba(18,8,7,.62);
+      background:rgba(18,8,7,.74);
       box-shadow: var(--shadow2);
-      padding:10px 12px;
-      font-weight:950;
-      line-height:1.25;
+      padding:12px 12px;
+      font-weight:850;
+      line-height:1.22;
+      backdrop-filter: blur(6px);
     }
-    .wheelLabel .inside span{
+    .wheelLabel .inside .big{
+      font-family:var(--display);
+      font-weight:700;
+      font-size:18px;
+      line-height:1.12;
+      letter-spacing:.2px;
+    }
+    .wheelLabel .inside .sub{
       display:block;
-      margin-top:6px;
+      margin-top:8px;
       font-size:12px;
-      font-weight:800;
+      font-weight:650;
       color:var(--muted);
       font-family:var(--mono);
     }
 
-    /* Challenge card */
+    /* Prompt / tracker */
     .challenge{
-      border-radius:var(--r);
+      border-radius:var(--r1);
       border:1px solid rgba(255,242,234,.12);
       background:
         radial-gradient(900px 260px at 0% 0%, rgba(255,122,89,.14), transparent 60%),
         radial-gradient(900px 260px at 100% 0%, rgba(255,184,107,.12), transparent 60%),
         rgba(0,0,0,.14);
-      padding:14px;
+      padding:16px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      min-height:340px;
     }
+
     .challengeTop{
       display:flex;
       justify-content:space-between;
@@ -304,21 +375,37 @@
       padding:4px 8px;
       border-radius:999px;
     }
-    .challengeText{
-      margin:10px 0 0;
-      font-size:18px;
-      font-weight:950;
-      letter-spacing:.1px;
-      line-height:1.22;
+
+    .promptTitle{
+      display:flex;
+      align-items:baseline;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
     }
-    .mini{
-      margin-top:8px;
+    .promptTitle .h{
+      font-weight:900;
+      letter-spacing:.2px;
+      font-size:13px;
       color:var(--muted);
+      text-transform:uppercase;
+    }
+    .promptTitle .tip{
+      color:var(--muted2);
       font-size:12px;
+      font-weight:500;
     }
 
-    /* Inputs */
-    label{display:block; font-size:12px; color:var(--muted); margin:10px 0 6px}
+    .challengeText{
+      margin:0;
+      font-size:20px;
+      font-weight:900;
+      letter-spacing:.1px;
+      line-height:1.22;
+      min-height:66px;
+    }
+
+    label{display:block; font-size:12px; color:var(--muted); margin:8px 0 6px}
     select, input[type="text"], textarea, input[type="range"]{
       width:100%;
       border-radius:14px;
@@ -327,47 +414,160 @@
       color:var(--text);
       padding:10px 12px;
       outline:none;
+      font-family:var(--sans);
     }
     textarea{min-height:88px; resize:vertical}
 
     .row{display:flex; gap:10px; flex-wrap:wrap; align-items:center}
     .row > *{flex:1 1 180px}
 
-    /* Stats */
+    /* Stats + game */
+    .grid{
+      margin-top:var(--gap);
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap:var(--gap);
+    }
+    @media (max-width: 980px){
+      .grid{grid-template-columns:1fr}
+    }
+
+    .sectionHead{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-bottom:10px;
+    }
+    .sectionHead h2{
+      margin:0;
+      font-size:14px;
+      font-weight:900;
+      letter-spacing:.2px;
+    }
+    .hint{color:var(--muted); font-size:12px; font-weight:500}
+
     .statgrid{display:grid; grid-template-columns: repeat(3,1fr); gap:10px}
     @media (max-width:520px){ .statgrid{grid-template-columns:1fr} }
     .stat{
-      border-radius:16px;
+      border-radius:18px;
       border:1px solid rgba(255,242,234,.10);
       background:rgba(0,0,0,.16);
       padding:12px;
     }
     .stat .k{color:var(--muted); font-size:11px}
-    .stat .v{font-weight:950; font-size:20px; margin-top:6px}
+    .stat .v{font-weight:950; font-size:22px; margin-top:6px}
+
+    .progressWrap{margin-top:10px}
+    .progressRow{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-top:6px;
+      color:var(--muted);
+      font-size:12px;
+      font-weight:500;
+    }
+    .progressBar{
+      height:10px;
+      width:100%;
+      border-radius:999px;
+      background:rgba(255,242,234,.08);
+      border:1px solid rgba(255,242,234,.10);
+      overflow:hidden;
+      box-shadow: inset 0 0 0 1px rgba(0,0,0,.12);
+    }
+    .progressFill{
+      height:100%;
+      width:0%;
+      background: linear-gradient(90deg, rgba(255,122,89,.92), rgba(255,184,107,.88), rgba(83,226,176,.84));
+    }
 
     table{width:100%; border-collapse:collapse; font-size:13px; margin-top:10px}
     th,td{border-bottom:1px solid rgba(255,242,234,.08); padding:10px 8px; vertical-align:top}
     th{color:var(--muted); font-size:12px; text-align:left}
+    td small{color:var(--muted); font-size:12px}
 
-    /* Collapsible */
-    details{
+    /* Badge shelf */
+    .badges{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap:10px;
+      margin-top:10px;
+    }
+    @media (max-width: 520px){ .badges{grid-template-columns:1fr 1fr} }
+
+    .badge{
+      border-radius:18px;
       border:1px solid rgba(255,242,234,.10);
-      border-radius:16px;
-      background:rgba(0,0,0,.14);
-      padding:10px 12px;
+      background:rgba(0,0,0,.16);
+      padding:10px;
+      display:flex;
+      gap:10px;
+      align-items:center;
+      min-height:64px;
     }
-    summary{
-      cursor:pointer;
-      font-weight:950;
-      list-style:none;
+    .badge.locked{opacity:.45}
+    .badgeIcon{
+      width:38px; height:38px;
+      border-radius:14px;
+      border:1px solid rgba(255,242,234,.12);
+      background:rgba(255,242,234,.06);
+      display:grid;
+      place-items:center;
+      flex:0 0 auto;
     }
-    summary::-webkit-details-marker{display:none}
-    .smallList{margin:10px 0 0; padding-left:18px; color:var(--muted); line-height:1.5}
-    .smallList li{margin:6px 0}
+    .badgeIcon svg{opacity:.95}
+    .badgeText{display:flex; flex-direction:column; gap:2px}
+    .badgeText .t{font-weight:900; font-size:13px}
+    .badgeText .d{color:var(--muted); font-size:11px; font-weight:500}
 
-    /* Toast + confetti canvas */
+    /* Share card */
+    .shareCard{
+      margin-top:12px;
+      border-radius:20px;
+      border:1px solid rgba(255,242,234,.12);
+      background:
+        radial-gradient(900px 320px at 0% 0%, rgba(255,122,89,.20), transparent 60%),
+        radial-gradient(900px 320px at 100% 0%, rgba(255,184,107,.16), transparent 60%),
+        rgba(0,0,0,.14);
+      padding:14px;
+    }
+
+    .shareTop{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:flex-start;
+    }
+
+    .shareTop .name{font-weight:950}
+    .shareBig{
+      margin-top:10px;
+      font-weight:950;
+      font-size:18px;
+      line-height:1.25;
+    }
+    .shareTags{
+      margin-top:10px;
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      color:var(--muted);
+      font-family:var(--mono);
+      font-size:12px;
+    }
+
+    /* Toast + confetti */
     .toast{
-      position:fixed; left:50%; bottom:18px; transform:translateX(-50%);
+      position:fixed;
+      left:50%;
+      bottom:18px;
+      transform:translateX(-50%);
       padding:10px 12px;
       border-radius:999px;
       border:1px solid rgba(255,242,234,.14);
@@ -379,44 +579,13 @@
       text-align:center;
       font-size:13px;
     }
+
     #confetti{
-      position:fixed; inset:0;
+      position:fixed;
+      inset:0;
       pointer-events:none;
       z-index:9998;
     }
-
-    /* First-time modal */
-    .modalBack{
-      position:fixed; inset:0;
-      background:rgba(0,0,0,.55);
-      display:none;
-      align-items:center;
-      justify-content:center;
-      padding:16px;
-      z-index:9997;
-    }
-    .modal{
-      width:min(560px, 96vw);
-      border-radius:20px;
-      border:1px solid rgba(255,242,234,.14);
-      background:
-        radial-gradient(800px 320px at 0% 0%, rgba(255,122,89,.18), transparent 60%),
-        radial-gradient(800px 320px at 100% 0%, rgba(255,184,107,.14), transparent 60%),
-        rgba(26,15,13,.92);
-      box-shadow: var(--shadow);
-      padding:16px;
-    }
-    .modal h3{margin:0; font-size:16px}
-    .modal p{margin:8px 0 0; color:var(--muted); line-height:1.45}
-    .modal .bul{
-      margin:10px 0 0;
-      padding-left:18px;
-      color:var(--muted);
-      line-height:1.5;
-    }
-    .modal .bul li{margin:6px 0}
-    .modal .row{margin-top:12px}
-
   </style>
 </head>
 
@@ -426,14 +595,26 @@
   <div class="wrap">
     <div class="topbar">
       <div class="brand">
-        <div class="logo" aria-hidden="true"></div>
-        <div class="title">
-          <span class="name">Rejection Challenge</span>
-          <span class="pill">public</span>
-          <span class="pill">no login</span>
-          <span class="pill">fast</span>
+        <div class="logo" aria-hidden="true">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+            <path d="M5 16c3.4 2.2 10.6 2.2 14 0" stroke="rgba(255,242,234,.92)" stroke-width="2.4" stroke-linecap="round"/>
+            <path d="M8.2 9.4h0" stroke="rgba(255,242,234,.92)" stroke-width="3.4" stroke-linecap="round"/>
+            <path d="M15.8 9.4h0" stroke="rgba(255,242,234,.92)" stroke-width="3.4" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="brandText">
+          <div class="brandName">
+            <span class="name">Rejection Challenge</span>
+            <div class="pills">
+              <span class="pill">public</span>
+              <span class="pill">no login</span>
+              <span class="pill">local only</span>
+            </div>
+          </div>
+          <div class="brandSub">Spin a prompt. Do it in person. Log it. Repeat.</div>
         </div>
       </div>
+
       <div class="actions">
         <button class="btn small" id="exportBtn" title="Download CSV of your logs">Export</button>
         <button class="btn small" id="shareBtn" title="Share the app link">Share</button>
@@ -441,25 +622,25 @@
       </div>
     </div>
 
-    <div class="hero">
+    <section class="hero">
       <div class="heroTop">
         <div>
-          <h1>Spin a dare. Do it in person. Log it.</h1>
+          <h1>Make rejection feel normal.</h1>
           <p>
-            The “no” is the win. One small ask a day. Your streak only moves when you log a rejection.
+            Quick reps beat motivation. Spin an in-person ask, do it politely, then log the result.
+            Your streak moves only when you log a rejection.
           </p>
-          <div class="hint">
-            <span class="pill">Tip: keep it polite, quick, and safe</span>
-            <details>
-              <summary>How it works</summary>
-              <ul class="smallList">
-                <li>Pick Daily or Random.</li>
-                <li>Spin to get a prompt.</li>
-                <li>Do it in person (no means stop).</li>
-                <li>Log Accepted or Rejected.</li>
-              </ul>
-            </details>
-          </div>
+
+          <details>
+            <summary>Ground rules</summary>
+            <ul class="smallList">
+              <li>In person only. No online asks for the streak.</li>
+              <li>No means stop. No arguing. No guilt.</li>
+              <li>Be brief and respectful. Do not interrupt someone rushing.</li>
+              <li>Consent required for photos or video.</li>
+              <li>Logs are saved only in your browser (not shared).</li>
+            </ul>
+          </details>
         </div>
 
         <div class="toggle" role="group" aria-label="Mode toggle">
@@ -469,18 +650,20 @@
       </div>
 
       <div class="wheelWrap">
-        <div class="wheelBox">
+        <div class="wheelBox" aria-label="Prompt wheel">
           <div class="pointer" aria-hidden="true"></div>
           <div class="wheel" id="wheel"></div>
+
+          <!-- Prompt now shows in the center -->
           <div class="wheelLabel">
-            <div class="inside" id="wheelInside">
-              Spin for a prompt
-              <span id="wheelSub">Daily = same for everyone today</span>
+            <div class="inside">
+              <div class="big" id="wheelBig">Spin to roll a prompt</div>
+              <span class="sub" id="wheelSub">Space to spin. R = rejected. A = accepted.</span>
             </div>
           </div>
         </div>
 
-        <div class="challenge">
+        <div class="challenge" aria-label="Tracker">
           <div class="challengeTop">
             <div class="meta">
               <span class="tag" id="mCat">category: any</span>
@@ -493,10 +676,15 @@
             </div>
           </div>
 
-          <div class="challengeText" id="challengeText">Your prompt will show up here.</div>
-          <div class="mini" id="miniHint">Then log the result below.</div>
+          <div class="promptTitle">
+            <div class="h">Your prompt</div>
+            <div class="tip" id="miniHint">Do it, then log accepted or rejected.</div>
+          </div>
 
-          <div class="row" style="margin-top:10px">
+          <!-- Prompt also shows here -->
+          <p class="challengeText" id="challengeText">Your prompt will appear here.</p>
+
+          <div class="row">
             <div>
               <label for="category">Category</label>
               <select id="category">
@@ -509,13 +697,14 @@
                 <option value="career">Career</option>
               </select>
             </div>
+
             <div>
               <label for="difficulty">Difficulty</label>
               <input id="difficulty" type="range" min="1" max="5" value="3" />
             </div>
           </div>
 
-          <div class="row" style="margin-top:6px">
+          <div class="row">
             <div>
               <label for="where">Where (optional)</label>
               <input id="where" type="text" placeholder="coffee shop, campus, gym" />
@@ -527,18 +716,23 @@
           </div>
 
           <label for="note">Note (optional)</label>
-          <textarea id="note" placeholder="Quick detail. Keep it short."></textarea>
+          <textarea id="note" placeholder="One quick detail. Keep it short."></textarea>
 
-          <div class="row" style="margin-top:10px">
+          <div class="row" style="margin-top:2px">
             <button class="btn good" id="acceptedBtn">Accepted</button>
             <button class="btn bad" id="rejectedBtn">Rejected</button>
           </div>
         </div>
       </div>
-    </div>
+    </section>
 
     <div class="grid">
-      <div class="card">
+      <section class="card">
+        <div class="sectionHead">
+          <h2>Stats</h2>
+          <div class="hint">Streak counts only on days with a rejection log.</div>
+        </div>
+
         <div class="statgrid">
           <div class="stat">
             <div class="k">Rejection streak (days)</div>
@@ -554,22 +748,27 @@
           </div>
         </div>
 
-        <details style="margin-top:12px">
-          <summary>Rules (quick)</summary>
-          <ul class="smallList">
-            <li>In person only.</li>
-            <li>No means stop. No pushback.</li>
-            <li>Skip anything unsafe / weird in your setting.</li>
-            <li>Ask for consent for photos/video.</li>
-          </ul>
-        </details>
+        <div class="progressWrap">
+          <div class="hint" id="milestoneText">Next milestone: 3-day streak</div>
+          <div class="progressBar" aria-label="Streak progress">
+            <div class="progressFill" id="streakProgress"></div>
+          </div>
+          <div class="progressRow">
+            <div id="progressLeft">0 / 3</div>
+            <div id="progressRight">Keep it polite. Take the rep.</div>
+          </div>
+        </div>
 
-        <div style="margin-top:12px">
-          <h3 style="margin:0; font-size:14px">Recent logs</h3>
+        <div style="margin-top:14px">
+          <div class="sectionHead">
+            <h2>Recent logs</h2>
+            <div class="hint">Saved only on this device/browser.</div>
+          </div>
+
           <table>
             <thead>
               <tr>
-                <th style="min-width:160px">Time</th>
+                <th style="min-width:170px">Time</th>
                 <th>Prompt</th>
                 <th style="min-width:110px">Result</th>
               </tr>
@@ -579,32 +778,30 @@
             </tbody>
           </table>
         </div>
-      </div>
+      </section>
 
-      <div class="card">
-        <h3 style="margin:0; font-size:14px">Share card</h3>
-        <div style="color:var(--muted); font-size:12px; margin-top:6px">
-          Generate a prompt, then export an image.
+      <aside class="card">
+        <div class="sectionHead">
+          <h2>Badges</h2>
+          <div class="hint">Unlocked locally.</div>
         </div>
 
-        <div id="shareCard" style="
-          margin-top:12px;
-          border-radius:18px;
-          border:1px solid rgba(255,242,234,.12);
-          background:
-            radial-gradient(900px 320px at 0% 0%, rgba(255,122,89,.20), transparent 60%),
-            radial-gradient(900px 320px at 100% 0%, rgba(255,184,107,.16), transparent 60%),
-            rgba(0,0,0,.14);
-          padding:14px;
-        ">
-          <div style="display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap; align-items:flex-start">
-            <div style="font-weight:950">Rejection Challenge</div>
+        <div class="badges" id="badges"></div>
+
+        <div style="margin-top:16px" class="sectionHead">
+          <h2>Share card</h2>
+          <div class="hint">Generate a prompt first.</div>
+        </div>
+
+        <div class="shareCard" id="shareCard">
+          <div class="shareTop">
+            <div class="name">Rejection Challenge</div>
             <div class="pill" id="shareStamp">daily</div>
           </div>
-          <div style="margin-top:10px; font-weight:950; font-size:18px; line-height:1.25" id="shareText">
-            Spin to get a prompt.
-          </div>
-          <div style="margin-top:10px; display:flex; gap:8px; flex-wrap:wrap; color:var(--muted); font-family:var(--mono); font-size:12px">
+
+          <div class="shareBig" id="shareText">Spin to get a prompt.</div>
+
+          <div class="shareTags">
             <span class="tag" id="shareCat">category:any</span>
             <span class="tag" id="shareDiff">d3</span>
             <span class="tag">rule:no means stop</span>
@@ -615,26 +812,10 @@
           <button class="btn small" id="copyImgBtn">Copy image</button>
           <button class="btn small" id="downloadImgBtn">Download</button>
         </div>
-      </div>
+      </aside>
     </div>
 
     <div class="toast" id="toast"></div>
-  </div>
-
-  <div class="modalBack" id="modalBack" role="dialog" aria-modal="true" aria-label="Quick start">
-    <div class="modal">
-      <h3>Quick start</h3>
-      <p>Spin once. Do the ask in person. Log the outcome. That’s it.</p>
-      <ul class="bul">
-        <li>Rejected counts for streak.</li>
-        <li>Keep it polite and fast.</li>
-        <li>Skip anything that feels unsafe.</li>
-      </ul>
-      <div class="row">
-        <button class="btn primary" id="modalGo">Got it</button>
-        <button class="btn ghost" id="modalSkip">Do not show again</button>
-      </div>
-    </div>
   </div>
 
 <script>
@@ -646,11 +827,14 @@
   const modeRandom = $("modeRandom");
   const spinBtn = $("spinBtn");
   const wheel = $("wheel");
+  const wheelBig = $("wheelBig");
+  const wheelSub = $("wheelSub");
 
   const category = $("category");
   const difficulty = $("difficulty");
 
   const challengeText = $("challengeText");
+  const miniHint = $("miniHint");
   const mCat = $("mCat");
   const mDiff = $("mDiff");
   const mMode = $("mMode");
@@ -671,7 +855,13 @@
   const levelEl = $("level");
   const xpEl = $("xp");
   const logBody = $("logBody");
-  const toast = $("toast");
+
+  const milestoneText = $("milestoneText");
+  const streakProgress = $("streakProgress");
+  const progressLeft = $("progressLeft");
+  const progressRight = $("progressRight");
+
+  const badgesHost = $("badges");
 
   const shareCard = $("shareCard");
   const shareStamp = $("shareStamp");
@@ -681,31 +871,36 @@
   const copyImgBtn = $("copyImgBtn");
   const downloadImgBtn = $("downloadImgBtn");
 
-  const modalBack = $("modalBack");
-  const modalGo = $("modalGo");
-  const modalSkip = $("modalSkip");
+  const toast = $("toast");
+  const confettiCanvas = $("confetti");
+  const ctx = confettiCanvas.getContext("2d");
 
   // Storage keys
-  const K_LOGS = "rc_logs_v1";
-  const K_STREAK = "rc_streak_v1";
-  const K_LAST_REJ_DAY = "rc_last_rej_day_v1";
-  const K_GAME = "rc_game_v1";
-  const K_HIDE_MODAL = "rc_hide_modal_v1";
+  const K_LOGS = "rc_logs_v3";
+  const K_STREAK = "rc_streak_v3";
+  const K_LAST_REJ_DAY = "rc_last_rej_day_v3";
+  const K_GAME = "rc_game_v3";
 
-  // State
   let mode = "daily"; // daily | random
   let current = null;
+  let spinRotation = 0;
 
-  // Helpers
-  function dayKey(d = new Date()){
-    return d.toISOString().slice(0,10);
+  function resizeConfetti(){
+    confettiCanvas.width = window.innerWidth;
+    confettiCanvas.height = window.innerHeight;
   }
+  window.addEventListener("resize", resizeConfetti);
+  resizeConfetti();
+
   function toastMsg(msg){
     toast.textContent = msg;
     toast.style.display = "block";
     clearTimeout(toast._t);
     toast._t = setTimeout(() => toast.style.display = "none", 1800);
   }
+
+  function dayKey(d = new Date()){ return d.toISOString().slice(0,10); }
+
   function hash32(str){
     let h = 2166136261;
     for (let i=0;i<str.length;i++){
@@ -728,7 +923,6 @@
     localStorage.setItem(key, JSON.stringify(value));
   }
 
-  // Content
   const challenges = [
     {cat:"food", diff:1, text:"Ask the barista to recommend something that is not on the menu."},
     {cat:"food", diff:2, text:"Ask if they can make your drink less sweet."},
@@ -738,7 +932,7 @@
 
     {cat:"social", diff:1, text:"Give a sincere compliment to a stranger and walk away."},
     {cat:"social", diff:2, text:"Ask someone where they got an item because you like it."},
-    {cat:"social", diff:3, text:"Ask a stranger to rate your outfit 1–10. Thank them either way."},
+    {cat:"social", diff:3, text:"Ask a stranger to rate your outfit 1 to 10. Thank them either way."},
     {cat:"social", diff:4, text:"Ask someone to take a quick photo of you. Offer to return the favor."},
     {cat:"social", diff:5, text:"Ask a group if you can join for 60 seconds to practice small talk, then leave."},
 
@@ -751,15 +945,15 @@
     {cat:"negotiation", diff:1, text:"Ask if there is a student discount."},
     {cat:"negotiation", diff:2, text:"Ask if they can waive a small add-on fee once."},
     {cat:"negotiation", diff:3, text:"Ask for a small upgrade (size, add-on, seat)."},
-    {cat:"negotiation", diff:4, text:"Ask for $1–$2 off a small purchase. If no, end it."},
+    {cat:"negotiation", diff:4, text:"Ask for $1 to $2 off a small purchase. If no, end it."},
     {cat:"negotiation", diff:5, text:"Ask for a free extra. If no, say thanks and stop."},
 
     {cat:"weird", diff:1, text:"Ask someone a harmless silly question: do pigeons have a leader?"},
     {cat:"weird", diff:2, text:"Ask a cashier: is today more of a 7 or a 9?"},
-    {cat:"weird", diff:3, text:"Ask for a 10-second pep talk. Time it."},
+    {cat:"weird", diff:3, text:"Ask for a 10-second pep talk."},
     {cat:"weird", diff:4, text:"Ask someone for one life hack that saves time."},
     {cat:"weird", diff:5, text:"Ask for a 5-second 'you got this' video (only with consent)."},
-    
+
     {cat:"career", diff:1, text:"Ask someone what they do for work and what they like about it."},
     {cat:"career", diff:2, text:"Ask for one piece of advice for someone early in their career."},
     {cat:"career", diff:3, text:"Ask if they are open to a 10-minute coffee chat sometime."},
@@ -774,9 +968,10 @@
     if (cat !== "any") p = p.filter(c => c.cat === cat);
     if (!p.length){
       p = challenges.slice();
-      if (cat !== "any") p = p.filter(c => c.cat === cat) || challenges.slice();
+      if (cat !== "any") p = p.filter(c => c.cat === cat);
+      if (!p.length) p = challenges.slice();
     }
-    return p.length ? p : challenges.slice();
+    return p;
   }
 
   function pick(){
@@ -788,7 +983,6 @@
     return p[Math.floor(Math.random() * p.length)];
   }
 
-  // Share link encoding
   function encodeChallenge(ch){
     const payload = {cat: ch.cat, diff: ch.diff, text: ch.text, mode, fCat: category.value, fDiff: difficulty.value};
     const b64 = btoa(unescape(encodeURIComponent(JSON.stringify(payload))));
@@ -814,40 +1008,104 @@
     shareDiff.textContent = "d" + difficulty.value;
   }
 
-  // Wheel spin (pure fun, still deterministic for daily)
-  let spinRotation = 0;
+  function setMode(next){
+    mode = next;
+    modeDaily.classList.toggle("on", mode === "daily");
+    modeRandom.classList.toggle("on", mode === "random");
+
+    wheelSub.textContent = (mode === "daily")
+      ? "Daily: same prompt today (same filters)"
+      : "Random: fresh roll each spin";
+
+    syncMeta();
+  }
+
+  // Confetti (small, tasteful)
+  let confetti = [];
+  function burstConfetti(){
+    const w = confettiCanvas.width;
+    const h = confettiCanvas.height;
+    const n = 90;
+    confetti = [];
+    for (let i=0;i<n;i++){
+      confetti.push({
+        x: w*0.5 + (Math.random()*80 - 40),
+        y: h*0.18 + (Math.random()*40 - 20),
+        vx: (Math.random()*6 - 3),
+        vy: (Math.random()*-8 - 4),
+        g: 0.22 + Math.random()*0.12,
+        r: 3 + Math.random()*3,
+        life: 120 + Math.floor(Math.random()*40)
+      });
+    }
+    animateConfetti();
+  }
+
+  function animateConfetti(){
+    let frames = 0;
+    const tick = () => {
+      frames++;
+      ctx.clearRect(0,0,confettiCanvas.width, confettiCanvas.height);
+
+      confetti.forEach(p => {
+        p.vy += p.g;
+        p.x += p.vx;
+        p.y += p.vy;
+        p.life -= 1;
+
+        const a = Math.max(0, Math.min(1, p.life / 140));
+        ctx.globalAlpha = a;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+        ctx.fillStyle = (frames % 3 === 0) ? "rgba(255,184,107,.95)" : (frames % 3 === 1) ? "rgba(255,122,89,.95)" : "rgba(83,226,176,.95)";
+        ctx.fill();
+      });
+
+      ctx.globalAlpha = 1;
+
+      confetti = confetti.filter(p => p.life > 0 && p.y < confettiCanvas.height + 30);
+      if (confetti.length && frames < 170){
+        requestAnimationFrame(tick);
+      } else {
+        ctx.clearRect(0,0,confettiCanvas.width, confettiCanvas.height);
+      }
+    };
+    requestAnimationFrame(tick);
+  }
+
   function spin(){
+    challengeText.textContent = "Spinning...";
+    miniHint.textContent = "Prompt appears here and in the wheel center.";
+    wheelBig.textContent = "Rolling...";
+
     const ch = pick();
     current = ch;
 
-    // add rotation
-    const extra = 1080 + Math.floor(Math.random() * 720); // 3–5 turns
+    const extra = 1080 + Math.floor(Math.random() * 720);
     spinRotation = (spinRotation + extra) % 3600;
     wheel.style.transform = `rotate(${spinRotation}deg)`;
 
-    // show text slightly after spin begins
     setTimeout(() => {
       challengeText.textContent = ch.text;
+      wheelBig.textContent = ch.text;
       shareText.textContent = ch.text;
+      miniHint.textContent = "Do it, then log accepted or rejected.";
 
       const url = new URL(location.href);
       url.searchParams.set("c", encodeChallenge(ch));
       history.replaceState(null, "", url.toString());
 
       toastMsg("Prompt ready.");
-    }, 650);
+    }, 720);
   }
 
-  // Logs + game
   function loadLogs(){ return loadJSON(K_LOGS, []); }
   function saveLogs(v){ saveJSON(K_LOGS, v); }
 
   function loadStreak(){ return loadJSON(K_STREAK, 0); }
   function saveStreak(v){ saveJSON(K_STREAK, v); }
 
-  function loadGame(){
-    return loadJSON(K_GAME, {xp:0, level:1});
-  }
+  function loadGame(){ return loadJSON(K_GAME, {xp:0, level:1}); }
   function saveGame(g){ saveJSON(K_GAME, g); }
 
   function levelForXP(xp){
@@ -860,46 +1118,6 @@
     return {level:lvl};
   }
 
-  function confettiBurst(){
-    const c = $("confetti");
-    const ctx = c.getContext("2d");
-    const W = c.width = window.innerWidth;
-    const H = c.height = window.innerHeight;
-
-    const parts = Array.from({length: 120}).map(() => ({
-      x: Math.random()*W,
-      y: -20 - Math.random()*H*0.2,
-      r: 3 + Math.random()*4,
-      vx: -2 + Math.random()*4,
-      vy: 3 + Math.random()*5,
-      a: 1,
-      spin: -0.2 + Math.random()*0.4
-    }));
-
-    let t = 0;
-    const colors = ["#ff7a59","#ffb86b","#53e2b0","#ff5b85","#fff2ea"];
-    function draw(){
-      t++;
-      ctx.clearRect(0,0,W,H);
-      for (const p of parts){
-        p.x += p.vx;
-        p.y += p.vy;
-        p.vy += 0.03;
-        p.a -= 0.006;
-        ctx.globalAlpha = Math.max(0,p.a);
-        ctx.save();
-        ctx.translate(p.x,p.y);
-        ctx.rotate(t*p.spin);
-        ctx.fillStyle = colors[(Math.random()*colors.length)|0];
-        ctx.fillRect(-p.r, -p.r, p.r*2, p.r*2);
-        ctx.restore();
-      }
-      if (parts.some(p => p.a > 0 && p.y < H + 40)) requestAnimationFrame(draw);
-      else ctx.clearRect(0,0,W,H);
-    }
-    draw();
-  }
-
   function updateStreakOnRejection(){
     const today = dayKey();
     const last = localStorage.getItem(K_LAST_REJ_DAY);
@@ -910,7 +1128,7 @@
       const d0 = new Date(last+"T00:00:00");
       const d1 = new Date(today+"T00:00:00");
       const diff = Math.round((d1 - d0) / 86400000);
-      if (diff === 0) { /* no change */ }
+      if (diff === 0) {}
       else if (diff === 1) s += 1;
       else s = 1;
     }
@@ -925,44 +1143,147 @@
     const catBonus = (entry.cat === "negotiation" || entry.cat === "career") ? 8 : 0;
     const add = base + diffBonus + catBonus;
 
-    const before = g.level;
+    const beforeLevel = g.level;
     g.xp += add;
     g.level = levelForXP(g.xp).level;
     saveGame(g);
 
-    if (g.level > before){
-      confettiBurst();
+    if (g.level > beforeLevel){
       toastMsg("Level up.");
+      burstConfetti();
     } else {
       toastMsg("Logged +" + add + " XP");
     }
   }
 
+  // Badge definitions + checks
+  const badgeDefs = [
+    {id:"b_first_no", title:"First No", desc:"Log your first rejection.", icon:"bolt"},
+    {id:"b_streak_3", title:"3-day streak", desc:"Reach a 3-day rejection streak.", icon:"flame"},
+    {id:"b_streak_7", title:"7-day streak", desc:"Reach a 7-day rejection streak.", icon:"crown"},
+    {id:"b_neg_5", title:"Negotiator", desc:"Log 5 negotiation reps.", icon:"handshake"},
+    {id:"b_career_5", title:"Networker", desc:"Log 5 career reps.", icon:"node"},
+    {id:"b_social_10", title:"Social 10", desc:"Log 10 social reps.", icon:"spark"}
+  ];
+
+  function getBadgeState(logs, streak){
+    const negCount = logs.filter(l => l.cat === "negotiation").length;
+    const careerCount = logs.filter(l => l.cat === "career").length;
+    const socialCount = logs.filter(l => l.cat === "social").length;
+
+    return {
+      b_first_no: logs.some(l => l.result === "rejected"),
+      b_streak_3: streak >= 3,
+      b_streak_7: streak >= 7,
+      b_neg_5: negCount >= 5,
+      b_career_5: careerCount >= 5,
+      b_social_10: socialCount >= 10
+    };
+  }
+
+  function iconSvg(name){
+    const stroke = "rgba(255,242,234,.92)";
+    const s2 = "rgba(255,242,234,.72)";
+    if (name === "bolt") return `
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+        <path d="M13 2L3 14h8l-1 8 11-14h-8l0-6z" stroke="${stroke}" stroke-width="2" stroke-linejoin="round"/>
+      </svg>`;
+    if (name === "flame") return `
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+        <path d="M12 2c2 4-1 5 2 8 2 2 4 3 4 7a6 6 0 0 1-12 0c0-3 2-5 4-7 2-2 0-4 2-8z" stroke="${stroke}" stroke-width="2"/>
+      </svg>`;
+    if (name === "crown") return `
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+        <path d="M4 8l4 4 4-7 4 7 4-4v10H4V8z" stroke="${stroke}" stroke-width="2" stroke-linejoin="round"/>
+        <path d="M4 18h16" stroke="${s2}" stroke-width="2" stroke-linecap="round"/>
+      </svg>`;
+    if (name === "handshake") return `
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+        <path d="M8 12l2 2c1 1 3 1 4 0l2-2" stroke="${stroke}" stroke-width="2" stroke-linecap="round"/>
+        <path d="M3 12l4-4 4 4-4 4-4-4z" stroke="${s2}" stroke-width="2" stroke-linejoin="round"/>
+        <path d="M21 12l-4-4-4 4 4 4 4-4z" stroke="${s2}" stroke-width="2" stroke-linejoin="round"/>
+      </svg>`;
+    if (name === "node") return `
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+        <path d="M7 12a2 2 0 1 0 0 .01" stroke="${stroke}" stroke-width="2"/>
+        <path d="M17 7a2 2 0 1 0 0 .01" stroke="${stroke}" stroke-width="2"/>
+        <path d="M17 17a2 2 0 1 0 0 .01" stroke="${stroke}" stroke-width="2"/>
+        <path d="M9 12l6-4" stroke="${s2}" stroke-width="2" stroke-linecap="round"/>
+        <path d="M9 12l6 4" stroke="${s2}" stroke-width="2" stroke-linecap="round"/>
+      </svg>`;
+    return `
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+        <path d="M12 3l1.6 4.8L18 9l-4.4 1.2L12 15l-1.6-4.8L6 9l4.4-1.2L12 3z" stroke="${stroke}" stroke-width="2" stroke-linejoin="round"/>
+      </svg>`;
+  }
+
+  function renderBadges(logs, streak){
+    const have = getBadgeState(logs, streak);
+    badgesHost.innerHTML = badgeDefs.map(b => {
+      const ok = !!have[b.id];
+      return `
+        <div class="badge ${ok ? "" : "locked"}" title="${b.desc}">
+          <div class="badgeIcon">${iconSvg(b.icon)}</div>
+          <div class="badgeText">
+            <div class="t">${b.title}</div>
+            <div class="d">${b.desc}</div>
+          </div>
+        </div>
+      `;
+    }).join("");
+  }
+
+  function streakMilestone(streak){
+    // Friendly progression for the bar
+    const milestones = [3, 7, 14, 30];
+    for (const m of milestones){
+      if (streak < m) return m;
+    }
+    return 30;
+  }
+
   function render(){
-    // stats
-    streakEl.textContent = loadStreak();
+    const logs = loadLogs();
+    const streak = loadStreak();
     const g = loadGame();
+
+    streakEl.textContent = streak;
     levelEl.textContent = g.level;
     xpEl.textContent = g.xp;
 
-    // logs
-    const logs = loadLogs().slice().reverse().slice(0, 10);
-    if (!logs.length){
+    // Streak progress bar toward next milestone
+    const next = streakMilestone(streak);
+    const pct = Math.max(0, Math.min(100, Math.round((streak / next) * 100)));
+    streakProgress.style.width = pct + "%";
+    milestoneText.textContent = "Next milestone: " + next + "-day streak";
+    progressLeft.textContent = streak + " / " + next;
+
+    const last = localStorage.getItem(K_LAST_REJ_DAY);
+    if (!last) progressRight.textContent = "Log a rejection to start the streak.";
+    else if (last === dayKey()) progressRight.textContent = "Streak counted today. Another rep is bonus.";
+    else progressRight.textContent = "Streak continues only if you log a rejection today.";
+
+    // Logs table
+    const show = logs.slice().reverse().slice(0, 10);
+    if (!show.length){
       logBody.innerHTML = `<tr><td colspan="3" style="color:var(--muted)">No logs yet.</td></tr>`;
-      return;
+    } else {
+      logBody.innerHTML = show.map(l => {
+        const dt = new Date(l.time);
+        const when = dt.toLocaleString([], {month:"short", day:"2-digit", hour:"2-digit", minute:"2-digit"});
+        const res = l.result === "rejected" ? "Rejected" : "Accepted";
+        return `
+          <tr>
+            <td>${when}<br><small>${l.cat} d${l.diff} • ${l.mode}</small></td>
+            <td style="font-weight:750">${l.challenge}</td>
+            <td>${res}</td>
+          </tr>
+        `;
+      }).join("");
     }
-    logBody.innerHTML = logs.map(l => {
-      const dt = new Date(l.time);
-      const when = dt.toLocaleString([], {month:"short", day:"2-digit", hour:"2-digit", minute:"2-digit"});
-      const res = l.result === "rejected" ? "Rejected" : "Accepted";
-      return `
-        <tr>
-          <td>${when}</td>
-          <td style="font-weight:800">${l.challenge}</td>
-          <td>${res}</td>
-        </tr>
-      `;
-    }).join("");
+
+    // Badges
+    renderBadges(logs, streak);
   }
 
   function log(result){
@@ -970,6 +1291,7 @@
       toastMsg("Spin first.");
       return;
     }
+
     const logs = loadLogs();
     const entry = {
       time: new Date().toISOString(),
@@ -978,16 +1300,27 @@
       cat: current.cat,
       diff: current.diff,
       challenge: current.text,
-      where: where.value.trim(),
-      who: who.value.trim(),
-      note: note.value.trim()
+      where: (where.value || "").trim(),
+      who: (who.value || "").trim(),
+      note: (note.value || "").trim()
     };
+
     logs.push(entry);
     saveLogs(logs);
 
-    if (result === "rejected") updateStreakOnRejection();
+    if (result === "rejected"){
+      const before = loadStreak();
+      updateStreakOnRejection();
+      const afterS = loadStreak();
+      if (afterS > before) toastMsg("Rejected logged. Streak updated.");
+      else toastMsg("Rejected logged. Streak already counted today.");
+    } else {
+      toastMsg("Accepted logged.");
+    }
+
     awardXP(entry);
 
+    // Clear fields
     where.value = "";
     who.value = "";
     note.value = "";
@@ -995,10 +1328,12 @@
     render();
   }
 
-  // Export + share
   function exportCSV(){
     const logs = loadLogs();
-    if (!logs.length){ toastMsg("Nothing to export."); return; }
+    if (!logs.length){
+      toastMsg("Nothing to export.");
+      return;
+    }
 
     const header = ["time_iso","result","mode","category","difficulty","challenge","where","who","note"];
     const rows = logs.map(l => [
@@ -1012,6 +1347,7 @@
     const csv = [header.join(","), ...rows.map(r => r.map(v => `"${v}"`).join(","))].join("\n");
     const blob = new Blob([csv], {type:"text/csv;charset=utf-8"});
     const url = URL.createObjectURL(blob);
+
     const a = document.createElement("a");
     a.href = url;
     a.download = "rejection-challenge-logs.csv";
@@ -1019,28 +1355,31 @@
     a.click();
     a.remove();
     URL.revokeObjectURL(url);
+    toastMsg("Exported.");
   }
 
   async function shareApp(){
     const url = location.origin + location.pathname;
     if (navigator.share){
-      try { await navigator.share({title:"Rejection Challenge", text:"Spin a prompt and log it:", url}); } catch {}
+      try { await navigator.share({title:"Rejection Challenge", text:"Try this:", url}); }
+      catch {}
     } else {
-      try { await navigator.clipboard.writeText(url); toastMsg("Link copied."); }
+      try { await navigator.clipboard.writeText(url); toastMsg("App link copied."); }
       catch { prompt("Copy this link:", url); }
     }
   }
 
   async function copyLink(){
     const url = location.href;
-    try { await navigator.clipboard.writeText(url); toastMsg("Copied."); }
+    try { await navigator.clipboard.writeText(url); toastMsg("Link copied."); }
     catch { prompt("Copy:", url); }
   }
 
   async function renderShareCard(){
-    await new Promise(r => setTimeout(r, 30));
+    await new Promise(r => setTimeout(r, 40));
     return html2canvas(shareCard, {backgroundColor: null, scale: 2});
   }
+
   async function copyShareImage(){
     if (!current){ toastMsg("Spin first."); return; }
     try{
@@ -1066,6 +1405,7 @@
       toastMsg("Could not copy. Try download.");
     }
   }
+
   async function downloadShareImage(){
     if (!current){ toastMsg("Spin first."); return; }
     const canvas = await renderShareCard();
@@ -1080,45 +1420,63 @@
   }
 
   function resetAll(){
-    if (!confirm("Reset logs and stats?")) return;
+    if (!confirm("Reset logs and stats on this device?")) return;
     localStorage.removeItem(K_LOGS);
     localStorage.removeItem(K_STREAK);
     localStorage.removeItem(K_LAST_REJ_DAY);
     localStorage.removeItem(K_GAME);
+
     history.replaceState(null,"", location.origin + location.pathname);
     current = null;
-    challengeText.textContent = "Your prompt will show up here.";
+
+    challengeText.textContent = "Your prompt will appear here.";
+    wheelBig.textContent = "Spin to roll a prompt";
     shareText.textContent = "Spin to get a prompt.";
     toastMsg("Reset.");
     render();
   }
 
-  // Mode toggle
-  function setMode(next){
-    mode = next;
-    modeDaily.classList.toggle("on", mode === "daily");
-    modeRandom.classList.toggle("on", mode === "random");
-    $("wheelSub").textContent = (mode === "daily")
-      ? "Daily = same for everyone today"
-      : "Random = fresh roll each time";
-    syncMeta();
-    if (current){
-      // update URL payload mode without forcing new prompt
-      const url = new URL(location.href);
-      url.searchParams.set("c", encodeChallenge(current));
-      history.replaceState(null, "", url.toString());
-    }
+  function updateShareMeta(){
+    shareStamp.textContent = mode;
+    shareCat.textContent = "category:" + category.value;
+    shareDiff.textContent = "d" + difficulty.value;
   }
 
-  // Wiring
-  modeDaily.addEventListener("click", () => { setMode("daily"); modeDaily.classList.add("on"); modeRandom.classList.remove("on"); });
-  modeRandom.addEventListener("click", () => { setMode("random"); modeRandom.classList.add("on"); modeDaily.classList.remove("on"); });
+  function spinAndSet(){
+    challengeText.textContent = "Spinning...";
+    miniHint.textContent = "Prompt appears here and in the wheel center.";
+    wheelBig.textContent = "Rolling...";
 
-  spinBtn.addEventListener("click", spin);
-  wheel.addEventListener("click", spin);
+    const ch = pick();
+    current = ch;
 
-  category.addEventListener("change", () => { syncMeta(); });
-  difficulty.addEventListener("input", () => { syncMeta(); });
+    const extra = 1080 + Math.floor(Math.random() * 720);
+    spinRotation = (spinRotation + extra) % 3600;
+    wheel.style.transform = `rotate(${spinRotation}deg)`;
+
+    setTimeout(() => {
+      challengeText.textContent = ch.text;
+      wheelBig.textContent = ch.text;
+      shareText.textContent = ch.text;
+      miniHint.textContent = "Do it, then log accepted or rejected.";
+
+      const url = new URL(location.href);
+      url.searchParams.set("c", encodeChallenge(ch));
+      history.replaceState(null, "", url.toString());
+
+      toastMsg("Prompt ready.");
+    }, 720);
+  }
+
+  // Wire up
+  modeDaily.addEventListener("click", () => setMode("daily"));
+  modeRandom.addEventListener("click", () => setMode("random"));
+
+  spinBtn.addEventListener("click", spinAndSet);
+  wheel.addEventListener("click", spinAndSet);
+
+  category.addEventListener("change", () => { syncMeta(); updateShareMeta(); });
+  difficulty.addEventListener("input", () => { syncMeta(); updateShareMeta(); });
 
   acceptedBtn.addEventListener("click", () => log("accepted"));
   rejectedBtn.addEventListener("click", () => log("rejected"));
@@ -1131,50 +1489,38 @@
   copyImgBtn.addEventListener("click", copyShareImage);
   downloadImgBtn.addEventListener("click", downloadShareImage);
 
-  // Shortcuts
   document.addEventListener("keydown", (e) => {
     const k = e.key.toLowerCase();
-    if (k === " "){ e.preventDefault(); spin(); }
+    if (k === " "){ e.preventDefault(); spinAndSet(); }
     if (k === "r") log("rejected");
     if (k === "a") log("accepted");
   });
 
-  // First-time modal
-  function showModal(){
-    if (localStorage.getItem(K_HIDE_MODAL) === "1") return;
-    modalBack.style.display = "flex";
-  }
-  function hideModal(perma){
-    modalBack.style.display = "none";
-    if (perma) localStorage.setItem(K_HIDE_MODAL, "1");
-  }
-  modalGo.addEventListener("click", () => hideModal(false));
-  modalSkip.addEventListener("click", () => hideModal(true));
-  modalBack.addEventListener("click", (e) => { if (e.target === modalBack) hideModal(false); });
-
-  // Load from shared link if present
+  // Load from shared link
   const params = new URLSearchParams(location.search);
   const c = params.get("c");
   if (c){
     const decoded = decodeChallenge(c);
     if (decoded){
-      mode = (decoded.mode === "random") ? "random" : "daily";
+      setMode(decoded.mode === "random" ? "random" : "daily");
       category.value = ["any","food","social","help","negotiation","weird","career"].includes(decoded.fCat) ? decoded.fCat : "any";
       difficulty.value = String(Math.min(5, Math.max(1, parseInt(decoded.fDiff || 3, 10) || 3)));
 
       current = {cat: decoded.cat, diff: decoded.diff, text: decoded.text};
       challengeText.textContent = decoded.text;
+      wheelBig.textContent = decoded.text;
       shareText.textContent = decoded.text;
+      miniHint.textContent = "Do it, then log accepted or rejected.";
     }
   }
 
   // Init
+  setMode("daily");
   syncMeta();
-  setMode(mode);
+  updateShareMeta();
   render();
-  showModal();
+
 })();
 </script>
 </body>
 </html>
-
