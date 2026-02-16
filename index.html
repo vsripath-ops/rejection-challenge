@@ -4,188 +4,166 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Rejection Challenge</title>
-  <meta name="description" content="A public 30-day rejection practice challenge: generate in-person asks, track streaks, earn XP, complete quests, unlock badges, export your log. No login." />
+  <meta name="description" content="A public rejection practice game: deal yourself a real-life ask, log the result, build streaks, earn XP, unlock badges, export your log. No login." />
 
-  <!-- Simple favicon (no emoji) -->
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23121a2a'/%3E%3Ctext x='50%25' y='56%25' text-anchor='middle' font-family='Arial' font-size='28' fill='%23e8eefc'%3ERR%3C/text%3E%3C/svg%3E">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23120b08'/%3E%3Ctext x='50%25' y='56%25' text-anchor='middle' font-family='Arial' font-size='26' font-weight='800' fill='%23fff6f0'%3ERC%3C/text%3E%3C/svg%3E">
 
-  <!-- html2canvas for share-card image capture -->
   <script defer src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 
   <style>
-   --bg:#120b08;
-  --card:#1b120f;
-  --muted:#d2b7a9;
-  --text:#fff6f0;
+    :root{
+      --bg:#120b08;
+      --card:#1b120f;
+      --muted:#d7bfb2;
+      --text:#fff6f0;
 
-  --accent:#ff7a59;     /* warm coral */
-  --accent2:#ffb86b;    /* warm amber */
-  --good:#4fd8a2;       /* mint */
-  --bad:#ff5a7a;        /* pink-red */
+      --accent:#ff7a59;   /* coral */
+      --accent2:#ffb86b;  /* amber */
+      --good:#4fd8a2;     /* mint */
+      --bad:#ff5a7a;      /* pink-red */
 
-  --border: rgba(255,246,240,.10);
-  --shadow: 0 12px 40px rgba(0,0,0,.40);
+      --border: rgba(255,246,240,.12);
+      --shadow: 0 18px 55px rgba(0,0,0,.44);
 
-  --radius:20px;
-  --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-  --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
-}
+      --radius:20px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
     }
+
     *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
     body{
-  margin:0; font-family:var(--sans); color:var(--text);
-  background:
-    radial-gradient(900px 520px at 10% 0%, rgba(255,122,89,.35), transparent 60%),
-    radial-gradient(900px 520px at 100% 10%, rgba(255,184,107,.22), transparent 55%),
-    radial-gradient(700px 420px at 40% 120%, rgba(79,216,162,.14), transparent 60%),
-    var(--bg);
-  min-height:100vh;
-}
+      margin:0;
+      font-family:var(--sans);
+      color:var(--text);
+      background:
+        radial-gradient(900px 520px at 10% 0%, rgba(255,122,89,.34), transparent 60%),
+        radial-gradient(900px 520px at 100% 8%, rgba(255,184,107,.22), transparent 55%),
+        radial-gradient(700px 420px at 40% 120%, rgba(79,216,162,.12), transparent 60%),
+        var(--bg);
+      min-height:100vh;
+    }
 
     a{color:inherit; text-decoration:none}
-    .wrap{max-width:1100px; margin:0 auto; padding:28px 16px 60px}
+
+    .wrap{max-width:1120px; margin:0 auto; padding:26px 16px 70px}
     header{
       display:flex; align-items:flex-start; justify-content:space-between; gap:16px;
       margin-bottom:14px;
     }
-    .brand{display:flex; flex-direction:column; gap:6px}
-    .title{display:flex; align-items:center; gap:10px; font-size:22px; font-weight:900; letter-spacing:.2px; flex-wrap:wrap}
+    @media (max-width: 980px){ header{flex-direction:column} }
+
+    .brand{display:flex; flex-direction:column; gap:8px}
+    .title{display:flex; align-items:center; gap:10px; flex-wrap:wrap; font-size:22px; font-weight:1000; letter-spacing:.2px}
+    .sub{color:var(--muted); font-size:14px; line-height:1.4; max-width:80ch}
+
     .pill{
       font-family:var(--mono);
-      font-size:12px; color:rgba(232,238,252,.9);
-      border:1px solid rgba(255,255,255,.12);
-      padding:4px 8px; border-radius:999px;
-      background:rgba(18,26,42,.55);
+      font-size:12px;
+      border:1px solid rgba(255,246,240,.18);
+      padding:4px 8px;
+      border-radius:999px;
+      background:rgba(255,246,240,.06);
+      color:rgba(255,246,240,.92);
       white-space:nowrap;
     }
-    .sub{color:var(--muted); font-size:14px; line-height:1.35; max-width:78ch}
 
     .grid{display:grid; grid-template-columns:1.25fr .75fr; gap:14px; margin-top:14px}
-    @media (max-width: 980px){ .grid{grid-template-columns:1fr} header{flex-direction:column} }
+    @media (max-width: 980px){ .grid{grid-template-columns:1fr} }
 
     .card{
       background: linear-gradient(180deg, rgba(27,18,15,.92), rgba(27,18,15,.72));
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  padding: 16px;
-}
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:16px;
+    }
     .card h2{margin:0 0 10px; font-size:15px; letter-spacing:.2px}
 
     .row{display:flex; gap:10px; align-items:center; flex-wrap:wrap}
-    .row > *{flex: 1 1 auto}
+    .row > *{flex:1 1 auto}
 
     label{display:block; font-size:12px; color:var(--muted); margin-bottom:6px}
+
     select, input[type="range"], input[type="text"], textarea{
       width:100%;
-      background:rgba(11,15,25,.65);
-      border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,246,240,.06);
+      border:1px solid rgba(255,246,240,.14);
       color:var(--text);
-      border-radius:12px;
+      border-radius:14px;
       padding:10px 12px;
       outline:none;
     }
+    select:focus, input[type="text"]:focus, textarea:focus{
+      border-color: rgba(255,184,107,.40);
+      box-shadow: 0 0 0 3px rgba(255,184,107,.12);
+    }
     textarea{min-height:88px; resize:vertical}
 
- .btn{
-  appearance:none; border:0; cursor:pointer;
-  padding:10px 12px;
-  border-radius:14px;
-  font-weight:900;
-  color:var(--text);
-  background:rgba(255,246,240,.08);
-  border:1px solid rgba(255,246,240,.14);
-  transition:transform .06s ease, filter .15s ease, background .15s ease;
-  user-select:none;
-  text-align:center;
-}
-.btn:hover{filter:brightness(1.05)}
-.btn:active{transform:translateY(1px) scale(.99)}
-
-.btn.primary{
-  background: linear-gradient(90deg, rgba(255,122,89,.98), rgba(255,184,107,.85));
-  border-color: rgba(255,184,107,.35);
-}
-.btn.good{
-  background: linear-gradient(90deg, rgba(79,216,162,.92), rgba(79,216,162,.62));
-  border-color: rgba(79,216,162,.40);
-}
-.btn.bad{
-  background: linear-gradient(90deg, rgba(255,90,122,.95), rgba(255,90,122,.62));
-  border-color: rgba(255,90,122,.42);
-}
-
-.challenge{
-  border:1px solid rgba(255,246,240,.14);
-  border-radius:18px;
-  padding:14px;
-  background:
-    radial-gradient(700px 260px at 0% 0%, rgba(255,122,89,.18), transparent 60%),
-    radial-gradient(700px 260px at 100% 0%, rgba(255,184,107,.14), transparent 60%),
-    rgba(12,8,7,.55);
-}
-.challenge .text{
-  font-size:19px;
-  font-weight:1000;
-  margin:10px 0 6px;
-  line-height:1.25;
-}
-
+    .btn{
+      appearance:none; border:0; cursor:pointer;
+      padding:10px 12px;
+      border-radius:14px;
+      font-weight:1000;
+      color:var(--text);
+      background:rgba(255,246,240,.08);
+      border:1px solid rgba(255,246,240,.16);
+      transition:transform .06s ease, filter .15s ease, background .15s ease;
+      user-select:none;
+      text-align:center;
+      box-shadow: 0 10px 30px rgba(0,0,0,.25);
     }
-    .challenge .headline{display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap}
-    .challenge .text{font-size:18px; font-weight:1000; margin:8px 0 6px; line-height:1.25}
-    .challenge .meta{display:flex; gap:8px; flex-wrap:wrap; color:var(--muted); font-size:12px}
+    .btn:hover{filter:brightness(1.05)}
+    .btn:active{transform:translateY(1px) scale(.99)}
+    .btn.small{padding:8px 10px; font-size:13px; box-shadow:none}
+    .btn.ghost{background:rgba(255,246,240,.06); box-shadow:none}
+    .btn.primary{
+      background: linear-gradient(90deg, rgba(255,122,89,.98), rgba(255,184,107,.86));
+      border-color: rgba(255,184,107,.30);
+    }
+    .btn.good{
+      background: linear-gradient(90deg, rgba(79,216,162,.92), rgba(79,216,162,.62));
+      border-color: rgba(79,216,162,.40);
+    }
+    .btn.bad{
+      background: linear-gradient(90deg, rgba(255,90,122,.95), rgba(255,90,122,.62));
+      border-color: rgba(255,90,122,.42);
+    }
+
+    .muted{color:var(--muted)}
+    .kbd{
+      font-family:var(--mono);
+      border:1px solid rgba(255,246,240,.18);
+      background:rgba(255,246,240,.07);
+      padding:2px 6px;
+      border-radius:8px;
+    }
+
     .tag{
-      border:1px solid rgba(255,255,255,.12);
-      background:rgba(18,26,42,.55);
+      border:1px solid rgba(255,246,240,.14);
+      background:rgba(255,246,240,.06);
       padding:3px 8px;
       border-radius:999px;
       font-family:var(--mono);
       font-size:12px;
+      color:rgba(255,246,240,.92);
     }
 
-    .statgrid{display:grid; grid-template-columns:repeat(3,1fr); gap:10px}
-    @media (max-width: 520px){ .statgrid{grid-template-columns:1fr} }
-    .stat{
-      padding:12px;
-      border-radius:14px;
-      background:rgba(11,15,25,.45);
-      border:1px solid rgba(255,255,255,.10);
+    .challenge{
+      border:1px solid rgba(255,246,240,.14);
+      border-radius:18px;
+      padding:14px;
+      background:
+        radial-gradient(700px 260px at 0% 0%, rgba(255,122,89,.18), transparent 60%),
+        radial-gradient(700px 260px at 100% 0%, rgba(255,184,107,.14), transparent 60%),
+        rgba(12,8,7,.55);
     }
-    .stat .k{font-size:11px; color:var(--muted)}
-    .stat .v{font-size:20px; font-weight:1000; margin-top:4px}
-
-    table{width:100%; border-collapse:collapse; margin-top:8px; font-size:13px}
-    th,td{padding:10px 8px; border-bottom:1px solid rgba(255,255,255,.08); vertical-align:top}
-    th{color:var(--muted); font-weight:900; text-align:left; font-size:12px}
-
-    .muted{color:var(--muted)}
-
-    /* Game UI */
-    .q{
-      padding:12px;
-      border-radius:14px;
-      background:rgba(11,15,25,.45);
-      border:1px solid rgba(255,255,255,.10);
-      display:flex;
-      align-items:flex-start;
-      justify-content:space-between;
-      gap:10px;
-    }
-    .q .t{font-weight:1000; line-height:1.25}
-    .q .d{color:var(--muted); font-size:12px; line-height:1.35; margin-top:4px}
-    .badge{
-      border:1px solid rgba(255,255,255,.12);
-      background:rgba(18,26,42,.55);
-      padding:6px 10px;
-      border-radius:999px;
-      font-family:var(--mono);
-      font-size:12px;
-    }
-    .badge.locked{opacity:.45}
+    .challenge .headline{display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap}
+    .challenge .meta{display:flex; gap:8px; flex-wrap:wrap; color:var(--muted); font-size:12px}
+    .challenge .text{font-size:19px; font-weight:1000; margin:10px 0 6px; line-height:1.25}
 
     .footer{
-      margin-top:14px;
+      margin-top:12px;
       color:var(--muted);
       font-size:12px;
       display:flex;
@@ -193,18 +171,122 @@
       gap:10px;
       flex-wrap:wrap;
     }
-    .kbd{
-      font-family:var(--mono);
-      border:1px solid rgba(255,255,255,.14);
-      background:rgba(11,15,25,.55);
-      padding:2px 6px;
-      border-radius:8px;
-    }
 
+    /* Hero */
+    .hero{
+      padding:18px 16px;
+      border-radius: var(--radius);
+      border:1px solid rgba(255,246,240,.12);
+      background:
+        radial-gradient(1000px 420px at 0% 0%, rgba(255,122,89,.22), transparent 60%),
+        radial-gradient(1000px 420px at 100% 0%, rgba(255,184,107,.18), transparent 60%),
+        rgba(27,18,15,.55);
+      box-shadow: var(--shadow);
+    }
+    .hero h1{margin:0; font-size:34px; line-height:1.08; letter-spacing:.2px}
+    .hero p{margin:10px 0 0; color:var(--muted); max-width:78ch; line-height:1.55}
+    .ctaRow{display:flex; gap:10px; flex-wrap:wrap; margin-top:14px}
+
+    .progressWrap{margin-top:12px; display:flex; align-items:center; gap:10px; flex-wrap:wrap}
+    .progressBar{
+      flex:1 1 260px;
+      height:11px;
+      border-radius:999px;
+      background:rgba(255,246,240,.07);
+      border:1px solid rgba(255,246,240,.12);
+      overflow:hidden;
+    }
+    .progressBar > div{
+      height:100%;
+      width:0%;
+      background:linear-gradient(90deg, rgba(255,122,89,.96), rgba(255,184,107,.88));
+    }
+    .progressText{font-size:12px; color:var(--muted); font-family:var(--mono)}
+
+    /* Collapsible helpers */
+    details.helper{
+      margin-top:12px;
+      border:1px solid rgba(255,246,240,.12);
+      background:rgba(255,246,240,.05);
+      border-radius:16px;
+      padding:12px;
+    }
+    details.helper summary{
+      cursor:pointer;
+      font-weight:1000;
+      list-style:none;
+    }
+    details.helper summary::-webkit-details-marker{display:none}
+    details.helper .inside{margin-top:10px; color:var(--muted); line-height:1.55}
+
+    .helperGrid{display:grid; grid-template-columns:1fr 1fr; gap:12px}
+    @media (max-width: 980px){ .helperGrid{grid-template-columns:1fr} }
+    .smallList{margin:0; padding-left:18px; color:var(--muted); line-height:1.55}
+
+    /* Plan */
+    .section{margin-top:14px}
+    .planGrid{display:grid; grid-template-columns: repeat(3, 1fr); gap:10px}
+    @media (max-width: 980px){ .planGrid{grid-template-columns:1fr 1fr} }
+    @media (max-width: 620px){ .planGrid{grid-template-columns:1fr} }
+
+    .dayCard{
+      padding:12px;
+      border-radius:16px;
+      border:1px solid rgba(255,246,240,.12);
+      background:rgba(255,246,240,.05);
+    }
+    .dayTop{display:flex; justify-content:space-between; align-items:flex-start; gap:10px}
+    .dayTitle{font-weight:1000; letter-spacing:.2px}
+    .dayMeta{display:flex; gap:6px; flex-wrap:wrap; margin-top:8px}
+    .dayText{margin-top:8px; line-height:1.35}
+    .dayActions{display:flex; gap:8px; flex-wrap:wrap; margin-top:10px}
+
+    /* Stats */
+    .statgrid{display:grid; grid-template-columns:repeat(3,1fr); gap:10px}
+    @media (max-width: 520px){ .statgrid{grid-template-columns:1fr} }
+    .stat{
+      padding:12px;
+      border-radius:14px;
+      background:rgba(255,246,240,.05);
+      border:1px solid rgba(255,246,240,.12);
+    }
+    .stat .k{font-size:11px; color:var(--muted)}
+    .stat .v{font-size:20px; font-weight:1000; margin-top:4px}
+
+    /* Quests / badges */
+    .q{
+      padding:12px;
+      border-radius:14px;
+      background:rgba(255,246,240,.05);
+      border:1px solid rgba(255,246,240,.12);
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:10px;
+    }
+    .q .t{font-weight:1000; line-height:1.25}
+    .q .d{color:var(--muted); font-size:12px; line-height:1.35; margin-top:4px}
+
+    .badge{
+      border:1px solid rgba(255,246,240,.14);
+      background:rgba(255,246,240,.06);
+      padding:6px 10px;
+      border-radius:999px;
+      font-family:var(--mono);
+      font-size:12px;
+    }
+    .badge.locked{opacity:.45}
+
+    /* Table */
+    table{width:100%; border-collapse:collapse; margin-top:8px; font-size:13px}
+    th,td{padding:10px 8px; border-bottom:1px solid rgba(255,246,240,.10); vertical-align:top}
+    th{color:var(--muted); font-weight:900; text-align:left; font-size:12px}
+
+    /* Toast */
     .toast{
       position:fixed; left:50%; bottom:18px; transform:translateX(-50%);
-      background:rgba(18,26,42,.92);
-      border:1px solid rgba(255,255,255,.12);
+      background:rgba(27,18,15,.92);
+      border:1px solid rgba(255,246,240,.14);
       padding:10px 12px; border-radius:999px;
       box-shadow:var(--shadow);
       display:none;
@@ -217,160 +299,22 @@
     /* Share card */
     .shareCard{
       border-radius:18px;
-      border:1px solid rgba(255,255,255,.12);
+      border:1px solid rgba(255,246,240,.14);
       background:
-        radial-gradient(900px 400px at 0% 0%, rgba(124,92,255,.28), transparent 60%),
-        radial-gradient(900px 400px at 100% 0%, rgba(54,211,153,.18), transparent 60%),
-        rgba(11,15,25,.55);
+        radial-gradient(900px 400px at 0% 0%, rgba(255,122,89,.22), transparent 60%),
+        radial-gradient(900px 400px at 100% 0%, rgba(255,184,107,.18), transparent 60%),
+        rgba(27,18,15,.55);
       padding:14px;
     }
-    .shareCard .top{
-      display:flex; justify-content:space-between; gap:10px; align-items:flex-start; flex-wrap:wrap;
-    }
-    .shareCard .app{
-      font-weight:1000; letter-spacing:.2px; display:flex; gap:8px; align-items:center; flex-wrap:wrap;
-    }
-    .shareCard .big{
-      font-size:18px; font-weight:1000; margin:10px 0 8px; line-height:1.25;
-    }
-    .shareCard .small{
-      font-size:12px; color:var(--muted); display:flex; gap:8px; flex-wrap:wrap; align-items:center;
-    }
-
-    /* Landing / home base */
-    .hero{
-      padding:18px 16px;
-      border-radius: var(--radius);
-      border:1px solid rgba(255,255,255,.10);
-      background:
-        radial-gradient(1000px 420px at 0% 0%, rgba(124,92,255,.28), transparent 60%),
-        radial-gradient(1000px 420px at 100% 0%, rgba(54,211,153,.18), transparent 60%),
-        rgba(18,26,42,.55);
-      box-shadow: var(--shadow);
-    }
-    .hero h1{
-      margin:0;
-      font-size:32px;
-      line-height:1.12;
-      letter-spacing:.2px;
-    }
-    .hero p{
-      margin:10px 0 0;
-      color:var(--muted);
-      max-width:78ch;
-      line-height:1.5;
-    }
-    .ctaRow{display:flex; gap:10px; flex-wrap:wrap; margin-top:14px}
-
-    .section{margin-top:14px}
-    .sectionTitle{
-      font-size:16px;
-      font-weight:1000;
-      margin:0 0 10px;
-      letter-spacing:.2px;
-    }
-    .cols{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap:14px;
-    }
-    @media (max-width: 980px){ .cols{grid-template-columns:1fr} }
-    .miniCard{
-      padding:14px;
-      border-radius:16px;
-      background:rgba(11,15,25,.45);
-      border:1px solid rgba(255,255,255,.10);
-    }
-    .miniCard h3{
-      margin:0 0 8px;
-      font-size:13px;
-      letter-spacing:.2px;
-    }
-    .smallList{
-      margin:0;
-      padding-left:18px;
-      color:var(--muted);
-      line-height:1.55;
-    }
-    .progressWrap{
-      margin-top:12px;
-      display:flex;
-      align-items:center;
-      gap:10px;
-      flex-wrap:wrap;
-    }
-    .progressBar{
-      flex:1 1 260px;
-      height:10px;
-      border-radius:999px;
-      background:rgba(255,255,255,.08);
-      border:1px solid rgba(255,255,255,.10);
-      overflow:hidden;
-    }
-    .progressBar > div{
-      height:100%;
-      width:0%;
-      background:linear-gradient(90deg, rgba(54,211,153,.95), rgba(124,92,255,.85));
-    }
-    .progressText{font-size:12px; color:var(--muted); font-family:var(--mono)}
-
-    .planGrid{
-      display:grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap:10px;
-    }
-    @media (max-width: 980px){ .planGrid{grid-template-columns:1fr 1fr} }
-    @media (max-width: 620px){ .planGrid{grid-template-columns:1fr} }
-
-    .dayCard{
-      padding:12px;
-      border-radius:16px;
-      border:1px solid rgba(255,255,255,.10);
-      background:rgba(11,15,25,.45);
-    }
-    .dayTop{
-      display:flex;
-      justify-content:space-between;
-      align-items:flex-start;
-      gap:10px;
-    }
-    .dayTitle{
-      font-weight:1000;
-      letter-spacing:.2px;
-    }
-    .dayMeta{
-      display:flex;
-      gap:6px;
-      flex-wrap:wrap;
-      margin-top:8px;
-    }
-    .dayText{
-      margin-top:8px;
-      line-height:1.35;
-    }
-    .dayActions{
-      display:flex;
-      gap:8px;
-      flex-wrap:wrap;
-      margin-top:10px;
-    }
-
-    .script{
-      display:flex;
-      gap:10px;
-      align-items:flex-start;
-      justify-content:space-between;
-      padding:12px;
-      border-radius:16px;
-      border:1px solid rgba(255,255,255,.10);
-      background:rgba(11,15,25,.45);
-    }
-    .scriptText{color:var(--text); line-height:1.45; max-width:78ch}
+    .shareCard .top{display:flex; justify-content:space-between; gap:10px; align-items:flex-start; flex-wrap:wrap}
+    .shareCard .app{font-weight:1000; letter-spacing:.2px; display:flex; gap:8px; align-items:center; flex-wrap:wrap}
+    .shareCard .big{font-size:18px; font-weight:1000; margin:10px 0 8px; line-height:1.25}
+    .shareCard .small{font-size:12px; color:var(--muted); display:flex; gap:8px; flex-wrap:wrap; align-items:center}
 
     @media print{
       header, .grid, #tracker { display:none !important; }
       body{ background:#fff !important; color:#000 !important; }
-      .card, .hero, .miniCard, .dayCard{ box-shadow:none !important; background:#fff !important; color:#000 !important; border:1px solid #ddd !important; }
+      .card, .hero, .dayCard{ box-shadow:none !important; background:#fff !important; color:#000 !important; border:1px solid #ddd !important; }
       .muted{ color:#333 !important; }
       .tag, .pill, .badge{ border:1px solid #ddd !important; background:#fff !important; color:#000 !important; }
     }
@@ -385,116 +329,66 @@
           Rejection Challenge
           <span class="pill">public</span>
           <span class="pill">no login</span>
-          <span class="pill">shareable</span>
-          <span class="pill">exportable</span>
+          <span class="pill">playable</span>
         </div>
         <div class="sub">
-          Generate an in-person ask designed to feel slightly uncomfortable (politely). Log what happened, build a rejection streak, earn XP, unlock badges.
+          Deal yourself one real-life ask. Do it in person. Log the result. Repeat.
         </div>
       </div>
       <div class="row" style="justify-content:flex-end; min-width:280px">
         <button class="btn small" id="resetBtn" title="Clears logs + streak + game">Reset</button>
-        <button class="btn small" id="exportBtn" title="Download CSV of your logs">Export CSV</button>
-        <button class="btn small" id="shareAppBtn" title="Share the app">Share App</button>
+        <button class="btn small" id="exportBtn" title="Download CSV of your logs">Export</button>
+        <button class="btn small" id="shareAppBtn" title="Share the app">Share</button>
       </div>
     </header>
 
-    <!-- Home base -->
     <section class="hero" id="top">
-      <div class="title" style="font-size:14px; font-weight:900; letter-spacing:.2px; margin-bottom:6px;">
-        Rejection Challenge
-        <span class="pill">30 days</span>
-        <span class="pill">in person</span>
-        <span class="pill">one rep per day</span>
+      <div class="title" style="font-size:14px; font-weight:1000; letter-spacing:.2px; margin-bottom:6px;">
+        30 days · in person · one rep a day
       </div>
 
-      <h1>Train your brain to handle rejection in 30 days.</h1>
+      <h1>Get comfortable hearing “no”.</h1>
       <p>
-        Most people avoid no so hard they stop taking shots in career and life. This challenge turns rejection into a skill:
-        one small in-person ask per day, logged in a simple tracker, so confidence grows through reps.
+        Not therapy. Not a lecture. Just reps.
+        You’ll be surprised how fast the fear drops once you start.
       </p>
 
       <div class="progressWrap">
         <div class="progressBar" aria-label="30-day progress">
           <div id="heroProgressFill"></div>
         </div>
-        <div class="progressText"><span id="heroProgressText">0/30 days</span> | streak counts only on rejection</div>
+        <div class="progressText"><span id="heroProgressText">0/30</span></div>
       </div>
 
       <div class="ctaRow">
-        <a class="btn cta" href="#plan">See the 30-day plan</a>
-        <a class="btn ghost" href="#tracker">Open the tracker</a>
-        <button class="btn ghost" id="printPlanBtn" type="button">Print plan</button>
-        <button class="btn ghost" id="startTodayBtn" type="button">Start today's rep</button>
-      </div>
-    </section>
-
-    <section class="section cols">
-      <div class="miniCard">
-        <h2 class="sectionTitle">Rules</h2>
-        <ul class="smallList">
-          <li>It must be in person (not online or phone).</li>
-          <li>A rep counts if you asked something specific and felt slightly vulnerable.</li>
-          <li>No means stop. No arguing. No guilt.</li>
-          <li>Consent required for photos or video.</li>
-          <li>Pick challenges that are safe and legal in your setting.</li>
-        </ul>
+        <button class="btn primary" id="startTodayBtn" type="button">Start today</button>
+        <a class="btn ghost" href="#tracker">Open tracker</a>
+        <a class="btn ghost" href="#plan">See plan</a>
+        <button class="btn ghost" id="printPlanBtn" type="button">Print</button>
       </div>
 
-      <div class="miniCard">
-        <h2 class="sectionTitle">Why this works</h2>
-        <div class="muted" style="line-height:1.55">
-          Fear of rejection is normal. Repeated, controlled exposure reduces the emotional sting over time.
-          When you treat rejection as data, you take more shots and learn faster.
-          <div style="margin-top:10px">
-            - Less anxiety about asking<br>
-            - More shots on goal (career, relationships, sales)<br>
-            - Faster learning from real feedback
+      <details class="helper">
+        <summary>Quick help (optional)</summary>
+        <div class="inside helperGrid">
+          <div>
+            <div style="font-weight:1000; margin-bottom:6px">Rules (tiny)</div>
+            <ul class="smallList">
+              <li>In person only.</li>
+              <li>Be polite. Keep it short.</li>
+              <li>If they say no, you stop.</li>
+              <li>Stay safe + legal.</li>
+            </ul>
+          </div>
+          <div>
+            <div style="font-weight:1000; margin-bottom:6px">If you freeze</div>
+            <ul class="smallList">
+              <li>Smile. One sentence.</li>
+              <li>“No worries—thanks anyway.”</li>
+              <li>Log it. That’s the win.</li>
+            </ul>
           </div>
         </div>
-      </div>
-    </section>
-
-    <section class="section cols" id="scripts">
-      <div class="miniCard">
-        <h2 class="sectionTitle">Ask scripts</h2>
-
-        <div class="script" style="margin-top:10px">
-          <div class="scriptText">
-            <b>Coffee chat</b><br>
-            "Hey, quick one. I'm working on being more proactive. Would you be open to a 10-minute coffee chat sometime this week? Totally okay if not."
-          </div>
-          <button class="btn small" data-copy="coffee">Copy</button>
-        </div>
-
-        <div class="script" style="margin-top:10px">
-          <div class="scriptText">
-            <b>Feedback</b><br>
-            "I'm trying to improve fast. Could I get 30 seconds of feedback on what I could do better next time?"
-          </div>
-          <button class="btn small" data-copy="feedback">Copy</button>
-        </div>
-
-        <div class="script" style="margin-top:10px">
-          <div class="scriptText">
-            <b>After a no</b><br>
-            "Totally get it, thanks anyway. If you're open to sharing: what's one thing I could improve for next time?"
-          </div>
-          <button class="btn small" data-copy="no">Copy</button>
-        </div>
-      </div>
-
-      <div class="miniCard">
-        <h2 class="sectionTitle">Daily reflection</h2>
-        <ul class="smallList">
-          <li>What did I fear would happen?</li>
-          <li>What actually happened?</li>
-          <li>What did I learn and what is my next rep?</li>
-        </ul>
-        <div class="muted" style="margin-top:10px; line-height:1.55">
-          The goal is not get yes. The goal is take reps without spiraling.
-        </div>
-      </div>
+      </details>
     </section>
 
     <!-- Plan -->
@@ -502,15 +396,14 @@
       <div class="card">
         <div class="row" style="justify-content:space-between; align-items:flex-start">
           <div>
-            <h2 class="sectionTitle" style="margin:0">30-day plan</h2>
+            <h2 style="margin:0">30-day plan</h2>
             <div class="muted" style="margin-top:6px; line-height:1.5">
-              Days 1-5: low stakes | Days 6-15: social or career | Days 16-30: stretch reps (negotiation + bigger asks).
-              Click Start to load the day's prompt into the tracker.
+              Tap Start on any day to load a prompt into the tracker.
             </div>
           </div>
           <div class="row" style="flex:0 0 auto">
-            <button class="btn small" id="markAllDoneBtn" type="button">Mark all done</button>
-            <button class="btn small" id="clearPlanBtn" type="button">Clear plan progress</button>
+            <button class="btn small" id="markAllDoneBtn" type="button">Mark all</button>
+            <button class="btn small" id="clearPlanBtn" type="button">Clear</button>
           </div>
         </div>
 
@@ -518,17 +411,15 @@
           <div class="progressBar">
             <div id="planProgressFill"></div>
           </div>
-          <div class="progressText" id="planProgressText">0/30 completed</div>
+          <div class="progressText" id="planProgressText">0/30</div>
         </div>
 
         <div class="planGrid" id="planGrid" style="margin-top:12px"></div>
       </div>
     </section>
 
-    <!-- Anchor for tracker -->
     <div id="tracker"></div>
 
-    <!-- Main app -->
     <div class="grid">
       <!-- Left -->
       <div class="card">
@@ -536,13 +427,13 @@
 
         <div class="row">
           <div style="min-width:220px">
-            <label for="pack">Challenge pack</label>
+            <label for="pack">Pack</label>
             <select id="pack">
-              <option value="all" selected>All (mixed)</option>
-              <option value="beginner">Beginner pack</option>
-              <option value="networking">Networking pack</option>
-              <option value="wholesome">Wholesome chaos pack</option>
-              <option value="negotiation">Negotiation pack</option>
+              <option value="all" selected>Mixed</option>
+              <option value="beginner">Beginner</option>
+              <option value="networking">Networking</option>
+              <option value="wholesome">Chaos (wholesome)</option>
+              <option value="negotiation">Negotiation</option>
             </select>
           </div>
 
@@ -550,28 +441,28 @@
             <label for="category">Category</label>
             <select id="category">
               <option value="any">Any</option>
-              <option value="food">Food and cafe</option>
-              <option value="social">Social and compliments</option>
-              <option value="help">Asking for help</option>
-              <option value="negotiation">Negotiation</option>
-              <option value="weird">Wholesome weird</option>
-              <option value="career">Career and networking</option>
+              <option value="food">Food</option>
+              <option value="social">Social</option>
+              <option value="help">Help</option>
+              <option value="negotiation">Negotiate</option>
+              <option value="weird">Weird</option>
+              <option value="career">Career</option>
             </select>
           </div>
 
           <div style="min-width:220px">
-            <label for="difficulty">Difficulty: <span id="diffLabel" class="pill">3</span></label>
+            <label for="difficulty">Heat: <span id="diffLabel" class="pill">3</span></label>
             <input id="difficulty" type="range" min="1" max="5" value="3" />
           </div>
 
           <div style="min-width:220px">
-            <label for="timebox">Timebox (minutes)</label>
+            <label for="timebox">Timer</label>
             <select id="timebox">
-              <option value="0">No timer</option>
-              <option value="5">5</option>
-              <option value="10">10</option>
-              <option value="15" selected>15</option>
-              <option value="30">30</option>
+              <option value="0">Off</option>
+              <option value="5">5 min</option>
+              <option value="10">10 min</option>
+              <option value="15" selected>15 min</option>
+              <option value="30">30 min</option>
             </select>
           </div>
         </div>
@@ -581,16 +472,16 @@
             <div class="meta">
               <span class="tag" id="tagPack">pack: all</span>
               <span class="tag" id="tagCat">any</span>
-              <span class="tag" id="tagDiff">difficulty: 3</span>
+              <span class="tag" id="tagDiff">heat: 3</span>
               <span class="tag" id="tagMode">mode: random</span>
             </div>
             <div class="row" style="flex:0 0 auto">
               <button class="btn small" id="copyLinkBtn">Copy link</button>
-              <button class="btn small" id="todayBtn" title="Deterministic for today">Today's</button>
-              <button class="btn primary" id="newBtn">Generate</button>
+              <button class="btn small" id="todayBtn" title="Same prompt for today">Today</button>
+              <button class="btn primary" id="newBtn">Deal me one</button>
             </div>
           </div>
-          <div class="text" id="challengeText">Click Generate to get your first challenge.</div>
+          <div class="text" id="challengeText">Hit “Deal me one” to start.</div>
           <div class="muted" id="timerText" style="margin-top:6px"></div>
         </div>
 
@@ -598,45 +489,56 @@
           <div class="row">
             <div style="min-width:220px">
               <label for="where">Where (optional)</label>
-              <input id="where" type="text" placeholder="e.g., coffee shop, campus, gym" />
+              <input id="where" type="text" placeholder="coffee shop, campus, gym" />
             </div>
             <div style="min-width:220px">
               <label for="who">Who (optional)</label>
-              <input id="who" type="text" placeholder="e.g., barista, stranger, classmate" />
+              <input id="who" type="text" placeholder="barista, stranger, classmate" />
             </div>
           </div>
 
           <div class="row" style="margin-top:10px">
             <div style="min-width:220px">
-              <label for="before">Feeling before (1-5): <span id="beforeLabel" class="pill">3</span></label>
+              <label for="before">Before: <span id="beforeLabel" class="pill">3</span></label>
               <input id="before" type="range" min="1" max="5" value="3" />
             </div>
             <div style="min-width:220px">
-              <label for="after">Feeling after (1-5): <span id="afterLabel" class="pill">3</span></label>
+              <label for="after">After: <span id="afterLabel" class="pill">3</span></label>
               <input id="after" type="range" min="1" max="5" value="3" />
             </div>
           </div>
 
           <div style="margin-top:10px">
-            <label for="note">Quick note (optional)</label>
-            <textarea id="note" placeholder="What did you say? What did they say? Any detail?"></textarea>
+            <label for="note">Note (optional)</label>
+            <textarea id="note" placeholder="Anything funny? Anything learned?"></textarea>
           </div>
 
           <div class="row" style="margin-top:10px">
-            <button class="btn good" id="acceptedBtn">Accepted</button>
-            <button class="btn bad" id="rejectedBtn">Rejected</button>
+            <button class="btn good" id="acceptedBtn">Got a yes</button>
+            <button class="btn bad" id="rejectedBtn">Got a no</button>
           </div>
 
           <div class="footer">
-            <div>Tip: polite, specific, and slightly uncomfortable.</div>
-            <div>Shortcuts: <span class="kbd">G</span> generate | <span class="kbd">T</span> today's | <span class="kbd">R</span> log rejected</div>
+            <div>Short + polite wins.</div>
+            <div>Keys: <span class="kbd">G</span> deal · <span class="kbd">T</span> today · <span class="kbd">R</span> log no</div>
           </div>
         </div>
+
+        <details class="helper">
+          <summary>Little scripts (optional)</summary>
+          <div class="inside">
+            <ul class="smallList">
+              <li><b>Coffee chat:</b> “Quick one—would you be up for a 10-minute coffee sometime? Totally fine if not.”</li>
+              <li><b>Feedback:</b> “Can I get one quick note—what would you improve?”</li>
+              <li><b>After a no:</b> “All good—thanks anyway. Anything I should do differently next time?”</li>
+            </ul>
+          </div>
+        </details>
 
         <!-- Share card -->
         <div style="margin-top:14px" class="card">
           <h2>Share card</h2>
-          <div class="muted" style="font-size:12px; margin-top:-6px">Post this prompt. Copy it as an image (no backend).</div>
+          <div class="muted" style="font-size:12px; margin-top:-6px">Post a prompt to friends.</div>
 
           <div id="shareCard" class="shareCard" style="margin-top:10px">
             <div class="top">
@@ -647,30 +549,30 @@
                 <span class="tag" id="shareDiff">d3</span>
               </div>
             </div>
-            <div class="big" id="shareText">Generate a challenge to fill this card.</div>
+            <div class="big" id="shareText">Deal a prompt to fill this.</div>
             <div class="small">
-              <span class="tag">rule: be polite</span>
-              <span class="tag">rule: accept no</span>
+              <span class="tag">be polite</span>
+              <span class="tag">accept no</span>
               <span class="tag">in person</span>
             </div>
           </div>
 
           <div class="row" style="margin-top:10px">
-            <button class="btn small" id="copyImageBtn">Copy as image</button>
-            <button class="btn small" id="downloadImageBtn">Download PNG</button>
+            <button class="btn small" id="copyImageBtn">Copy image</button>
+            <button class="btn small" id="downloadImageBtn">Download</button>
           </div>
         </div>
       </div>
 
       <!-- Right -->
       <div class="card">
-        <h2>Your stats</h2>
+        <h2>Stats</h2>
 
         <div class="statgrid">
           <div class="stat">
-            <div class="k">Rejection streak (days)</div>
+            <div class="k">No streak (days)</div>
             <div class="v" id="streak">0</div>
-            <div class="muted" style="font-size:11px; margin-top:6px" id="streakHint">Log 1 rejection today to extend.</div>
+            <div class="muted" style="font-size:11px; margin-top:6px" id="streakHint">Log one “no” today.</div>
           </div>
 
           <div class="stat">
@@ -682,25 +584,25 @@
           <div class="stat">
             <div class="k">Shields</div>
             <div class="v"><span id="shields">0</span></div>
-            <div class="muted" style="font-size:11px; margin-top:6px">Prevents streak loss once.</div>
+            <div class="muted" style="font-size:11px; margin-top:6px">One save per week.</div>
           </div>
         </div>
 
         <div class="card" style="margin-top:12px">
           <h2>Daily quests</h2>
-          <div class="muted" style="font-size:12px; margin-top:-6px">Complete quests for bonus XP.</div>
+          <div class="muted" style="font-size:12px; margin-top:-6px">Tiny bonuses. Totally optional.</div>
           <div id="quests" style="margin-top:10px; display:grid; gap:10px"></div>
         </div>
 
         <div class="card" style="margin-top:12px">
           <h2>Badges</h2>
-          <div class="muted" style="font-size:12px; margin-top:-6px">Earned locally in your browser.</div>
+          <div class="muted" style="font-size:12px; margin-top:-6px">Earned on this device.</div>
           <div id="badges" style="margin-top:10px; display:flex; gap:8px; flex-wrap:wrap"></div>
         </div>
 
         <div class="card" style="margin-top:12px">
           <h2>Weekly boss</h2>
-          <div class="muted" style="font-size:12px; margin-top:-6px">One bigger ask per week. High reward.</div>
+          <div class="muted" style="font-size:12px; margin-top:-6px">One bigger ask. Bigger XP.</div>
           <div class="challenge" style="margin-top:10px">
             <div class="meta">
               <span class="tag" id="bossWeekTag">week</span>
@@ -709,15 +611,14 @@
             </div>
             <div class="text" id="bossText">Boss challenge will load here.</div>
             <div class="row" style="margin-top:10px">
-              <button class="btn small" id="loadBossBtn" type="button">Load into tracker</button>
-              <button class="btn small" id="markBossBtn" type="button">Mark completed</button>
+              <button class="btn small" id="loadBossBtn" type="button">Load</button>
+              <button class="btn small" id="markBossBtn" type="button">Mark done</button>
             </div>
           </div>
         </div>
 
         <div class="muted" style="font-size:12px; margin-top:12px; line-height:1.4">
-          Stored in your browser (localStorage). No account required.
-          <br><b>Streak updates only</b> on days you log at least one <b>Rejected</b>.
+          Saved in your browser. No account.
         </div>
 
         <h2 style="margin-top:14px">Recent logs</h2>
@@ -742,7 +643,7 @@
             <div class="v" id="total">0</div>
           </div>
           <div class="stat" style="flex:1 1 auto">
-            <div class="k">Rejection rate</div>
+            <div class="k">No rate</div>
             <div class="v" id="rate">0%</div>
           </div>
         </div>
@@ -756,24 +657,20 @@
 (() => {
   const $ = (id) => document.getElementById(id);
 
-  // Controls
   const pack = $("pack");
   const category = $("category");
   const difficulty = $("difficulty");
   const timebox = $("timebox");
 
-  // Labels/tags
   const diffLabel = $("diffLabel");
   const tagPack = $("tagPack");
   const tagCat = $("tagCat");
   const tagDiff = $("tagDiff");
   const tagMode = $("tagMode");
 
-  // Challenge
   const challengeText = $("challengeText");
   const timerText = $("timerText");
 
-  // Log fields
   const where = $("where");
   const who = $("who");
   const before = $("before");
@@ -782,7 +679,6 @@
   const afterLabel = $("afterLabel");
   const note = $("note");
 
-  // Buttons
   const newBtn = $("newBtn");
   const todayBtn = $("todayBtn");
   const acceptedBtn = $("acceptedBtn");
@@ -795,7 +691,6 @@
   const downloadImageBtn = $("downloadImageBtn");
   const startTodayBtn = $("startTodayBtn");
 
-  // Share card
   const shareCard = $("shareCard");
   const shareStamp = $("shareStamp");
   const sharePack = $("sharePack");
@@ -803,7 +698,6 @@
   const shareDiff = $("shareDiff");
   const shareText = $("shareText");
 
-  // Plan UI
   const planGrid = $("planGrid");
   const planProgressFill = $("planProgressFill");
   const planProgressText = $("planProgressText");
@@ -813,25 +707,22 @@
   const markAllDoneBtn = $("markAllDoneBtn");
   const clearPlanBtn = $("clearPlanBtn");
 
-  // Stats/logs
   const streakEl = $("streak");
   const totalEl = $("total");
   const rateEl = $("rate");
   const logBody = $("logBody");
   const toast = $("toast");
 
-  // Storage
   const STORAGE_KEY = "rr_logs_v4";
   const STREAK_KEY = "rr_rej_streak_v4";
   const LAST_REJ_DAY_KEY = "rr_last_rej_day_v4";
   const PLAN_DONE_KEY = "rr_plan_done_v3";
 
   let currentChallenge = null;
-  let currentMode = "random"; // random | today
+  let currentMode = "random";
   let timer = null;
   let timerEndsAt = null;
 
-  // Helpers
   function nowISO() { return new Date().toISOString(); }
   function dayKey(d = new Date()) { return d.toISOString().slice(0,10); }
 
@@ -839,7 +730,7 @@
     toast.textContent = msg;
     toast.style.display = "block";
     clearTimeout(toast._t);
-    toast._t = setTimeout(()=> toast.style.display="none", 1900);
+    toast._t = setTimeout(()=> toast.style.display="none", 1700);
   }
 
   function hash32(str){
@@ -855,35 +746,30 @@
     const x = (Math.imul(seed, 1664525) + 1013904223) >>> 0;
     return n ? (x % n) : 0;
   }
-
   function escapeHtml(s){
     return String(s)
       .replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;")
       .replaceAll('"',"&quot;").replaceAll("'","&#039;");
   }
 
-  // Logs storage
   function loadLogs(){
     try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]"); }
     catch { return []; }
   }
   function saveLogs(logs){ localStorage.setItem(STORAGE_KEY, JSON.stringify(logs)); }
 
-  // Streak storage
   function loadStreak(){
     try { return JSON.parse(localStorage.getItem(STREAK_KEY) || "0"); }
     catch { return 0; }
   }
   function saveStreak(n){ localStorage.setItem(STREAK_KEY, JSON.stringify(n)); }
 
-  // Plan storage
   function loadPlanDone(){
     try { return JSON.parse(localStorage.getItem(PLAN_DONE_KEY) || "{}"); }
     catch { return {}; }
   }
   function savePlanDone(obj){ localStorage.setItem(PLAN_DONE_KEY, JSON.stringify(obj)); }
 
-  // Packs
   const packFilters = {
     all: (c) => true,
     beginner: (c) => c.diff <= 2,
@@ -892,52 +778,44 @@
     negotiation: (c) => c.cat === "negotiation"
   };
 
-  // Challenges
   const challenges = [
-    // Food
-    {cat:"food", diff:1, text:"Ask a barista to recommend something not on the menu."},
-    {cat:"food", diff:2, text:"Ask for a small sample before buying (accept no politely)."},
-    {cat:"food", diff:3, text:"Ask if they can make your drink half sweet."},
-    {cat:"food", diff:4, text:"Ask for a surprise under $5 and let them choose."},
-    {cat:"food", diff:5, text:"Ask for a custom swap (change a side). Accept no and move on."},
+    {cat:"food", diff:1, text:"Ask a barista for a recommendation that’s not the usual."},
+    {cat:"food", diff:2, text:"Ask for a tiny sample before you buy (and accept no)."},
+    {cat:"food", diff:3, text:"Ask if they can make your drink half-sweet."},
+    {cat:"food", diff:4, text:"Ask for a surprise under $5. Let them pick."},
+    {cat:"food", diff:5, text:"Ask for a small swap (side/topping). If it’s a no, it’s a no."},
 
-    // Social
-    {cat:"social", diff:1, text:"Give a sincere compliment to a stranger and leave."},
-    {cat:"social", diff:2, text:"Ask someone where they got an item because you like it."},
-    {cat:"social", diff:3, text:"Ask a stranger to rate your outfit from 1 to 10. Thank them either way."},
-    {cat:"social", diff:4, text:"Ask someone for a quick photo of you. Offer to take one for them too."},
-    {cat:"social", diff:5, text:"Ask a group if you can join for 2 minutes to practice small talk, then leave."},
+    {cat:"social", diff:1, text:"Give a genuine compliment and keep walking."},
+    {cat:"social", diff:2, text:"Ask someone where they got something you like."},
+    {cat:"social", diff:3, text:"Ask a stranger to rate your outfit 1–10. Thank them either way."},
+    {cat:"social", diff:4, text:"Ask someone to take a quick photo of you (offer to return the favor)."},
+    {cat:"social", diff:5, text:"Ask a group if you can join for 60 seconds of small talk, then bounce."},
 
-    // Help
-    {cat:"help", diff:1, text:"Ask someone for directions to a nearby place you already know."},
-    {cat:"help", diff:2, text:"Ask someone to recommend a nearby spot they genuinely like."},
-    {cat:"help", diff:3, text:"Ask if you can borrow a pen for 30 seconds."},
-    {cat:"help", diff:4, text:"Ask an employee to help you pick between two options and explain why."},
-    {cat:"help", diff:5, text:"Ask someone to listen to your 15-second intro and give one note."},
+    {cat:"help", diff:1, text:"Ask for directions to a place you already know."},
+    {cat:"help", diff:2, text:"Ask for a nearby spot they actually like."},
+    {cat:"help", diff:3, text:"Ask to borrow a pen for 30 seconds."},
+    {cat:"help", diff:4, text:"Ask an employee to help you pick between two options."},
+    {cat:"help", diff:5, text:"Ask someone to hear your 15-second intro and give one note."},
 
-    // Negotiation
-    {cat:"negotiation", diff:1, text:"Ask if there is a student discount."},
-    {cat:"negotiation", diff:2, text:"Ask if they can waive an add-on fee once. Accept no."},
-    {cat:"negotiation", diff:3, text:"Ask for a small upgrade (bigger size, better seat, etc.)."},
-    {cat:"negotiation", diff:4, text:"Ask for a $1 or $2 discount on a small purchase. Accept no."},
-    {cat:"negotiation", diff:5, text:"Ask for a free extra (topping or add-on). No arguing if no."},
+    {cat:"negotiation", diff:1, text:"Ask if there’s a student discount."},
+    {cat:"negotiation", diff:2, text:"Ask if they can waive a tiny fee just this once."},
+    {cat:"negotiation", diff:3, text:"Ask for a small upgrade (size/seat/etc.)."},
+    {cat:"negotiation", diff:4, text:"Ask for $1–$2 off a small purchase. Smile either way."},
+    {cat:"negotiation", diff:5, text:"Ask for a free add-on. If no, thank them and move on."},
 
-    // Wholesome weird
-    {cat:"weird", diff:1, text:"Ask someone a harmless silly question: do pigeons have a leader?"},
-    {cat:"weird", diff:2, text:"Ask a cashier: is today more of a 7 or a 9?"},
-    {cat:"weird", diff:3, text:"Ask someone for a 10-second pep talk. Time it."},
-    {cat:"weird", diff:4, text:"Ask a stranger for a life hack that saves time."},
-    {cat:"weird", diff:5, text:"Ask if someone will say 'you've got this' on video for 5 seconds (consent required)."},
-
-    // Career
-    {cat:"career", diff:1, text:"Ask someone what they do for work and what they enjoy about it."},
-    {cat:"career", diff:2, text:"Ask for one piece of advice for someone early in their career."},
-    {cat:"career", diff:3, text:"Ask if they would be open to a 10-minute coffee chat sometime. Accept no warmly."},
-    {cat:"career", diff:4, text:"Ask if they know one person you should meet and why."},
-    {cat:"career", diff:5, text:"Ask a professional for feedback on your 15-second intro on the spot."}
+    {cat:"weird", diff:1, text:"Ask a harmless silly question: ‘Do pigeons have a leader?’"},
+    {cat:"weird", diff:2, text:"Ask a cashier: ‘Is today more of a 7 or a 9?’"},
+    {cat:"weird", diff:3, text:"Ask for a 10-second pep talk. Time it."},
+    {cat:"weird", diff:4, text:"Ask a stranger for their best time-saving life hack."},
+    {cat:"weird", diff:5, text:"Ask if someone will say ‘you’ve got this’ on video (only if they’re into it)."},
+    
+    {cat:"career", diff:1, text:"Ask what they do for work and what they enjoy about it."},
+    {cat:"career", diff:2, text:"Ask for one piece of advice for someone early-career."},
+    {cat:"career", diff:3, text:"Ask if they’d be open to a 10-minute coffee chat sometime."},
+    {cat:"career", diff:4, text:"Ask if there’s one person you should meet (and why)."},
+    {cat:"career", diff:5, text:"Ask for feedback on your 15-second intro on the spot."}
   ];
 
-  // Share link encoding
   function encodeChallenge(ch){
     const payload = {cat:ch.cat, diff:ch.diff, text:ch.text, mode: currentMode, pack: pack.value};
     const b64 = btoa(unescape(encodeURIComponent(JSON.stringify(payload))));
@@ -953,7 +831,6 @@
     } catch { return null; }
   }
 
-  // UI tags update
   function updateTags(){
     diffLabel.textContent = difficulty.value;
     beforeLabel.textContent = before.value;
@@ -961,7 +838,7 @@
 
     tagPack.textContent = "pack: " + pack.value;
     tagCat.textContent = category.value;
-    tagDiff.textContent = "difficulty: " + difficulty.value;
+    tagDiff.textContent = "heat: " + difficulty.value;
     tagMode.textContent = "mode: " + currentMode;
 
     sharePack.textContent = "pack: " + pack.value;
@@ -1026,7 +903,7 @@
     const tick = () => {
       const ms = timerEndsAt - Date.now();
       if (ms <= 0){
-        timerText.textContent = "Timebox complete. Do the rep now.";
+        timerText.textContent = "Timer done. Go do it.";
         stopTimer();
         return;
       }
@@ -1043,7 +920,6 @@
     timerEndsAt = null;
   }
 
-  // Streak: only updates on days with at least one rejection
   function updateRejectionStreakOnRejectedLog(){
     const today = dayKey();
     const last = localStorage.getItem(LAST_REJ_DAY_KEY);
@@ -1099,7 +975,7 @@
     const rows = logs.slice().reverse().slice(0, 12).map(l => {
       const dt = new Date(l.time);
       const when = dt.toLocaleString([], {year:"numeric", month:"short", day:"2-digit", hour:"2-digit", minute:"2-digit"});
-      const res = (l.result === "rejected") ? "Rejected" : "Accepted";
+      const res = (l.result === "rejected") ? "No" : "Yes";
 
       const metaBits = [
         `<span class="tag">${escapeHtml(l.pack || "all")}</span>`,
@@ -1107,7 +983,7 @@
         `<span class="tag">d${escapeHtml(String(l.diff))}</span>`,
         l.where ? `<span class="tag">where: ${escapeHtml(l.where)}</span>` : "",
         l.who ? `<span class="tag">who: ${escapeHtml(l.who)}</span>` : "",
-        (l.before && l.after) ? `<span class="tag">feel ${escapeHtml(String(l.before))} to ${escapeHtml(String(l.after))}</span>` : ""
+        (l.before && l.after) ? `<span class="tag">feel ${escapeHtml(String(l.before))}→${escapeHtml(String(l.after))}</span>` : ""
       ].filter(Boolean).join(" ");
 
       const extra = l.note ? `<div class="muted" style="margin-top:6px">${escapeHtml(l.note)}</div>` : "";
@@ -1142,7 +1018,7 @@
   async function shareApp(){
     const url = location.origin + location.pathname;
     if (navigator.share){
-      try{ await navigator.share({title:"Rejection Challenge", text:"Try this 30-day challenge:", url}); }
+      try{ await navigator.share({title:"Rejection Challenge", text:"Try this:", url}); }
       catch {}
     } else {
       try{
@@ -1162,7 +1038,7 @@
 
   async function copyShareCardAsImage(){
     if (!currentChallenge){
-      toastMsg("Generate a challenge first.");
+      toastMsg("Deal a prompt first.");
       return;
     }
     try{
@@ -1172,37 +1048,37 @@
 
       if (navigator.clipboard && window.ClipboardItem){
         await navigator.clipboard.write([new ClipboardItem({"image/png": blob})]);
-        toastMsg("Copied share card as image.");
+        toastMsg("Image copied.");
       } else {
         const url = URL.createObjectURL(blob);
         const a = document.createElement("a");
         a.href = url;
-        a.download = "rejection-challenge-card.png";
+        a.download = "rejection-card.png";
         document.body.appendChild(a);
         a.click();
         a.remove();
         URL.revokeObjectURL(url);
-        toastMsg("Clipboard not supported; downloaded PNG.");
+        toastMsg("Downloaded.");
       }
     } catch {
-      toastMsg("Could not copy image. Try Download PNG.");
+      toastMsg("Couldn’t copy. Try Download.");
     }
   }
 
   async function downloadShareCard(){
     if (!currentChallenge){
-      toastMsg("Generate a challenge first.");
+      toastMsg("Deal a prompt first.");
       return;
     }
     const canvas = await renderShareCardToCanvas();
     const url = canvas.toDataURL("image/png");
     const a = document.createElement("a");
     a.href = url;
-    a.download = "rejection-challenge-card.png";
+    a.download = "rejection-card.png";
     document.body.appendChild(a);
     a.click();
     a.remove();
-    toastMsg("Downloaded PNG.");
+    toastMsg("Downloaded.");
   }
 
   function exportCSV(){
@@ -1230,7 +1106,7 @@
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = "rejection-challenge-logs.csv";
+    a.download = "rejection-logs.csv";
     document.body.appendChild(a);
     a.click();
     a.remove();
@@ -1299,9 +1175,9 @@
     saveGame(g);
     renderGameUI();
     if (g.level > beforeLevel){
-      toastMsg(`Level up: ${beforeLevel} -> ${g.level}`);
+      toastMsg(`Level up: ${beforeLevel} → ${g.level}`);
     } else if (reason){
-      toastMsg(`${reason}: +${amount} XP`);
+      toastMsg(`${reason} +${amount} XP`);
     }
   }
 
@@ -1311,7 +1187,7 @@
       g.badges[id] = {name, at: nowISO()};
       saveGame(g);
       renderGameUI();
-      toastMsg(`Badge unlocked: ${name}`);
+      toastMsg(`Badge: ${name}`);
     }
   }
 
@@ -1324,9 +1200,9 @@
     const cats = ["social","help","food","career","negotiation","weird"];
     const catPick = cats[seededIndex(cats.length, seed)];
     const quests = [
-      {id:"q_rej", title:"Get 1 rejection today", desc:"Log at least one Rejected result today.", reward: 60},
-      {id:"q_newcat", title:`Try category: ${catPick}`, desc:"Log any result in the category of the day.", reward: 40, cat: catPick},
-      {id:"q_hard", title:"Do a difficulty 4+ rep", desc:"Log any result at difficulty 4 or 5.", reward: 50}
+      {id:"q_rej", title:"Get 1 no today", desc:"Log at least one “Got a no” today.", reward: 60},
+      {id:"q_newcat", title:`Try: ${catPick}`, desc:"Log any result in today’s category.", reward: 40, cat: catPick},
+      {id:"q_hard", title:"Heat 4+", desc:"Log any result at heat 4 or 5.", reward: 50}
     ];
 
     g.questDay = today;
@@ -1348,18 +1224,18 @@
 
     if (!g.questDone[doneKey("q_rej")] && todayLogs.some(l => l.result === "rejected")){
       markDone("q_rej");
-      awardXP(60, "Quest complete");
+      awardXP(60, "Quest");
     }
 
     const qCat = g.quests?.find(q => q.id === "q_newcat")?.cat;
     if (qCat && !g.questDone[doneKey("q_newcat")] && todayLogs.some(l => l.cat === qCat)){
       markDone("q_newcat");
-      awardXP(40, "Quest complete");
+      awardXP(40, "Quest");
     }
 
     if (!g.questDone[doneKey("q_hard")] && todayLogs.some(l => (l.diff || 0) >= 4)){
       markDone("q_hard");
-      awardXP(50, "Quest complete");
+      awardXP(50, "Quest");
     }
 
     saveGame(g);
@@ -1425,15 +1301,15 @@
     const today = dayKey();
     const last = localStorage.getItem(LAST_REJ_DAY_KEY);
 
-    if (!last) { el.textContent = "Log 1 rejection today to start your streak."; return; }
-    if (last === today) { el.textContent = "Already counted today. Get another rejection for fun."; return; }
+    if (!last) { el.textContent = "Log one “no” today to start."; return; }
+    if (last === today) { el.textContent = "Counted for today. Extra no’s welcome."; return; }
 
     const lastDate = new Date(last + "T00:00:00");
     const todayDate = new Date(today + "T00:00:00");
     const diffDays = Math.round((todayDate - lastDate) / (24*60*60*1000));
     el.textContent = (diffDays === 1)
-      ? "Log 1 rejection today to extend your streak."
-      : "Your streak will reset unless you log a rejection today.";
+      ? "One “no” today keeps it going."
+      : "Log a “no” today to restart the streak.";
   }
 
   function bossChallengeForWeek(){
@@ -1461,7 +1337,7 @@
 
     bossWeekTag.textContent = b.week;
     bossRewardTag.textContent = `+${b.reward} XP`;
-    bossText.textContent = g.bossDone ? (b.text + " (completed)") : b.text;
+    bossText.textContent = g.bossDone ? (b.text + " (done)") : b.text;
 
     const loadBtn = $("loadBossBtn");
     const markBtn = $("markBossBtn");
@@ -1477,7 +1353,7 @@
         startTimer();
         updateTags();
         location.hash = "#tracker";
-        toastMsg("Boss loaded into tracker.");
+        toastMsg("Boss loaded.");
       });
     }
 
@@ -1486,10 +1362,10 @@
       markBtn.addEventListener("click", () => {
         const gg = loadGame();
         const bb = bossChallengeForWeek();
-        if (gg.bossDone){ toastMsg("Boss already completed this week."); return; }
+        if (gg.bossDone){ toastMsg("Already done this week."); return; }
         gg.bossDone = true;
         saveGame(gg);
-        awardXP(bb.reward, "Boss cleared");
+        awardXP(bb.reward, "Boss");
         unlockBadge("b_week_boss", "Boss down");
         renderGameUI();
       });
@@ -1516,12 +1392,9 @@
     renderStreakHint();
   }
 
-  // ======================
-  // Logging with XP + badges
-  // ======================
   function logResult(result){
     if (!currentChallenge){
-      toastMsg("Generate a challenge first.");
+      toastMsg("Deal a prompt first.");
       return;
     }
     const logs = loadLogs();
@@ -1542,19 +1415,16 @@
     logs.push(entry);
     saveLogs(logs);
 
-    // Streak logic
     if (result === "rejected"){
       updateRejectionStreakOnRejectedLog();
-      toastMsg("Logged: rejected (streak updates once per day).");
+      toastMsg("Logged. Nice.");
     } else {
-      toastMsg("Logged: accepted.");
+      toastMsg("Logged.");
     }
 
-    // XP + quests
     awardXP(xpForLog(entry), "Logged");
     checkQuestCompletionOnLog();
 
-    // Badge checks
     const allLogs = loadLogs();
     if (allLogs.some(l => l.result === "rejected")) unlockBadge("b_first_no", "First No");
 
@@ -1573,15 +1443,12 @@
     updateStats();
   }
 
-  // ======================
-  // Plan logic
-  // ======================
   function daySpec(day){
-    if (day <= 5) return {diff: 1 + (day >= 3 ? 1 : 0), cat: (day % 2 ? "social" : "help"), label:"low stakes"};
-    if (day <= 15) return {diff: 2 + (day >= 10 ? 1 : 0), cat: (day % 3 === 0 ? "career" : "social"), label:"social or career"};
+    if (day <= 5) return {diff: 1 + (day >= 3 ? 1 : 0), cat: (day % 2 ? "social" : "help"), label:"low"};
+    if (day <= 15) return {diff: 2 + (day >= 10 ? 1 : 0), cat: (day % 3 === 0 ? "career" : "social"), label:"mid"};
     const stretchCat = (day % 4 === 0) ? "career" : (day % 3 === 0 ? "negotiation" : "social");
     const stretchDiff = (day <= 20) ? 3 : (day <= 25 ? 4 : 5);
-    return {diff: stretchDiff, cat: stretchCat, label:"stretch"};
+    return {diff: stretchDiff, cat: stretchCat, label:"spicy"};
   }
 
   function planDoneCount(){
@@ -1593,7 +1460,7 @@
     const completed = planDoneCount();
     const pct = Math.round((completed / 30) * 100);
     heroProgressFill.style.width = pct + "%";
-    heroProgressText.textContent = completed + "/30 days";
+    heroProgressText.textContent = completed + "/30";
   }
 
   function renderPlan(){
@@ -1640,7 +1507,7 @@
 
     const pct = Math.round((completed / 30) * 100);
     planProgressFill.style.width = pct + "%";
-    planProgressText.textContent = completed + "/30 completed";
+    planProgressText.textContent = completed + "/30";
 
     planGrid.querySelectorAll('input[type="checkbox"][data-day]').forEach(cb => {
       cb.addEventListener("change", (e) => {
@@ -1667,7 +1534,7 @@
         setChallenge(pickTodaysChallenge());
         startTimer();
         updateTags();
-        toastMsg("Loaded day prompt into tracker.");
+        toastMsg("Loaded.");
       });
     });
 
@@ -1676,7 +1543,7 @@
         const text = btn.getAttribute("data-text") || "";
         try{
           await navigator.clipboard.writeText(text);
-          toastMsg("Prompt copied.");
+          toastMsg("Copied.");
         } catch {
           prompt("Copy this:", text);
         }
@@ -1684,26 +1551,6 @@
     });
   }
 
-  // Script copy buttons
-  document.querySelectorAll("button[data-copy]").forEach(btn => {
-    btn.addEventListener("click", async () => {
-      const key = btn.getAttribute("data-copy");
-      const map = {
-        coffee: "Hey, quick one. I'm working on being more proactive. Would you be open to a 10-minute coffee chat sometime this week? Totally okay if not.",
-        feedback: "I'm trying to improve fast. Could I get 30 seconds of feedback on what I could do better next time?",
-        no: "Totally get it, thanks anyway. If you're open to sharing: what's one thing I could improve for next time?"
-      };
-      const text = map[key] || "";
-      try{
-        await navigator.clipboard.writeText(text);
-        toastMsg("Script copied.");
-      } catch {
-        prompt("Copy this:", text);
-      }
-    });
-  });
-
-  // Generate
   function generate(mode){
     currentMode = mode;
     updateTags();
@@ -1713,22 +1560,20 @@
     updateTags();
   }
 
-  // Reset
   function resetAll(){
-    if (!confirm("Reset logs, streak, plan progress, and game progress?")) return;
+    if (!confirm("Reset everything on this device?")) return;
     localStorage.removeItem(STORAGE_KEY);
     localStorage.removeItem(STREAK_KEY);
     localStorage.removeItem(LAST_REJ_DAY_KEY);
     localStorage.removeItem(PLAN_DONE_KEY);
     localStorage.removeItem(GAME_KEY);
-    toastMsg("Reset complete.");
+    toastMsg("Reset.");
     renderPlan();
     updateHeroProgress();
     updateStats();
     renderGameUI();
   }
 
-  // Wire UI
   function syncMeta(){ updateTags(); }
   difficulty.addEventListener("input", syncMeta);
   before.addEventListener("input", syncMeta);
@@ -1760,21 +1605,20 @@
     if (k === "r") logResult("rejected");
   });
 
-  // Plan controls
   markAllDoneBtn.addEventListener("click", () => {
     const obj = {};
     for (let d=1; d<=30; d++) obj[String(d)] = true;
     savePlanDone(obj);
     renderPlan();
     updateHeroProgress();
-    toastMsg("Marked all days done.");
+    toastMsg("Marked.");
   });
 
   clearPlanBtn.addEventListener("click", () => {
     localStorage.removeItem(PLAN_DONE_KEY);
     renderPlan();
     updateHeroProgress();
-    toastMsg("Cleared plan progress.");
+    toastMsg("Cleared.");
   });
 
   printPlanBtn.addEventListener("click", () => {
@@ -1782,7 +1626,6 @@
     setTimeout(() => window.print(), 150);
   });
 
-  // Load from share link if present
   const params = new URLSearchParams(location.search);
   const c = params.get("c");
   if (c){
@@ -1800,16 +1643,25 @@
     }
   }
 
-  // Initial render
+  function renderGameUI(){
+    // weekly shield + UI render
+    maybeGrantWeeklyShield();
+    renderLevel();
+    renderQuests();
+    renderBadges();
+    renderBoss();
+    renderStreakHint();
+  }
+
+  function renderStreakHint(){ /* redefined above, kept */ }
+
   updateTags();
   renderPlan();
   updateHeroProgress();
   updateStats();
   renderGameUI();
-
 })();
 </script>
 </body>
 </html>
-
 
