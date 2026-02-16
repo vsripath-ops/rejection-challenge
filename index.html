@@ -482,4 +482,901 @@
           <div style="min-width:220px">
             <label for="category">Category</label>
             <select id="category">
+              <option value="any">Any</option>
+              <option value="food">Food and cafe</option>
+              <option value="social">Social and compliments</option>
+              <option value="help">Asking for help</option>
+              <option value="negotiation">Negotiation</option>
+              <option value="weird">Wholesome weird</option>
+              <option value="career">Career and networking</option>
+            </select>
+          </div>
+
+          <div style="min-width:220px">
+            <label for="difficulty">Difficulty: <span id="diffLabel" class="pill">3</span></label>
+            <input id="difficulty" type="range" min="1" max="5" value="3" />
+          </div>
+
+          <div style="min-width:220px">
+            <label for="timebox">Timebox (minutes)</label>
+            <select id="timebox">
+              <option value="0">No timer</option>
+              <option value="5">5</option>
+              <option value="10">10</option>
+              <option value="15" selected>15</option>
+              <option value="30">30</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="challenge" style="margin-top:12px">
+          <div class="headline">
+            <div class="meta">
+              <span class="tag" id="tagPack">pack: all</span>
+              <span class="tag" id="tagCat">any</span>
+              <span class="tag" id="tagDiff">difficulty: 3</span>
+              <span class="tag" id="tagMode">mode: random</span>
+            </div>
+            <div class="row" style="flex:0 0 auto">
+              <button class="btn small" id="copyLinkBtn">Copy link</button>
+              <button class="btn small" id="todayBtn" title="Deterministic for today">Todays</button>
+              <button class="btn primary" id="newBtn">Generate</button>
+            </div>
+          </div>
+          <div class="text" id="challengeText">Click Generate to get your first challenge.</div>
+          <div class="muted" id="timerText" style="margin-top:6px"></div>
+        </div>
+
+        <div style="margin-top:12px">
+          <div class="row">
+            <div style="min-width:220px">
+              <label for="where">Where (optional)</label>
+              <input id="where" type="text" placeholder="e.g., coffee shop, campus, gym" />
+            </div>
+            <div style="min-width:220px">
+              <label for="who">Who (optional)</label>
+              <input id="who" type="text" placeholder="e.g., barista, stranger, classmate" />
+            </div>
+          </div>
+
+          <div class="row" style="margin-top:10px">
+            <div style="min-width:220px">
+              <label for="before">Feeling before (1-5): <span id="beforeLabel" class="pill">3</span></label>
+              <input id="before" type="range" min="1" max="5" value="3" />
+            </div>
+            <div style="min-width:220px">
+              <label for="after">Feeling after (1-5): <span id="afterLabel" class="pill">3</span></label>
+              <input id="after" type="range" min="1" max="5" value="3" />
+            </div>
+          </div>
+
+          <div style="margin-top:10px">
+            <label for="note">Quick note (optional)</label>
+            <textarea id="note" placeholder="What did you say? What did they say? Any detail?"></textarea>
+          </div>
+
+          <div class="row" style="margin-top:10px">
+            <button class="btn good" id="acceptedBtn">Accepted</button>
+            <button class="btn bad" id="rejectedBtn">Rejected</button>
+          </div>
+
+          <div class="footer">
+            <div>Tip: polite, specific, and slightly uncomfortable.</div>
+            <div>Shortcuts: <span class="kbd">G</span> generate | <span class="kbd">T</span> todays | <span class="kbd">R</span> log rejected</div>
+          </div>
+        </div>
+
+        <!-- Share card -->
+        <div style="margin-top:14px" class="card">
+          <h2>Share card</h2>
+          <div class="muted" style="font-size:12px; margin-top:-6px">Post this prompt. Copy it as an image (no backend).</div>
+
+          <div id="shareCard" class="shareCard" style="margin-top:10px">
+            <div class="top">
+              <div class="app">Rejection Challenge <span class="pill" id="shareStamp">today</span></div>
+              <div class="small">
+                <span class="tag" id="sharePack">pack: all</span>
+                <span class="tag" id="shareCat">any</span>
+                <span class="tag" id="shareDiff">d3</span>
+              </div>
+            </div>
+            <div class="big" id="shareText">Generate a challenge to fill this card.</div>
+            <div class="small">
+              <span class="tag">rule: be polite</span>
+              <span class="tag">rule: accept no</span>
+              <span class="tag">in person</span>
+            </div>
+          </div>
+
+          <div class="row" style="margin-top:10px">
+            <button class="btn small" id="copyImageBtn">Copy as image</button>
+            <button class="btn small" id="downloadImageBtn">Download PNG</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right -->
+      <div class="card">
+        <h2>Your stats</h2>
+        <div class="statgrid">
+          <div class="stat">
+            <div class="k">Rejection streak (days)</div>
+            <div class="v" id="streak">0</div>
+          </div>
+          <div class="stat">
+            <div class="k">Total logs</div>
+            <div class="v" id="total">0</div>
+          </div>
+          <div class="stat">
+            <div class="k">Rejection rate</div>
+            <div class="v" id="rate">0%</div>
+          </div>
+        </div>
+
+        <div class="muted" style="font-size:12px; margin-top:10px; line-height:1.4">
+          Stored in your browser (localStorage). No account required.
+          <br><b>Streak updates only</b> on days you log at least one <b>Rejected</b>.
+        </div>
+
+        <h2 style="margin-top:14px">Recent logs</h2>
+        <div style="overflow:auto; margin-top:6px">
+          <table>
+            <thead>
+              <tr>
+                <th style="min-width:140px">Time</th>
+                <th>Challenge</th>
+                <th style="min-width:120px">Result</th>
+              </tr>
+            </thead>
+            <tbody id="logBody">
+              <tr><td colspan="3" class="muted">No logs yet.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+  </div>
+
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+
+  // Controls
+  const pack = $("pack");
+  const category = $("category");
+  const difficulty = $("difficulty");
+  const timebox = $("timebox");
+
+  // Labels/tags
+  const diffLabel = $("diffLabel");
+  const tagPack = $("tagPack");
+  const tagCat = $("tagCat");
+  const tagDiff = $("tagDiff");
+  const tagMode = $("tagMode");
+
+  // Challenge
+  const challengeText = $("challengeText");
+  const timerText = $("timerText");
+
+  // Log fields
+  const where = $("where");
+  const who = $("who");
+  const before = $("before");
+  const after = $("after");
+  const beforeLabel = $("beforeLabel");
+  const afterLabel = $("afterLabel");
+  const note = $("note");
+
+  // Buttons
+  const newBtn = $("newBtn");
+  const todayBtn = $("todayBtn");
+  const acceptedBtn = $("acceptedBtn");
+  const rejectedBtn = $("rejectedBtn");
+  const exportBtn = $("exportBtn");
+  const resetBtn = $("resetBtn");
+  const copyLinkBtn = $("copyLinkBtn");
+  const shareAppBtn = $("shareAppBtn");
+  const copyImageBtn = $("copyImageBtn");
+  const downloadImageBtn = $("downloadImageBtn");
+
+  // Share card
+  const shareCard = $("shareCard");
+  const shareStamp = $("shareStamp");
+  const sharePack = $("sharePack");
+  const shareCat = $("shareCat");
+  const shareDiff = $("shareDiff");
+  const shareText = $("shareText");
+
+  // Plan UI
+  const planGrid = $("planGrid");
+  const planProgressFill = $("planProgressFill");
+  const planProgressText = $("planProgressText");
+  const heroProgressFill = $("heroProgressFill");
+  const heroProgressText = $("heroProgressText");
+  const printPlanBtn = $("printPlanBtn");
+  const markAllDoneBtn = $("markAllDoneBtn");
+  const clearPlanBtn = $("clearPlanBtn");
+
+  // Stats/logs
+  const streakEl = $("streak");
+  const totalEl = $("total");
+  const rateEl = $("rate");
+  const logBody = $("logBody");
+  const toast = $("toast");
+
+  // Storage
+  const STORAGE_KEY = "rr_logs_v3";
+  const STREAK_KEY = "rr_rej_streak_v3";
+  const LAST_REJ_DAY_KEY = "rr_last_rej_day_v3";
+  const PLAN_DONE_KEY = "rr_plan_done_v2";
+
+  let currentChallenge = null;
+  let currentMode = "random"; // random | today
+  let timer = null;
+  let timerEndsAt = null;
+
+  // Packs
+  const packFilters = {
+    all: (c) => true,
+    beginner: (c) => c.diff <= 2,
+    networking: (c) => c.cat === "career" || (c.cat === "social" && c.diff <= 4),
+    wholesome: (c) => c.cat === "weird" || (c.cat === "social"),
+    negotiation: (c) => c.cat === "negotiation"
+  };
+
+  // Challenges
+  const challenges = [
+    // Food
+    {cat:"food", diff:1, text:"Ask a barista to recommend something not on the menu."},
+    {cat:"food", diff:2, text:"Ask for a small sample before buying (accept no politely)."},
+    {cat:"food", diff:3, text:"Ask if they can make your drink half sweet."},
+    {cat:"food", diff:4, text:"Ask for a surprise under $5 and let them choose."},
+    {cat:"food", diff:5, text:"Ask for a custom swap (change a side). Accept no and move on."},
+
+    // Social
+    {cat:"social", diff:1, text:"Give a sincere compliment to a stranger and leave."},
+    {cat:"social", diff:2, text:"Ask someone where they got an item because you like it."},
+    {cat:"social", diff:3, text:"Ask a stranger to rate your outfit from 1 to 10. Thank them either way."},
+    {cat:"social", diff:4, text:"Ask someone for a quick photo of you. Offer to take one for them too."},
+    {cat:"social", diff:5, text:"Ask a group if you can join for 2 minutes to practice small talk, then leave."},
+
+    // Help
+    {cat:"help", diff:1, text:"Ask someone for directions to a nearby place you already know."},
+    {cat:"help", diff:2, text:"Ask someone to recommend a nearby spot they genuinely like."},
+    {cat:"help", diff:3, text:"Ask if you can borrow a pen for 30 seconds."},
+    {cat:"help", diff:4, text:"Ask an employee to help you pick between two options and explain why."},
+    {cat:"help", diff:5, text:"Ask someone to listen to your 15-second intro and give one note."},
+
+    // Negotiation
+    {cat:"negotiation", diff:1, text:"Ask if there is a student discount."},
+    {cat:"negotiation", diff:2, text:"Ask if they can waive an add-on fee once. Accept no."},
+    {cat:"negotiation", diff:3, text:"Ask for a small upgrade (bigger size, better seat, etc.)."},
+    {cat:"negotiation", diff:4, text:"Ask for a $1 or $2 discount on a small purchase. Accept no."},
+    {cat:"negotiation", diff:5, text:"Ask for a free extra (topping or add-on). No arguing if no."},
+
+    // Wholesome weird
+    {cat:"weird", diff:1, text:"Ask someone a harmless silly question: do pigeons have a leader?"},
+    {cat:"weird", diff:2, text:"Ask a cashier: is today more of a 7 or a 9?"},
+    {cat:"weird", diff:3, text:"Ask someone for a 10-second pep talk. Time it."},
+    {cat:"weird", diff:4, text:"Ask a stranger for a life hack that saves time."},
+    {cat:"weird", diff:5, text:"Ask if someone will say 'you've got this' on video for 5 seconds (consent required)."},
+
+    // Career
+    {cat:"career", diff:1, text:"Ask someone what they do for work and what they enjoy about it."},
+    {cat:"career", diff:2, text:"Ask for one piece of advice for someone early in their career."},
+    {cat:"career", diff:3, text:"Ask if they would be open to a 10-minute coffee chat sometime. Accept no warmly."},
+    {cat:"career", diff:4, text:"Ask if they know one person you should meet and why."},
+    {cat:"career", diff:5, text:"Ask a professional for feedback on your 15-second intro on the spot."}
+  ];
+
+  function nowISO() { return new Date().toISOString(); }
+  function dayKey(d = new Date()) { return d.toISOString().slice(0,10); }
+
+  function loadLogs(){
+    try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]"); }
+    catch { return []; }
+  }
+  function saveLogs(logs){ localStorage.setItem(STORAGE_KEY, JSON.stringify(logs)); }
+
+  function loadStreak(){
+    try { return JSON.parse(localStorage.getItem(STREAK_KEY) || "0"); }
+    catch { return 0; }
+  }
+  function saveStreak(n){ localStorage.setItem(STREAK_KEY, JSON.stringify(n)); }
+
+  function loadPlanDone(){
+    try { return JSON.parse(localStorage.getItem(PLAN_DONE_KEY) || "{}"); }
+    catch { return {}; }
+  }
+  function savePlanDone(obj){ localStorage.setItem(PLAN_DONE_KEY, JSON.stringify(obj)); }
+
+  function toastMsg(msg){
+    toast.textContent = msg;
+    toast.style.display = "block";
+    clearTimeout(toast._t);
+    toast._t = setTimeout(()=> toast.style.display="none", 1900);
+  }
+
+  function hash32(str){
+    let h = 2166136261;
+    for (let i=0;i<str.length;i++){
+      h ^= str.charCodeAt(i);
+      h = Math.imul(h, 16777619);
+    }
+    return h >>> 0;
+  }
+  function seededIndex(n, seedStr){
+    const seed = hash32(seedStr);
+    const x = (Math.imul(seed, 1664525) + 1013904223) >>> 0;
+    return n ? (x % n) : 0;
+  }
+
+  function encodeChallenge(ch){
+    const payload = {cat:ch.cat, diff:ch.diff, text:ch.text, mode: currentMode, pack: pack.value};
+    const b64 = btoa(unescape(encodeURIComponent(JSON.stringify(payload))));
+    return b64.replaceAll("=", "");
+  }
+  function decodeChallenge(str){
+    try{
+      const pad = str + "===".slice((str.length % 4) || 4);
+      const json = decodeURIComponent(escape(atob(pad)));
+      const obj = JSON.parse(json);
+      if (!obj || !obj.text) return null;
+      return obj;
+    } catch { return null; }
+  }
+
+  function escapeHtml(s){
+    return String(s)
+      .replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;")
+      .replaceAll('"',"&quot;").replaceAll("'","&#039;");
+  }
+
+  function updateTags(){
+    diffLabel.textContent = difficulty.value;
+    beforeLabel.textContent = before.value;
+    afterLabel.textContent = after.value;
+
+    tagPack.textContent = "pack: " + pack.value;
+    tagCat.textContent = category.value;
+    tagDiff.textContent = "difficulty: " + difficulty.value;
+    tagMode.textContent = "mode: " + currentMode;
+
+    sharePack.textContent = "pack: " + pack.value;
+    shareCat.textContent = category.value;
+    shareDiff.textContent = "d" + difficulty.value;
+    shareStamp.textContent = (currentMode === "today") ? "today" : "random";
+  }
+
+  function setChallenge(ch){
+    currentChallenge = ch;
+    challengeText.textContent = ch.text;
+    shareText.textContent = ch.text;
+
+    const share = new URL(location.href);
+    share.searchParams.set("c", encodeChallenge(ch));
+    history.replaceState(null, "", share.toString());
+  }
+
+  function filteredPool(){
+    const p = pack.value;
+    const cat = category.value;
+    const diff = parseInt(difficulty.value, 10);
+
+    return challenges.filter(c => {
+      if (!packFilters[p](c)) return false;
+      if (cat !== "any" && c.cat !== cat) return false;
+      if (c.diff !== diff) return false;
+      return true;
+    });
+  }
+
+  function fallbackPool(){
+    const p = pack.value;
+    const cat = category.value;
+    return challenges.filter(c => {
+      if (!packFilters[p](c)) return false;
+      if (cat !== "any" && c.cat !== cat) return false;
+      return true;
+    });
+  }
+
+  function pickRandomChallenge(){
+    let pool = filteredPool();
+    if (!pool.length) pool = fallbackPool();
+    if (!pool.length) pool = challenges.slice();
+    return pool[Math.floor(Math.random() * pool.length)];
+  }
+
+  function pickTodaysChallenge(){
+    let pool = filteredPool();
+    if (!pool.length) pool = fallbackPool();
+    if (!pool.length) pool = challenges.slice();
+    const seedStr = dayKey() + "|" + pack.value + "|" + category.value + "|" + difficulty.value;
+    return pool[seededIndex(pool.length, seedStr)];
+  }
+
+  function startTimer(){
+    stopTimer();
+    const minutes = parseInt(timebox.value, 10);
+    if (!minutes){ timerText.textContent = ""; return; }
+    timerEndsAt = Date.now() + minutes * 60 * 1000;
+    const tick = () => {
+      const ms = timerEndsAt - Date.now();
+      if (ms <= 0){
+        timerText.textContent = "Timebox complete. Do the rep now.";
+        stopTimer();
+        return;
+      }
+      const m = Math.floor(ms / 60000);
+      const s = Math.floor((ms % 60000) / 1000);
+      timerText.textContent = "Time left: " + m + ":" + String(s).padStart(2,"0");
+    };
+    tick();
+    timer = setInterval(tick, 250);
+  }
+  function stopTimer(){
+    if (timer) clearInterval(timer);
+    timer = null;
+    timerEndsAt = null;
+  }
+
+  function updateStats(){
+    const logs = loadLogs();
+    totalEl.textContent = logs.length;
+
+    const rejected = logs.filter(x => x.result === "rejected").length;
+    const rate = logs.length ? Math.round((rejected / logs.length) * 100) : 0;
+    rateEl.textContent = rate + "%";
+
+    streakEl.textContent = loadStreak();
+    renderLogs(logs);
+  }
+
+  function renderLogs(logs){
+    if (!logs.length){
+      logBody.innerHTML = `<tr><td colspan="3" class="muted">No logs yet.</td></tr>`;
+      return;
+    }
+    const rows = logs.slice().reverse().slice(0, 12).map(l => {
+      const dt = new Date(l.time);
+      const when = dt.toLocaleString([], {year:"numeric", month:"short", day:"2-digit", hour:"2-digit", minute:"2-digit"});
+      const res = (l.result === "rejected") ? "Rejected" : "Accepted";
+
+      const metaBits = [
+        `<span class="tag">${escapeHtml(l.pack || "all")}</span>`,
+        `<span class="tag">${escapeHtml(l.cat)}</span>`,
+        `<span class="tag">d${escapeHtml(String(l.diff))}</span>`,
+        l.where ? `<span class="tag">where: ${escapeHtml(l.where)}</span>` : "",
+        l.who ? `<span class="tag">who: ${escapeHtml(l.who)}</span>` : "",
+        (l.before && l.after) ? `<span class="tag">feel ${escapeHtml(String(l.before))} to ${escapeHtml(String(l.after))}</span>` : ""
+      ].filter(Boolean).join(" ");
+
+      const extra = l.note ? `<div class="muted" style="margin-top:6px">${escapeHtml(l.note)}</div>` : "";
+
+      return `
+        <tr>
+          <td>${escapeHtml(when)}</td>
+          <td>
+            <div style="font-weight:1000">${escapeHtml(l.challenge)}</div>
+            <div class="muted" style="margin-top:6px; display:flex; gap:6px; flex-wrap:wrap">
+              ${metaBits}
+            </div>
+            ${extra}
+          </td>
+          <td>${res}</td>
+        </tr>
+      `;
+    }).join("");
+    logBody.innerHTML = rows;
+  }
+
+  // Streak: only updates on days with at least one rejection
+  function updateRejectionStreakOnRejectedLog(){
+    const today = dayKey();
+    const last = localStorage.getItem(LAST_REJ_DAY_KEY);
+    let streak = loadStreak();
+
+    if (!last){
+      streak = 1;
+    } else {
+      const lastDate = new Date(last + "T00:00:00");
+      const todayDate = new Date(today + "T00:00:00");
+      const diffDays = Math.round((todayDate - lastDate) / (24*60*60*1000));
+
+      if (diffDays === 0){
+        // already counted today
+      } else if (diffDays === 1){
+        streak += 1;
+      } else {
+        streak = 1;
+      }
+    }
+    localStorage.setItem(LAST_REJ_DAY_KEY, today);
+    saveStreak(streak);
+  }
+
+  function clearLogFields(){
+    where.value = "";
+    who.value = "";
+    note.value = "";
+    before.value = "3";
+    after.value = "3";
+    beforeLabel.textContent = "3";
+    afterLabel.textContent = "3";
+  }
+
+  function logResult(result){
+    if (!currentChallenge){
+      toastMsg("Generate a challenge first.");
+      return;
+    }
+    const logs = loadLogs();
+    const entry = {
+      time: nowISO(),
+      result,
+      mode: currentMode,
+      pack: pack.value,
+      cat: currentChallenge.cat,
+      diff: currentChallenge.diff,
+      challenge: currentChallenge.text,
+      where: where.value.trim(),
+      who: who.value.trim(),
+      before: parseInt(before.value,10),
+      after: parseInt(after.value,10),
+      note: note.value.trim()
+    };
+    logs.push(entry);
+    saveLogs(logs);
+
+    if (result === "rejected"){
+      updateRejectionStreakOnRejectedLog();
+      toastMsg("Logged: rejected (streak updated if first rejection today).");
+    } else {
+      toastMsg("Logged: accepted.");
+    }
+
+    clearLogFields();
+    updateStats();
+  }
+
+  function exportCSV(){
+    const logs = loadLogs();
+    if (!logs.length){ toastMsg("Nothing to export yet."); return; }
+
+    const header = ["time_iso","result","mode","pack","category","difficulty","challenge","where","who","feeling_before","feeling_after","note"];
+    const rows = logs.map(l => [
+      l.time,
+      l.result,
+      l.mode || "",
+      l.pack || "",
+      l.cat,
+      String(l.diff),
+      (l.challenge || "").replaceAll('"','""'),
+      (l.where || "").replaceAll('"','""'),
+      (l.who || "").replaceAll('"','""'),
+      String(l.before ?? ""),
+      String(l.after ?? ""),
+      (l.note || "").replaceAll('"','""')
+    ]);
+
+    const csv = [header.join(","), ...rows.map(r => r.map(v => `"${v}"`).join(","))].join("\n");
+    const blob = new Blob([csv], {type:"text/csv;charset=utf-8"});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "rejection-challenge-logs.csv";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  }
+
+  async function copyCurrentLink(){
+    const url = location.href;
+    try{
+      await navigator.clipboard.writeText(url);
+      toastMsg("Link copied.");
+    } catch {
+      prompt("Copy this link:", url);
+    }
+  }
+
+  async function shareApp(){
+    const url = location.origin + location.pathname;
+    if (navigator.share){
+      try{ await navigator.share({title:"Rejection Challenge", text:"Try this 30-day challenge:", url}); }
+      catch {}
+    } else {
+      try{
+        await navigator.clipboard.writeText(url);
+        toastMsg("App link copied.");
+      } catch {
+        prompt("Copy this app link:", url);
+      }
+    }
+  }
+
+  async function renderShareCardToCanvas(){
+    await new Promise(r => setTimeout(r, 50));
+    const canvas = await html2canvas(shareCard, {backgroundColor: null, scale: 2});
+    return canvas;
+  }
+
+  async function copyShareCardAsImage(){
+    if (!currentChallenge){
+      toastMsg("Generate a challenge first.");
+      return;
+    }
+    try{
+      const canvas = await renderShareCardToCanvas();
+      const blob = await new Promise(res => canvas.toBlob(res, "image/png"));
+      if (!blob) throw new Error("No image blob");
+
+      if (navigator.clipboard && window.ClipboardItem){
+        await navigator.clipboard.write([new ClipboardItem({"image/png": blob})]);
+        toastMsg("Copied share card as image.");
+      } else {
+        // fallback
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "rejection-challenge-card.png";
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+        toastMsg("Clipboard not supported; downloaded PNG.");
+      }
+    } catch {
+      toastMsg("Could not copy image. Try Download PNG.");
+    }
+  }
+
+  async function downloadShareCard(){
+    if (!currentChallenge){
+      toastMsg("Generate a challenge first.");
+      return;
+    }
+    const canvas = await renderShareCardToCanvas();
+    const url = canvas.toDataURL("image/png");
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "rejection-challenge-card.png";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    toastMsg("Downloaded PNG.");
+  }
+
+  function resetAll(){
+    if (!confirm("Reset logs, streak, and plan progress?")) return;
+    localStorage.removeItem(STORAGE_KEY);
+    localStorage.removeItem(STREAK_KEY);
+    localStorage.removeItem(LAST_REJ_DAY_KEY);
+    localStorage.removeItem(PLAN_DONE_KEY);
+    toastMsg("Reset complete.");
+    renderPlan();
+    updateHeroProgress();
+    updateStats();
+  }
+
+  function generate(mode){
+    currentMode = mode;
+    updateTags();
+    const ch = (mode === "today") ? pickTodaysChallenge() : pickRandomChallenge();
+    setChallenge(ch);
+    startTimer();
+    updateTags();
+  }
+
+  // Plan (concrete 30 days)
+  function daySpec(day){
+    if (day <= 5) return {diff: 1 + (day >= 3 ? 1 : 0), cat: (day % 2 ? "social" : "help"), label:"low stakes"};
+    if (day <= 15) return {diff: 2 + (day >= 10 ? 1 : 0), cat: (day % 3 === 0 ? "career" : "social"), label:"social or career"};
+    const stretchCat = (day % 4 === 0) ? "career" : (day % 3 === 0 ? "negotiation" : "social");
+    const stretchDiff = (day <= 20) ? 3 : (day <= 25 ? 4 : 5);
+    return {diff: stretchDiff, cat: stretchCat, label:"stretch"};
+  }
+
+  function planDoneCount(){
+    const done = loadPlanDone();
+    return Object.values(done).filter(Boolean).length;
+  }
+
+  function updateHeroProgress(){
+    const completed = planDoneCount();
+    const pct = Math.round((completed / 30) * 100);
+    heroProgressFill.style.width = pct + "%";
+    heroProgressText.textContent = completed + "/30 days";
+  }
+
+  function renderPlan(){
+    const done = loadPlanDone();
+    let completed = 0;
+
+    const cards = [];
+    for (let day = 1; day <= 30; day++){
+      const checked = !!done[String(day)];
+      if (checked) completed++;
+
+      const spec = daySpec(day);
+      const seedStr = "plan|" + String(day);
+      const pool = challenges.filter(c => c.cat === spec.cat && c.diff === spec.diff);
+      const chosen = pool.length ? pool[seededIndex(pool.length, seedStr)] : challenges[seededIndex(challenges.length, seedStr)];
+
+      cards.push(`
+        <div class="dayCard">
+          <div class="dayTop">
+            <div>
+              <div class="dayTitle">Day ${day} <span class="tag" style="margin-left:6px">${spec.label}</span></div>
+              <div class="dayMeta">
+                <span class="tag">${spec.cat}</span>
+                <span class="tag">d${spec.diff}</span>
+              </div>
+            </div>
+            <label class="tag" style="cursor:pointer; user-select:none">
+              <input type="checkbox" data-day="${day}" ${checked ? "checked" : ""} style="margin-right:6px; transform:translateY(1px)" />
+              done
+            </label>
+          </div>
+
+          <div class="dayText">${escapeHtml(chosen.text)}</div>
+
+          <div class="dayActions">
+            <button class="btn small" data-start-day="${day}" data-cat="${spec.cat}" data-diff="${spec.diff}">Start</button>
+            <button class="btn small" data-copy-day="${day}" data-text="${escapeHtml(chosen.text)}">Copy</button>
+          </div>
+        </div>
+      `);
+    }
+
+    planGrid.innerHTML = cards.join("");
+
+    const pct = Math.round((completed / 30) * 100);
+    planProgressFill.style.width = pct + "%";
+    planProgressText.textContent = completed + "/30 completed";
+
+    // Wire day checkboxes
+    planGrid.querySelectorAll('input[type="checkbox"][data-day]').forEach(cb => {
+      cb.addEventListener("change", (e) => {
+        const d = parseInt(e.target.getAttribute("data-day"), 10);
+        const obj = loadPlanDone();
+        obj[String(d)] = !!e.target.checked;
+        savePlanDone(obj);
+        renderPlan();
+        updateHeroProgress();
+      });
+    });
+
+    // Start day
+    planGrid.querySelectorAll('button[data-start-day]').forEach(btn => {
+      btn.addEventListener("click", () => {
+        const cat = btn.getAttribute("data-cat");
+        const diff = btn.getAttribute("data-diff");
+
+        category.value = cat;
+        difficulty.value = diff;
+
+        location.hash = "#tracker";
+        currentMode = "today";
+        updateTags();
+        setChallenge(pickTodaysChallenge());
+        startTimer();
+        updateTags();
+        toastMsg("Loaded day prompt into tracker.");
+      });
+    });
+
+    // Copy day prompt
+    planGrid.querySelectorAll('button[data-copy-day]').forEach(btn => {
+      btn.addEventListener("click", async () => {
+        const text = btn.getAttribute("data-text") || "";
+        try{
+          await navigator.clipboard.writeText(text);
+          toastMsg("Prompt copied.");
+        } catch {
+          prompt("Copy this:", text);
+        }
+      });
+    });
+  }
+
+  // Scripts copy buttons
+  document.querySelectorAll("button[data-copy]").forEach(btn => {
+    btn.addEventListener("click", async () => {
+      const key = btn.getAttribute("data-copy");
+      const map = {
+        coffee: "Hey, quick one. I'm working on being more proactive. Would you be open to a 10-minute coffee chat sometime this week? Totally okay if not.",
+        feedback: "I'm trying to improve fast. Could I get 30 seconds of feedback on what I could do better next time?",
+        no: "Totally get it, thanks anyway. If you're open to sharing: what's one thing I could improve for next time?"
+      };
+      const text = map[key] || "";
+      try{
+        await navigator.clipboard.writeText(text);
+        toastMsg("Script copied.");
+      } catch {
+        prompt("Copy this:", text);
+      }
+    });
+  });
+
+  // Wire UI
+  function syncMeta(){ updateTags(); }
+  difficulty.addEventListener("input", syncMeta);
+  before.addEventListener("input", syncMeta);
+  after.addEventListener("input", syncMeta);
+  category.addEventListener("change", syncMeta);
+  pack.addEventListener("change", syncMeta);
+  timebox.addEventListener("change", () => startTimer());
+
+  newBtn.addEventListener("click", () => generate("random"));
+  todayBtn.addEventListener("click", () => generate("today"));
+  acceptedBtn.addEventListener("click", () => logResult("accepted"));
+  rejectedBtn.addEventListener("click", () => logResult("rejected"));
+  exportBtn.addEventListener("click", exportCSV);
+  resetBtn.addEventListener("click", resetAll);
+  copyLinkBtn.addEventListener("click", copyCurrentLink);
+  shareAppBtn.addEventListener("click", shareApp);
+  copyImageBtn.addEventListener("click", copyShareCardAsImage);
+  downloadImageBtn.addEventListener("click", downloadShareCard);
+
+  document.addEventListener("keydown", (e) => {
+    const k = e.key.toLowerCase();
+    if (k === "g") generate("random");
+    if (k === "t") generate("today");
+    if (k === "r") logResult("rejected");
+  });
+
+  // Plan controls
+  markAllDoneBtn.addEventListener("click", () => {
+    const obj = {};
+    for (let d=1; d<=30; d++) obj[String(d)] = true;
+    savePlanDone(obj);
+    renderPlan();
+    updateHeroProgress();
+    toastMsg("Marked all days done.");
+  });
+
+  clearPlanBtn.addEventListener("click", () => {
+    localStorage.removeItem(PLAN_DONE_KEY);
+    renderPlan();
+    updateHeroProgress();
+    toastMsg("Cleared plan progress.");
+  });
+
+  printPlanBtn.addEventListener("click", () => {
+    location.hash = "#plan";
+    setTimeout(() => window.print(), 150);
+  });
+
+  // Load from share link
+  const params = new URLSearchParams(location.search);
+  const c = params.get("c");
+  if (c){
+    const decoded = decodeChallenge(c);
+    if (decoded){
+      currentChallenge = decoded;
+      challengeText.textContent = decoded.text;
+      shareText.textContent = decoded.text;
+
+      if (decoded.pack && packFilters[decoded.pack]) pack.value = decoded.pack;
+      category.value = ["food","social","help","negotiation","weird","career"].includes(decoded.cat) ? decoded.cat : "any";
+      difficulty.value = String(Math.min(5, Math.max(1, parseInt(decoded.diff || 3,10) || 3)));
+
+      currentMode = (decoded.mode === "today") ? "today" : "random";
+    }
+  }
+
+  // Initial render
+  updateTags();
+  renderPlan();
+  updateHeroProgress();
+  updateStats();
+})();
+</script>
+</body>
+</html>
 
