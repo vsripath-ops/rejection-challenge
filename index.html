@@ -4,9 +4,9 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Rejection Challenge</title>
-  <meta name="description" content="A public rejection practice game: deal yourself a real-life ask, log the result, build streaks, earn XP, unlock badges, export your log. No login." />
+  <meta name="description" content="A public rejection practice challenge: spin a prompt, do it in person, log it, level up. No login." />
 
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23120b08'/%3E%3Ctext x='50%25' y='56%25' text-anchor='middle' font-family='Arial' font-size='26' font-weight='800' fill='%23fff6f0'%3ERC%3C/text%3E%3C/svg%3E">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23120b08'/%3E%3Ctext x='50%25' y='56%25' text-anchor='middle' font-family='Arial' font-size='26' font-weight='700' fill='%23fff6f0'%3ERR%3C/text%3E%3C/svg%3E">
 
   <script defer src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 
@@ -14,18 +14,18 @@
     :root{
       --bg:#120b08;
       --card:#1b120f;
-      --muted:#d7bfb2;
+      --muted:#d2b7a9;
       --text:#fff6f0;
 
-      --accent:#ff7a59;   /* coral */
-      --accent2:#ffb86b;  /* amber */
-      --good:#4fd8a2;     /* mint */
-      --bad:#ff5a7a;      /* pink-red */
+      --accent:#ff7a59;
+      --accent2:#ffb86b;
+      --good:#4fd8a2;
+      --bad:#ff5a7a;
 
       --border: rgba(255,246,240,.12);
-      --shadow: 0 18px 55px rgba(0,0,0,.44);
-
+      --shadow: 0 14px 55px rgba(0,0,0,.45);
       --radius:20px;
+
       --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
       --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
     }
@@ -37,54 +37,88 @@
       font-family:var(--sans);
       color:var(--text);
       background:
-        radial-gradient(900px 520px at 10% 0%, rgba(255,122,89,.34), transparent 60%),
-        radial-gradient(900px 520px at 100% 8%, rgba(255,184,107,.22), transparent 55%),
-        radial-gradient(700px 420px at 40% 120%, rgba(79,216,162,.12), transparent 60%),
+        radial-gradient(900px 520px at 8% 0%, rgba(255,122,89,.35), transparent 60%),
+        radial-gradient(900px 520px at 100% 10%, rgba(255,184,107,.22), transparent 55%),
+        radial-gradient(700px 420px at 40% 120%, rgba(79,216,162,.14), transparent 60%),
         var(--bg);
       min-height:100vh;
     }
-
     a{color:inherit; text-decoration:none}
+    .wrap{max-width:1100px; margin:0 auto; padding:26px 16px 70px}
 
-    .wrap{max-width:1120px; margin:0 auto; padding:26px 16px 70px}
     header{
-      display:flex; align-items:flex-start; justify-content:space-between; gap:16px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
       margin-bottom:14px;
+      flex-wrap:wrap;
     }
-    @media (max-width: 980px){ header{flex-direction:column} }
-
-    .brand{display:flex; flex-direction:column; gap:8px}
-    .title{display:flex; align-items:center; gap:10px; flex-wrap:wrap; font-size:22px; font-weight:1000; letter-spacing:.2px}
-    .sub{color:var(--muted); font-size:14px; line-height:1.4; max-width:80ch}
-
+    .brand{display:flex; flex-direction:column; gap:4px}
+    .titleRow{display:flex; gap:10px; align-items:center; flex-wrap:wrap}
+    .title{
+      font-size:20px;
+      font-weight:850;
+      letter-spacing:.2px;
+    }
+    .sub{
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.35;
+      max-width:70ch;
+    }
     .pill{
       font-family:var(--mono);
-      font-size:12px;
-      border:1px solid rgba(255,246,240,.18);
+      font-size:11px;
+      color:rgba(255,246,240,.92);
+      border:1px solid rgba(255,246,240,.14);
       padding:4px 8px;
       border-radius:999px;
       background:rgba(255,246,240,.06);
-      color:rgba(255,246,240,.92);
       white-space:nowrap;
     }
 
-    .grid{display:grid; grid-template-columns:1.25fr .75fr; gap:14px; margin-top:14px}
-    @media (max-width: 980px){ .grid{grid-template-columns:1fr} }
+    .row{display:flex; gap:10px; align-items:center; flex-wrap:wrap}
+    .row > *{flex: 1 1 auto}
 
     .card{
-      background: linear-gradient(180deg, rgba(27,18,15,.92), rgba(27,18,15,.72));
-      border:1px solid var(--border);
-      border-radius:var(--radius);
-      box-shadow:var(--shadow);
-      padding:16px;
+      background: linear-gradient(180deg, rgba(27,18,15,.94), rgba(27,18,15,.76));
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 16px;
     }
-    .card h2{margin:0 0 10px; font-size:15px; letter-spacing:.2px}
 
-    .row{display:flex; gap:10px; align-items:center; flex-wrap:wrap}
-    .row > *{flex:1 1 auto}
+    /* HERO */
+    .hero{
+      padding:18px 16px;
+      border-radius: var(--radius);
+      border:1px solid rgba(255,246,240,.14);
+      background:
+        radial-gradient(1000px 420px at 0% 0%, rgba(255,122,89,.24), transparent 60%),
+        radial-gradient(1000px 420px at 100% 0%, rgba(255,184,107,.18), transparent 60%),
+        rgba(27,18,15,.72);
+      box-shadow: var(--shadow);
+    }
+    .hero h1{
+      margin:0;
+      font-size:34px;
+      line-height:1.08;
+      letter-spacing:.2px;
+      font-weight:900;
+    }
+    .hero p{
+      margin:10px 0 0;
+      color:var(--muted);
+      line-height:1.5;
+      max-width:72ch;
+      font-size:14px;
+    }
 
+    .ctaRow{display:flex; gap:10px; flex-wrap:wrap; margin-top:14px}
+
+    /* Inputs */
     label{display:block; font-size:12px; color:var(--muted); margin-bottom:6px}
-
     select, input[type="range"], input[type="text"], textarea{
       width:100%;
       background:rgba(255,246,240,.06);
@@ -94,32 +128,29 @@
       padding:10px 12px;
       outline:none;
     }
-    select:focus, input[type="text"]:focus, textarea:focus{
-      border-color: rgba(255,184,107,.40);
-      box-shadow: 0 0 0 3px rgba(255,184,107,.12);
-    }
     textarea{min-height:88px; resize:vertical}
 
+    /* Buttons */
     .btn{
-      appearance:none; border:0; cursor:pointer;
+      appearance:none;
+      border:1px solid rgba(255,246,240,.14);
+      cursor:pointer;
       padding:10px 12px;
       border-radius:14px;
-      font-weight:1000;
+      font-weight:850;
       color:var(--text);
-      background:rgba(255,246,240,.08);
-      border:1px solid rgba(255,246,240,.16);
-      transition:transform .06s ease, filter .15s ease, background .15s ease;
+      background:rgba(255,246,240,.07);
+      transition:transform .07s ease, filter .15s ease, background .15s ease, box-shadow .15s ease;
       user-select:none;
       text-align:center;
-      box-shadow: 0 10px 30px rgba(0,0,0,.25);
     }
-    .btn:hover{filter:brightness(1.05)}
+    .btn:hover{filter:brightness(1.05); box-shadow:0 10px 35px rgba(0,0,0,.22)}
     .btn:active{transform:translateY(1px) scale(.99)}
-    .btn.small{padding:8px 10px; font-size:13px; box-shadow:none}
-    .btn.ghost{background:rgba(255,246,240,.06); box-shadow:none}
+    .btn.small{padding:8px 10px; font-size:13px}
+    .btn.ghost{background:rgba(255,246,240,.05)}
     .btn.primary{
-      background: linear-gradient(90deg, rgba(255,122,89,.98), rgba(255,184,107,.86));
-      border-color: rgba(255,184,107,.30);
+      background: linear-gradient(90deg, rgba(255,122,89,.98), rgba(255,184,107,.88));
+      border-color: rgba(255,184,107,.35);
     }
     .btn.good{
       background: linear-gradient(90deg, rgba(79,216,162,.92), rgba(79,216,162,.62));
@@ -130,25 +161,11 @@
       border-color: rgba(255,90,122,.42);
     }
 
-    .muted{color:var(--muted)}
-    .kbd{
-      font-family:var(--mono);
-      border:1px solid rgba(255,246,240,.18);
-      background:rgba(255,246,240,.07);
-      padding:2px 6px;
-      border-radius:8px;
-    }
+    /* Layout */
+    .grid{display:grid; grid-template-columns:1.2fr .8fr; gap:14px; margin-top:14px}
+    @media (max-width: 980px){ .grid{grid-template-columns:1fr} }
 
-    .tag{
-      border:1px solid rgba(255,246,240,.14);
-      background:rgba(255,246,240,.06);
-      padding:3px 8px;
-      border-radius:999px;
-      font-family:var(--mono);
-      font-size:12px;
-      color:rgba(255,246,240,.92);
-    }
-
+    /* Challenge */
     .challenge{
       border:1px solid rgba(255,246,240,.14);
       border-radius:18px;
@@ -156,131 +173,102 @@
       background:
         radial-gradient(700px 260px at 0% 0%, rgba(255,122,89,.18), transparent 60%),
         radial-gradient(700px 260px at 100% 0%, rgba(255,184,107,.14), transparent 60%),
-        rgba(12,8,7,.55);
-    }
-    .challenge .headline{display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap}
-    .challenge .meta{display:flex; gap:8px; flex-wrap:wrap; color:var(--muted); font-size:12px}
-    .challenge .text{font-size:19px; font-weight:1000; margin:10px 0 6px; line-height:1.25}
-
-    .footer{
-      margin-top:12px;
-      color:var(--muted);
-      font-size:12px;
-      display:flex;
-      justify-content:space-between;
-      gap:10px;
-      flex-wrap:wrap;
-    }
-
-    /* Hero */
-    .hero{
-      padding:18px 16px;
-      border-radius: var(--radius);
-      border:1px solid rgba(255,246,240,.12);
-      background:
-        radial-gradient(1000px 420px at 0% 0%, rgba(255,122,89,.22), transparent 60%),
-        radial-gradient(1000px 420px at 100% 0%, rgba(255,184,107,.18), transparent 60%),
-        rgba(27,18,15,.55);
-      box-shadow: var(--shadow);
-    }
-    .hero h1{margin:0; font-size:34px; line-height:1.08; letter-spacing:.2px}
-    .hero p{margin:10px 0 0; color:var(--muted); max-width:78ch; line-height:1.55}
-    .ctaRow{display:flex; gap:10px; flex-wrap:wrap; margin-top:14px}
-
-    .progressWrap{margin-top:12px; display:flex; align-items:center; gap:10px; flex-wrap:wrap}
-    .progressBar{
-      flex:1 1 260px;
-      height:11px;
-      border-radius:999px;
-      background:rgba(255,246,240,.07);
-      border:1px solid rgba(255,246,240,.12);
+        rgba(18,11,8,.55);
+      position:relative;
       overflow:hidden;
     }
-    .progressBar > div{
-      height:100%;
-      width:0%;
-      background:linear-gradient(90deg, rgba(255,122,89,.96), rgba(255,184,107,.88));
+    .challenge .headline{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap
     }
-    .progressText{font-size:12px; color:var(--muted); font-family:var(--mono)}
-
-    /* Collapsible helpers */
-    details.helper{
-      margin-top:12px;
+    .challenge .text{
+      font-size:20px;
+      font-weight:900;
+      margin:10px 0 6px;
+      line-height:1.25
+    }
+    .meta{display:flex; gap:8px; flex-wrap:wrap; color:var(--muted); font-size:12px}
+    .tag{
       border:1px solid rgba(255,246,240,.12);
-      background:rgba(255,246,240,.05);
-      border-radius:16px;
-      padding:12px;
+      background:rgba(255,246,240,.06);
+      padding:3px 8px;
+      border-radius:999px;
+      font-family:var(--mono);
+      font-size:12px;
     }
-    details.helper summary{
-      cursor:pointer;
-      font-weight:1000;
-      list-style:none;
+
+    /* Spin effect */
+    .spinOverlay{
+      position:absolute; inset:0;
+      background:linear-gradient(90deg, rgba(255,122,89,.08), rgba(255,184,107,.07));
+      opacity:0;
+      pointer-events:none;
+      transition:opacity .2s ease;
     }
-    details.helper summary::-webkit-details-marker{display:none}
-    details.helper .inside{margin-top:10px; color:var(--muted); line-height:1.55}
-
-    .helperGrid{display:grid; grid-template-columns:1fr 1fr; gap:12px}
-    @media (max-width: 980px){ .helperGrid{grid-template-columns:1fr} }
-    .smallList{margin:0; padding-left:18px; color:var(--muted); line-height:1.55}
-
-    /* Plan */
-    .section{margin-top:14px}
-    .planGrid{display:grid; grid-template-columns: repeat(3, 1fr); gap:10px}
-    @media (max-width: 980px){ .planGrid{grid-template-columns:1fr 1fr} }
-    @media (max-width: 620px){ .planGrid{grid-template-columns:1fr} }
-
-    .dayCard{
-      padding:12px;
-      border-radius:16px;
-      border:1px solid rgba(255,246,240,.12);
-      background:rgba(255,246,240,.05);
+    .spinning .spinOverlay{opacity:1}
+    .spinning .text{filter:blur(2px); opacity:.45}
+    .spinTicker{
+      position:absolute; right:14px; bottom:12px;
+      font-family:var(--mono);
+      font-size:12px;
+      color:rgba(255,246,240,.85);
+      opacity:0;
+      transform:translateY(4px);
+      transition:opacity .2s ease, transform .2s ease;
     }
-    .dayTop{display:flex; justify-content:space-between; align-items:flex-start; gap:10px}
-    .dayTitle{font-weight:1000; letter-spacing:.2px}
-    .dayMeta{display:flex; gap:6px; flex-wrap:wrap; margin-top:8px}
-    .dayText{margin-top:8px; line-height:1.35}
-    .dayActions{display:flex; gap:8px; flex-wrap:wrap; margin-top:10px}
+    .spinning .spinTicker{opacity:1; transform:translateY(0)}
 
     /* Stats */
     .statgrid{display:grid; grid-template-columns:repeat(3,1fr); gap:10px}
     @media (max-width: 520px){ .statgrid{grid-template-columns:1fr} }
     .stat{
       padding:12px;
-      border-radius:14px;
+      border-radius:16px;
       background:rgba(255,246,240,.05);
       border:1px solid rgba(255,246,240,.12);
     }
     .stat .k{font-size:11px; color:var(--muted)}
-    .stat .v{font-size:20px; font-weight:1000; margin-top:4px}
+    .stat .v{font-size:20px; font-weight:900; margin-top:4px}
 
-    /* Quests / badges */
-    .q{
-      padding:12px;
-      border-radius:14px;
-      background:rgba(255,246,240,.05);
-      border:1px solid rgba(255,246,240,.12);
-      display:flex;
-      align-items:flex-start;
-      justify-content:space-between;
-      gap:10px;
-    }
-    .q .t{font-weight:1000; line-height:1.25}
-    .q .d{color:var(--muted); font-size:12px; line-height:1.35; margin-top:4px}
-
-    .badge{
-      border:1px solid rgba(255,246,240,.14);
-      background:rgba(255,246,240,.06);
-      padding:6px 10px;
+    /* XP bar */
+    .bar{
+      height:10px;
       border-radius:999px;
-      font-family:var(--mono);
-      font-size:12px;
+      border:1px solid rgba(255,246,240,.12);
+      background:rgba(255,246,240,.06);
+      overflow:hidden;
+      margin-top:8px;
     }
-    .badge.locked{opacity:.45}
+    .bar > div{
+      height:100%;
+      width:0%;
+      background:linear-gradient(90deg, rgba(79,216,162,.95), rgba(255,184,107,.90));
+    }
+    .muted{color:var(--muted)}
 
     /* Table */
     table{width:100%; border-collapse:collapse; margin-top:8px; font-size:13px}
     th,td{padding:10px 8px; border-bottom:1px solid rgba(255,246,240,.10); vertical-align:top}
-    th{color:var(--muted); font-weight:900; text-align:left; font-size:12px}
+    th{color:var(--muted); font-weight:800; text-align:left; font-size:12px}
+
+    /* Collapsibles */
+    details{
+      border:1px solid rgba(255,246,240,.12);
+      background:rgba(255,246,240,.05);
+      border-radius:16px;
+      padding:10px 12px;
+    }
+    details summary{
+      cursor:pointer;
+      font-weight:850;
+      color:rgba(255,246,240,.95);
+      list-style:none;
+    }
+    details summary::-webkit-details-marker{display:none}
+    details .inside{margin-top:10px; color:var(--muted); line-height:1.55; font-size:13px}
 
     /* Toast */
     .toast{
@@ -301,22 +289,36 @@
       border-radius:18px;
       border:1px solid rgba(255,246,240,.14);
       background:
-        radial-gradient(900px 400px at 0% 0%, rgba(255,122,89,.22), transparent 60%),
-        radial-gradient(900px 400px at 100% 0%, rgba(255,184,107,.18), transparent 60%),
-        rgba(27,18,15,.55);
+        radial-gradient(900px 400px at 0% 0%, rgba(255,122,89,.18), transparent 60%),
+        radial-gradient(900px 400px at 100% 0%, rgba(255,184,107,.14), transparent 60%),
+        rgba(18,11,8,.55);
       padding:14px;
     }
-    .shareCard .top{display:flex; justify-content:space-between; gap:10px; align-items:flex-start; flex-wrap:wrap}
-    .shareCard .app{font-weight:1000; letter-spacing:.2px; display:flex; gap:8px; align-items:center; flex-wrap:wrap}
-    .shareCard .big{font-size:18px; font-weight:1000; margin:10px 0 8px; line-height:1.25}
-    .shareCard .small{font-size:12px; color:var(--muted); display:flex; gap:8px; flex-wrap:wrap; align-items:center}
+    .shareCard .top{
+      display:flex; justify-content:space-between; gap:10px; align-items:flex-start; flex-wrap:wrap;
+    }
+    .shareCard .app{font-weight:900; letter-spacing:.2px; display:flex; gap:8px; align-items:center; flex-wrap:wrap;}
+    .shareCard .big{font-size:18px; font-weight:900; margin:10px 0 8px; line-height:1.25;}
+    .shareCard .small{font-size:12px; color:var(--muted); display:flex; gap:8px; flex-wrap:wrap; align-items:center;}
 
-    @media print{
-      header, .grid, #tracker { display:none !important; }
-      body{ background:#fff !important; color:#000 !important; }
-      .card, .hero, .dayCard{ box-shadow:none !important; background:#fff !important; color:#000 !important; border:1px solid #ddd !important; }
-      .muted{ color:#333 !important; }
-      .tag, .pill, .badge{ border:1px solid #ddd !important; background:#fff !important; color:#000 !important; }
+    /* Confetti */
+    .confetti{
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      z-index:9998;
+      overflow:hidden;
+    }
+    .confetti i{
+      position:absolute;
+      width:10px; height:14px;
+      border-radius:3px;
+      opacity:.95;
+      transform:translateY(-30px) rotate(0deg);
+      animation:fall 900ms linear forwards;
+    }
+    @keyframes fall{
+      to{ transform:translateY(110vh) rotate(260deg); opacity:1; }
     }
   </style>
 </head>
@@ -325,137 +327,95 @@
   <div class="wrap">
     <header>
       <div class="brand">
-        <div class="title">
-          Rejection Challenge
+        <div class="titleRow">
+          <div class="title">Rejection Challenge</div>
           <span class="pill">public</span>
           <span class="pill">no login</span>
-          <span class="pill">playable</span>
+          <span class="pill">one rep/day</span>
         </div>
-        <div class="sub">
-          Deal yourself one real-life ask. Do it in person. Log the result. Repeat.
-        </div>
+        <div class="sub">Spin a prompt. Do it in person. Log it. A “no” counts as a win here.</div>
       </div>
       <div class="row" style="justify-content:flex-end; min-width:280px">
-        <button class="btn small" id="resetBtn" title="Clears logs + streak + game">Reset</button>
-        <button class="btn small" id="exportBtn" title="Download CSV of your logs">Export</button>
+        <button class="btn small" id="resetBtn" title="Clears everything">Reset</button>
+        <button class="btn small" id="exportBtn" title="Download CSV">Export</button>
         <button class="btn small" id="shareAppBtn" title="Share the app">Share</button>
       </div>
     </header>
 
     <section class="hero" id="top">
-      <div class="title" style="font-size:14px; font-weight:1000; letter-spacing:.2px; margin-bottom:6px;">
-        30 days · in person · one rep a day
-      </div>
-
       <h1>Get comfortable hearing “no”.</h1>
-      <p>
-        Not therapy. Not a lecture. Just reps.
-        You’ll be surprised how fast the fear drops once you start.
-      </p>
-
-      <div class="progressWrap">
-        <div class="progressBar" aria-label="30-day progress">
-          <div id="heroProgressFill"></div>
-        </div>
-        <div class="progressText"><span id="heroProgressText">0/30</span></div>
-      </div>
+      <p>One small ask a day. Keep it respectful. Log what happened. The streak only cares about rejections.</p>
 
       <div class="ctaRow">
-        <button class="btn primary" id="startTodayBtn" type="button">Start today</button>
         <a class="btn ghost" href="#tracker">Open tracker</a>
-        <a class="btn ghost" href="#plan">See plan</a>
-        <button class="btn ghost" id="printPlanBtn" type="button">Print</button>
+        <button class="btn primary" id="spinBtn" type="button">Spin a prompt</button>
+        <button class="btn ghost" id="startTodayBtn" type="button">Today’s prompt</button>
       </div>
 
-      <details class="helper">
-        <summary>Quick help (optional)</summary>
-        <div class="inside helperGrid">
-          <div>
-            <div style="font-weight:1000; margin-bottom:6px">Rules (tiny)</div>
-            <ul class="smallList">
-              <li>In person only.</li>
-              <li>Be polite. Keep it short.</li>
-              <li>If they say no, you stop.</li>
-              <li>Stay safe + legal.</li>
-            </ul>
+      <div class="row" style="margin-top:12px">
+        <details>
+          <summary>Quick rules</summary>
+          <div class="inside">
+            In person only. Be brief. A “no” ends it. No guilt, no pushback. Ask safe, legal things.
           </div>
-          <div>
-            <div style="font-weight:1000; margin-bottom:6px">If you freeze</div>
-            <ul class="smallList">
-              <li>Smile. One sentence.</li>
-              <li>“No worries—thanks anyway.”</li>
-              <li>Log it. That’s the win.</li>
-            </ul>
-          </div>
-        </div>
-      </details>
-    </section>
-
-    <!-- Plan -->
-    <section class="section" id="plan">
-      <div class="card">
-        <div class="row" style="justify-content:space-between; align-items:flex-start">
-          <div>
-            <h2 style="margin:0">30-day plan</h2>
-            <div class="muted" style="margin-top:6px; line-height:1.5">
-              Tap Start on any day to load a prompt into the tracker.
+        </details>
+        <details>
+          <summary>Need words?</summary>
+          <div class="inside">
+            <div style="display:grid; gap:10px">
+              <div>
+                <b>Coffee chat:</b> “Quick one — would you be open to a 10-minute coffee chat sometime this week? Totally okay if not.”
+                <div><button class="btn small" data-copy="coffee" style="margin-top:8px">Copy</button></div>
+              </div>
+              <div>
+                <b>After a no:</b> “All good — thanks anyway. If you’re open to it, what’s one thing I could improve next time?”
+                <div><button class="btn small" data-copy="no" style="margin-top:8px">Copy</button></div>
+              </div>
             </div>
           </div>
-          <div class="row" style="flex:0 0 auto">
-            <button class="btn small" id="markAllDoneBtn" type="button">Mark all</button>
-            <button class="btn small" id="clearPlanBtn" type="button">Clear</button>
-          </div>
-        </div>
-
-        <div class="progressWrap" style="margin-top:10px">
-          <div class="progressBar">
-            <div id="planProgressFill"></div>
-          </div>
-          <div class="progressText" id="planProgressText">0/30</div>
-        </div>
-
-        <div class="planGrid" id="planGrid" style="margin-top:12px"></div>
+        </details>
       </div>
     </section>
 
-    <div id="tracker"></div>
-
-    <div class="grid">
+    <div class="grid" id="tracker" style="margin-top:14px">
       <!-- Left -->
       <div class="card">
-        <h2>Tracker</h2>
+        <div class="row" style="justify-content:space-between; align-items:center">
+          <h2 style="margin:0; font-size:15px; font-weight:900">Tracker</h2>
+          <span class="pill">local-only</span>
+        </div>
 
-        <div class="row">
-          <div style="min-width:220px">
+        <div class="row" style="margin-top:10px">
+          <div style="min-width:210px">
             <label for="pack">Pack</label>
             <select id="pack">
               <option value="all" selected>Mixed</option>
               <option value="beginner">Beginner</option>
               <option value="networking">Networking</option>
-              <option value="wholesome">Chaos (wholesome)</option>
+              <option value="wholesome">Wholesome</option>
               <option value="negotiation">Negotiation</option>
             </select>
           </div>
 
-          <div style="min-width:220px">
+          <div style="min-width:210px">
             <label for="category">Category</label>
             <select id="category">
               <option value="any">Any</option>
               <option value="food">Food</option>
               <option value="social">Social</option>
               <option value="help">Help</option>
-              <option value="negotiation">Negotiate</option>
+              <option value="negotiation">Negotiation</option>
               <option value="weird">Weird</option>
               <option value="career">Career</option>
             </select>
           </div>
 
-          <div style="min-width:220px">
-            <label for="difficulty">Heat: <span id="diffLabel" class="pill">3</span></label>
+          <div style="min-width:210px">
+            <label for="difficulty">Difficulty <span id="diffLabel" class="pill">3</span></label>
             <input id="difficulty" type="range" min="1" max="5" value="3" />
           </div>
 
-          <div style="min-width:220px">
+          <div style="min-width:210px">
             <label for="timebox">Timer</label>
             <select id="timebox">
               <option value="0">Off</option>
@@ -467,21 +427,24 @@
           </div>
         </div>
 
-        <div class="challenge" style="margin-top:12px">
+        <div class="challenge" style="margin-top:12px" id="challengeBox">
+          <div class="spinOverlay"></div>
+          <div class="spinTicker" id="spinTicker">spinning…</div>
+
           <div class="headline">
             <div class="meta">
               <span class="tag" id="tagPack">pack: all</span>
               <span class="tag" id="tagCat">any</span>
-              <span class="tag" id="tagDiff">heat: 3</span>
-              <span class="tag" id="tagMode">mode: random</span>
+              <span class="tag" id="tagDiff">d3</span>
+              <span class="tag" id="tagMode">random</span>
             </div>
             <div class="row" style="flex:0 0 auto">
               <button class="btn small" id="copyLinkBtn">Copy link</button>
-              <button class="btn small" id="todayBtn" title="Same prompt for today">Today</button>
-              <button class="btn primary" id="newBtn">Deal me one</button>
+              <button class="btn small" id="todayBtn" title="Same prompt for everyone today">Today</button>
+              <button class="btn primary" id="newBtn">Generate</button>
             </div>
           </div>
-          <div class="text" id="challengeText">Hit “Deal me one” to start.</div>
+          <div class="text" id="challengeText">Hit Generate.</div>
           <div class="muted" id="timerText" style="margin-top:6px"></div>
         </div>
 
@@ -489,7 +452,7 @@
           <div class="row">
             <div style="min-width:220px">
               <label for="where">Where (optional)</label>
-              <input id="where" type="text" placeholder="coffee shop, campus, gym" />
+              <input id="where" type="text" placeholder="cafe, campus, gym" />
             </div>
             <div style="min-width:220px">
               <label for="who">Who (optional)</label>
@@ -499,46 +462,33 @@
 
           <div class="row" style="margin-top:10px">
             <div style="min-width:220px">
-              <label for="before">Before: <span id="beforeLabel" class="pill">3</span></label>
+              <label for="before">Before <span id="beforeLabel" class="pill">3</span></label>
               <input id="before" type="range" min="1" max="5" value="3" />
             </div>
             <div style="min-width:220px">
-              <label for="after">After: <span id="afterLabel" class="pill">3</span></label>
+              <label for="after">After <span id="afterLabel" class="pill">3</span></label>
               <input id="after" type="range" min="1" max="5" value="3" />
             </div>
           </div>
 
           <div style="margin-top:10px">
             <label for="note">Note (optional)</label>
-            <textarea id="note" placeholder="Anything funny? Anything learned?"></textarea>
+            <textarea id="note" placeholder="What happened?"></textarea>
           </div>
 
           <div class="row" style="margin-top:10px">
-            <button class="btn good" id="acceptedBtn">Got a yes</button>
-            <button class="btn bad" id="rejectedBtn">Got a no</button>
+            <button class="btn good" id="acceptedBtn">Accepted</button>
+            <button class="btn bad" id="rejectedBtn">Rejected</button>
           </div>
 
-          <div class="footer">
-            <div>Short + polite wins.</div>
-            <div>Keys: <span class="kbd">G</span> deal · <span class="kbd">T</span> today · <span class="kbd">R</span> log no</div>
+          <div class="muted" style="font-size:12px; margin-top:10px">
+            Keyboard: G generate • T today • R log rejected
           </div>
         </div>
 
-        <details class="helper">
-          <summary>Little scripts (optional)</summary>
-          <div class="inside">
-            <ul class="smallList">
-              <li><b>Coffee chat:</b> “Quick one—would you be up for a 10-minute coffee sometime? Totally fine if not.”</li>
-              <li><b>Feedback:</b> “Can I get one quick note—what would you improve?”</li>
-              <li><b>After a no:</b> “All good—thanks anyway. Anything I should do differently next time?”</li>
-            </ul>
-          </div>
-        </details>
-
-        <!-- Share card -->
         <div style="margin-top:14px" class="card">
-          <h2>Share card</h2>
-          <div class="muted" style="font-size:12px; margin-top:-6px">Post a prompt to friends.</div>
+          <h2 style="margin:0 0 8px; font-size:14px; font-weight:900">Share card</h2>
+          <div class="muted" style="font-size:12px; margin-top:-4px">Make a screenshot-style card. No backend.</div>
 
           <div id="shareCard" class="shareCard" style="margin-top:10px">
             <div class="top">
@@ -549,7 +499,7 @@
                 <span class="tag" id="shareDiff">d3</span>
               </div>
             </div>
-            <div class="big" id="shareText">Deal a prompt to fill this.</div>
+            <div class="big" id="shareText">Generate a prompt.</div>
             <div class="small">
               <span class="tag">be polite</span>
               <span class="tag">accept no</span>
@@ -566,62 +516,45 @@
 
       <!-- Right -->
       <div class="card">
-        <h2>Stats</h2>
+        <h2 style="margin:0 0 10px; font-size:15px; font-weight:900">Progress</h2>
 
         <div class="statgrid">
           <div class="stat">
-            <div class="k">No streak (days)</div>
+            <div class="k">Rejection streak</div>
             <div class="v" id="streak">0</div>
-            <div class="muted" style="font-size:11px; margin-top:6px" id="streakHint">Log one “no” today.</div>
+            <div class="muted" style="font-size:11px; margin-top:6px" id="streakHint">Log 1 rejection today to extend.</div>
           </div>
 
           <div class="stat">
             <div class="k">Level</div>
             <div class="v"><span id="level">1</span></div>
             <div class="muted" style="font-size:11px; margin-top:6px"><span id="xp">0</span> XP</div>
+            <div class="bar"><div id="xpFill"></div></div>
+            <div class="muted" style="font-size:11px; margin-top:6px"><span id="xpInto">0</span>/<span id="xpNeed">100</span></div>
           </div>
 
           <div class="stat">
             <div class="k">Shields</div>
             <div class="v"><span id="shields">0</span></div>
-            <div class="muted" style="font-size:11px; margin-top:6px">One save per week.</div>
+            <div class="muted" style="font-size:11px; margin-top:6px">Weekly bonus.</div>
           </div>
         </div>
 
         <div class="card" style="margin-top:12px">
-          <h2>Daily quests</h2>
-          <div class="muted" style="font-size:12px; margin-top:-6px">Tiny bonuses. Totally optional.</div>
-          <div id="quests" style="margin-top:10px; display:grid; gap:10px"></div>
+          <h2 style="margin:0 0 8px; font-size:14px; font-weight:900">Daily quests</h2>
+          <div id="quests" style="display:grid; gap:10px"></div>
         </div>
 
         <div class="card" style="margin-top:12px">
-          <h2>Badges</h2>
-          <div class="muted" style="font-size:12px; margin-top:-6px">Earned on this device.</div>
-          <div id="badges" style="margin-top:10px; display:flex; gap:8px; flex-wrap:wrap"></div>
-        </div>
-
-        <div class="card" style="margin-top:12px">
-          <h2>Weekly boss</h2>
-          <div class="muted" style="font-size:12px; margin-top:-6px">One bigger ask. Bigger XP.</div>
-          <div class="challenge" style="margin-top:10px">
-            <div class="meta">
-              <span class="tag" id="bossWeekTag">week</span>
-              <span class="tag">boss</span>
-              <span class="tag" id="bossRewardTag">+0 XP</span>
-            </div>
-            <div class="text" id="bossText">Boss challenge will load here.</div>
-            <div class="row" style="margin-top:10px">
-              <button class="btn small" id="loadBossBtn" type="button">Load</button>
-              <button class="btn small" id="markBossBtn" type="button">Mark done</button>
-            </div>
-          </div>
+          <h2 style="margin:0 0 8px; font-size:14px; font-weight:900">Badges</h2>
+          <div id="badges" style="display:flex; gap:8px; flex-wrap:wrap"></div>
         </div>
 
         <div class="muted" style="font-size:12px; margin-top:12px; line-height:1.4">
-          Saved in your browser. No account.
+          Stored in your browser. No account.
         </div>
 
-        <h2 style="margin-top:14px">Recent logs</h2>
+        <h2 style="margin:14px 0 6px; font-size:14px; font-weight:900">Recent logs</h2>
         <div style="overflow:auto; margin-top:6px">
           <table>
             <thead>
@@ -643,7 +576,7 @@
             <div class="v" id="total">0</div>
           </div>
           <div class="stat" style="flex:1 1 auto">
-            <div class="k">No rate</div>
+            <div class="k">Rejection rate</div>
             <div class="v" id="rate">0%</div>
           </div>
         </div>
@@ -670,6 +603,8 @@
 
   const challengeText = $("challengeText");
   const timerText = $("timerText");
+  const challengeBox = $("challengeBox");
+  const spinTicker = $("spinTicker");
 
   const where = $("where");
   const who = $("who");
@@ -681,6 +616,8 @@
 
   const newBtn = $("newBtn");
   const todayBtn = $("todayBtn");
+  const spinBtn = $("spinBtn");
+  const startTodayBtn = $("startTodayBtn");
   const acceptedBtn = $("acceptedBtn");
   const rejectedBtn = $("rejectedBtn");
   const exportBtn = $("exportBtn");
@@ -689,7 +626,6 @@
   const shareAppBtn = $("shareAppBtn");
   const copyImageBtn = $("copyImageBtn");
   const downloadImageBtn = $("downloadImageBtn");
-  const startTodayBtn = $("startTodayBtn");
 
   const shareCard = $("shareCard");
   const shareStamp = $("shareStamp");
@@ -698,39 +634,56 @@
   const shareDiff = $("shareDiff");
   const shareText = $("shareText");
 
-  const planGrid = $("planGrid");
-  const planProgressFill = $("planProgressFill");
-  const planProgressText = $("planProgressText");
-  const heroProgressFill = $("heroProgressFill");
-  const heroProgressText = $("heroProgressText");
-  const printPlanBtn = $("printPlanBtn");
-  const markAllDoneBtn = $("markAllDoneBtn");
-  const clearPlanBtn = $("clearPlanBtn");
-
   const streakEl = $("streak");
   const totalEl = $("total");
   const rateEl = $("rate");
   const logBody = $("logBody");
   const toast = $("toast");
 
-  const STORAGE_KEY = "rr_logs_v4";
-  const STREAK_KEY = "rr_rej_streak_v4";
-  const LAST_REJ_DAY_KEY = "rr_last_rej_day_v4";
-  const PLAN_DONE_KEY = "rr_plan_done_v3";
+  const levelEl = $("level");
+  const xpEl = $("xp");
+  const xpFill = $("xpFill");
+  const xpIntoEl = $("xpInto");
+  const xpNeedEl = $("xpNeed");
+  const shieldsEl = $("shields");
+  const streakHint = $("streakHint");
+
+  const STORAGE_KEY = "rr_logs_v5";
+  const STREAK_KEY = "rr_rej_streak_v5";
+  const LAST_REJ_DAY_KEY = "rr_last_rej_day_v5";
+  const GAME_KEY = "rr_game_v2";
 
   let currentChallenge = null;
   let currentMode = "random";
   let timer = null;
   let timerEndsAt = null;
 
-  function nowISO() { return new Date().toISOString(); }
-  function dayKey(d = new Date()) { return d.toISOString().slice(0,10); }
+  function nowISO(){ return new Date().toISOString(); }
+  function dayKey(d=new Date()){ return d.toISOString().slice(0,10); }
 
   function toastMsg(msg){
     toast.textContent = msg;
     toast.style.display = "block";
     clearTimeout(toast._t);
-    toast._t = setTimeout(()=> toast.style.display="none", 1700);
+    toast._t = setTimeout(()=> toast.style.display="none", 1800);
+  }
+
+  function confettiBurst(){
+    const host = document.createElement("div");
+    host.className = "confetti";
+    document.body.appendChild(host);
+
+    const colors = ["#ff7a59","#ffb86b","#4fd8a2","#fff6f0","#ff5a7a"];
+    const n = 22;
+    for(let i=0;i<n;i++){
+      const p = document.createElement("i");
+      p.style.left = Math.random()*100 + "vw";
+      p.style.background = colors[(Math.random()*colors.length)|0];
+      p.style.animationDuration = (700 + Math.random()*600) + "ms";
+      p.style.transform = `translateY(-30px) rotate(${Math.random()*120}deg)`;
+      host.appendChild(p);
+    }
+    setTimeout(()=> host.remove(), 1200);
   }
 
   function hash32(str){
@@ -746,6 +699,7 @@
     const x = (Math.imul(seed, 1664525) + 1013904223) >>> 0;
     return n ? (x % n) : 0;
   }
+
   function escapeHtml(s){
     return String(s)
       .replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;")
@@ -764,11 +718,42 @@
   }
   function saveStreak(n){ localStorage.setItem(STREAK_KEY, JSON.stringify(n)); }
 
-  function loadPlanDone(){
-    try { return JSON.parse(localStorage.getItem(PLAN_DONE_KEY) || "{}"); }
-    catch { return {}; }
+  function defaultGame(){
+    return {
+      xp: 0,
+      level: 1,
+      shields: 1,
+      lastShieldWeek: null,
+      badges: {},
+      questDay: null,
+      quests: [],
+      questDone: {}
+    };
   }
-  function savePlanDone(obj){ localStorage.setItem(PLAN_DONE_KEY, JSON.stringify(obj)); }
+  function loadGame(){
+    try { return JSON.parse(localStorage.getItem(GAME_KEY) || "null") || defaultGame(); }
+    catch { return defaultGame(); }
+  }
+  function saveGame(g){ localStorage.setItem(GAME_KEY, JSON.stringify(g)); }
+
+  function isoWeekKey(date = new Date()){
+    const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+    const dayNum = d.getUTCDay() || 7;
+    d.setUTCDate(d.getUTCDate() + 4 - dayNum);
+    const yearStart = new Date(Date.UTC(d.getUTCFullYear(),0,1));
+    const weekNo = Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
+    return `${d.getUTCFullYear()}-W${String(weekNo).padStart(2,"0")}`;
+  }
+
+  function maybeGrantWeeklyShield(){
+    const g = loadGame();
+    const wk = isoWeekKey(new Date());
+    if (g.lastShieldWeek !== wk){
+      g.lastShieldWeek = wk;
+      g.shields = (g.shields || 0) + 1;
+      saveGame(g);
+    }
+  }
 
   const packFilters = {
     all: (c) => true,
@@ -779,40 +764,40 @@
   };
 
   const challenges = [
-    {cat:"food", diff:1, text:"Ask a barista for a recommendation that’s not the usual."},
-    {cat:"food", diff:2, text:"Ask for a tiny sample before you buy (and accept no)."},
-    {cat:"food", diff:3, text:"Ask if they can make your drink half-sweet."},
-    {cat:"food", diff:4, text:"Ask for a surprise under $5. Let them pick."},
-    {cat:"food", diff:5, text:"Ask for a small swap (side/topping). If it’s a no, it’s a no."},
+    {cat:"food", diff:1, text:"Ask the cashier what they would order if they were paying."},
+    {cat:"food", diff:2, text:"Ask if they can do your drink less sweet. If not, say thanks and move on."},
+    {cat:"food", diff:3, text:"Ask for a surprise under $5 and let them pick."},
+    {cat:"food", diff:4, text:"Ask for a small swap on an item. If it’s a no, it’s a no."},
+    {cat:"food", diff:5, text:"Ask for an off-menu recommendation. Keep it short and polite."},
 
-    {cat:"social", diff:1, text:"Give a genuine compliment and keep walking."},
-    {cat:"social", diff:2, text:"Ask someone where they got something you like."},
-    {cat:"social", diff:3, text:"Ask a stranger to rate your outfit 1–10. Thank them either way."},
-    {cat:"social", diff:4, text:"Ask someone to take a quick photo of you (offer to return the favor)."},
-    {cat:"social", diff:5, text:"Ask a group if you can join for 60 seconds of small talk, then bounce."},
+    {cat:"social", diff:1, text:"Give a sincere compliment and leave immediately."},
+    {cat:"social", diff:2, text:"Ask where someone got an item you like."},
+    {cat:"social", diff:3, text:"Ask someone to rate your outfit 1–10. Thank them either way."},
+    {cat:"social", diff:4, text:"Ask a stranger to take a quick photo of you."},
+    {cat:"social", diff:5, text:"Ask a small group if you can join for 60 seconds to practice small talk."},
 
     {cat:"help", diff:1, text:"Ask for directions to a place you already know."},
-    {cat:"help", diff:2, text:"Ask for a nearby spot they actually like."},
-    {cat:"help", diff:3, text:"Ask to borrow a pen for 30 seconds."},
-    {cat:"help", diff:4, text:"Ask an employee to help you pick between two options."},
+    {cat:"help", diff:2, text:"Ask someone for a nearby recommendation they genuinely like."},
+    {cat:"help", diff:3, text:"Ask to borrow a pen for 20 seconds."},
+    {cat:"help", diff:4, text:"Ask an employee to help you choose between two options."},
     {cat:"help", diff:5, text:"Ask someone to hear your 15-second intro and give one note."},
 
     {cat:"negotiation", diff:1, text:"Ask if there’s a student discount."},
-    {cat:"negotiation", diff:2, text:"Ask if they can waive a tiny fee just this once."},
-    {cat:"negotiation", diff:3, text:"Ask for a small upgrade (size/seat/etc.)."},
-    {cat:"negotiation", diff:4, text:"Ask for $1–$2 off a small purchase. Smile either way."},
-    {cat:"negotiation", diff:5, text:"Ask for a free add-on. If no, thank them and move on."},
+    {cat:"negotiation", diff:2, text:"Ask if they can waive a small add-on fee once."},
+    {cat:"negotiation", diff:3, text:"Ask for a small upgrade (size, side, seat)."},
+    {cat:"negotiation", diff:4, text:"Ask for $1–$2 off a small purchase. If no, say thanks."},
+    {cat:"negotiation", diff:5, text:"Ask for an extra add-on for free. No pressure if no."},
 
-    {cat:"weird", diff:1, text:"Ask a harmless silly question: ‘Do pigeons have a leader?’"},
-    {cat:"weird", diff:2, text:"Ask a cashier: ‘Is today more of a 7 or a 9?’"},
-    {cat:"weird", diff:3, text:"Ask for a 10-second pep talk. Time it."},
-    {cat:"weird", diff:4, text:"Ask a stranger for their best time-saving life hack."},
-    {cat:"weird", diff:5, text:"Ask if someone will say ‘you’ve got this’ on video (only if they’re into it)."},
-    
-    {cat:"career", diff:1, text:"Ask what they do for work and what they enjoy about it."},
-    {cat:"career", diff:2, text:"Ask for one piece of advice for someone early-career."},
-    {cat:"career", diff:3, text:"Ask if they’d be open to a 10-minute coffee chat sometime."},
-    {cat:"career", diff:4, text:"Ask if there’s one person you should meet (and why)."},
+    {cat:"weird", diff:1, text:"Ask a harmless question: ‘Is today feeling more like a 7 or a 9?’"},
+    {cat:"weird", diff:2, text:"Ask for a 10-second pep talk."},
+    {cat:"weird", diff:3, text:"Ask for one time-saving life hack."},
+    {cat:"weird", diff:4, text:"Ask someone to recommend a ‘small win’ habit."},
+    {cat:"weird", diff:5, text:"Ask if someone will say ‘good luck’ on video (only if they’re clearly comfortable)."}
+    ,
+    {cat:"career", diff:1, text:"Ask what someone does for work, then ask what they actually enjoy about it."},
+    {cat:"career", diff:2, text:"Ask for one piece of advice for someone early in their career."},
+    {cat:"career", diff:3, text:"Ask if they’d be open to a 10-minute coffee chat this week."},
+    {cat:"career", diff:4, text:"Ask if they know one person you should meet — and why."},
     {cat:"career", diff:5, text:"Ask for feedback on your 15-second intro on the spot."}
   ];
 
@@ -838,8 +823,8 @@
 
     tagPack.textContent = "pack: " + pack.value;
     tagCat.textContent = category.value;
-    tagDiff.textContent = "heat: " + difficulty.value;
-    tagMode.textContent = "mode: " + currentMode;
+    tagDiff.textContent = "d" + difficulty.value;
+    tagMode.textContent = currentMode;
 
     sharePack.textContent = "pack: " + pack.value;
     shareCat.textContent = category.value;
@@ -869,7 +854,6 @@
       return true;
     });
   }
-
   function fallbackPool(){
     const p = pack.value;
     const cat = category.value;
@@ -886,7 +870,6 @@
     if (!pool.length) pool = challenges.slice();
     return pool[Math.floor(Math.random() * pool.length)];
   }
-
   function pickTodaysChallenge(){
     let pool = filteredPool();
     if (!pool.length) pool = fallbackPool();
@@ -931,7 +914,6 @@
       const lastDate = new Date(last + "T00:00:00");
       const todayDate = new Date(today + "T00:00:00");
       const diffDays = Math.round((todayDate - lastDate) / (24*60*60*1000));
-
       if (diffDays === 0){
         // already counted today
       } else if (diffDays === 1){
@@ -954,199 +936,6 @@
     afterLabel.textContent = "3";
   }
 
-  function updateStats(){
-    const logs = loadLogs();
-    totalEl.textContent = logs.length;
-
-    const rejected = logs.filter(x => x.result === "rejected").length;
-    const rate = logs.length ? Math.round((rejected / logs.length) * 100) : 0;
-    rateEl.textContent = rate + "%";
-
-    streakEl.textContent = loadStreak();
-    renderLogs(logs);
-    renderGameUI();
-  }
-
-  function renderLogs(logs){
-    if (!logs.length){
-      logBody.innerHTML = `<tr><td colspan="3" class="muted">No logs yet.</td></tr>`;
-      return;
-    }
-    const rows = logs.slice().reverse().slice(0, 12).map(l => {
-      const dt = new Date(l.time);
-      const when = dt.toLocaleString([], {year:"numeric", month:"short", day:"2-digit", hour:"2-digit", minute:"2-digit"});
-      const res = (l.result === "rejected") ? "No" : "Yes";
-
-      const metaBits = [
-        `<span class="tag">${escapeHtml(l.pack || "all")}</span>`,
-        `<span class="tag">${escapeHtml(l.cat)}</span>`,
-        `<span class="tag">d${escapeHtml(String(l.diff))}</span>`,
-        l.where ? `<span class="tag">where: ${escapeHtml(l.where)}</span>` : "",
-        l.who ? `<span class="tag">who: ${escapeHtml(l.who)}</span>` : "",
-        (l.before && l.after) ? `<span class="tag">feel ${escapeHtml(String(l.before))}→${escapeHtml(String(l.after))}</span>` : ""
-      ].filter(Boolean).join(" ");
-
-      const extra = l.note ? `<div class="muted" style="margin-top:6px">${escapeHtml(l.note)}</div>` : "";
-
-      return `
-        <tr>
-          <td>${escapeHtml(when)}</td>
-          <td>
-            <div style="font-weight:1000">${escapeHtml(l.challenge)}</div>
-            <div class="muted" style="margin-top:6px; display:flex; gap:6px; flex-wrap:wrap">
-              ${metaBits}
-            </div>
-            ${extra}
-          </td>
-          <td>${res}</td>
-        </tr>
-      `;
-    }).join("");
-    logBody.innerHTML = rows;
-  }
-
-  async function copyCurrentLink(){
-    const url = location.href;
-    try{
-      await navigator.clipboard.writeText(url);
-      toastMsg("Link copied.");
-    } catch {
-      prompt("Copy this link:", url);
-    }
-  }
-
-  async function shareApp(){
-    const url = location.origin + location.pathname;
-    if (navigator.share){
-      try{ await navigator.share({title:"Rejection Challenge", text:"Try this:", url}); }
-      catch {}
-    } else {
-      try{
-        await navigator.clipboard.writeText(url);
-        toastMsg("App link copied.");
-      } catch {
-        prompt("Copy this app link:", url);
-      }
-    }
-  }
-
-  async function renderShareCardToCanvas(){
-    await new Promise(r => setTimeout(r, 50));
-    const canvas = await html2canvas(shareCard, {backgroundColor: null, scale: 2});
-    return canvas;
-  }
-
-  async function copyShareCardAsImage(){
-    if (!currentChallenge){
-      toastMsg("Deal a prompt first.");
-      return;
-    }
-    try{
-      const canvas = await renderShareCardToCanvas();
-      const blob = await new Promise(res => canvas.toBlob(res, "image/png"));
-      if (!blob) throw new Error("No image blob");
-
-      if (navigator.clipboard && window.ClipboardItem){
-        await navigator.clipboard.write([new ClipboardItem({"image/png": blob})]);
-        toastMsg("Image copied.");
-      } else {
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = "rejection-card.png";
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-        URL.revokeObjectURL(url);
-        toastMsg("Downloaded.");
-      }
-    } catch {
-      toastMsg("Couldn’t copy. Try Download.");
-    }
-  }
-
-  async function downloadShareCard(){
-    if (!currentChallenge){
-      toastMsg("Deal a prompt first.");
-      return;
-    }
-    const canvas = await renderShareCardToCanvas();
-    const url = canvas.toDataURL("image/png");
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "rejection-card.png";
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    toastMsg("Downloaded.");
-  }
-
-  function exportCSV(){
-    const logs = loadLogs();
-    if (!logs.length){ toastMsg("Nothing to export yet."); return; }
-
-    const header = ["time_iso","result","mode","pack","category","difficulty","challenge","where","who","feeling_before","feeling_after","note"];
-    const rows = logs.map(l => [
-      l.time,
-      l.result,
-      l.mode || "",
-      l.pack || "",
-      l.cat,
-      String(l.diff),
-      (l.challenge || "").replaceAll('"','""'),
-      (l.where || "").replaceAll('"','""'),
-      (l.who || "").replaceAll('"','""'),
-      String(l.before ?? ""),
-      String(l.after ?? ""),
-      (l.note || "").replaceAll('"','""')
-    ]);
-
-    const csv = [header.join(","), ...rows.map(r => r.map(v => `"${v}"`).join(","))].join("\n");
-    const blob = new Blob([csv], {type:"text/csv;charset=utf-8"});
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "rejection-logs.csv";
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    URL.revokeObjectURL(url);
-  }
-
-  // ======================
-  // Game system
-  // ======================
-  const GAME_KEY = "rr_game_v1";
-
-  function defaultGame(){
-    return {
-      xp: 0,
-      level: 1,
-      shields: 1,
-      lastShieldWeek: null,
-      badges: {},
-      questDay: null,
-      quests: [],
-      questDone: {},
-      bossWeek: null,
-      bossDone: false
-    };
-  }
-  function loadGame(){
-    try { return JSON.parse(localStorage.getItem(GAME_KEY) || "null") || defaultGame(); }
-    catch { return defaultGame(); }
-  }
-  function saveGame(g){ localStorage.setItem(GAME_KEY, JSON.stringify(g)); }
-
-  function isoWeekKey(date = new Date()){
-    const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
-    const dayNum = d.getUTCDay() || 7;
-    d.setUTCDate(d.getUTCDate() + 4 - dayNum);
-    const yearStart = new Date(Date.UTC(d.getUTCFullYear(),0,1));
-    const weekNo = Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
-    return `${d.getUTCFullYear()}-W${String(weekNo).padStart(2,"0")}`;
-  }
-
   function xpForLog(entry){
     const base = (entry.result === "rejected") ? 25 : 10;
     const diffBonus = (entry.diff || 3) * 6;
@@ -1166,28 +955,29 @@
     return {level: lvl, into: xp - spent, need};
   }
 
-  function awardXP(amount, reason){
-    const g = loadGame();
-    g.xp += amount;
-    const beforeLevel = g.level;
-    const lv = levelForXP(g.xp);
-    g.level = lv.level;
-    saveGame(g);
-    renderGameUI();
-    if (g.level > beforeLevel){
-      toastMsg(`Level up: ${beforeLevel} → ${g.level}`);
-    } else if (reason){
-      toastMsg(`${reason} +${amount} XP`);
-    }
-  }
-
   function unlockBadge(id, name){
     const g = loadGame();
     if (!g.badges[id]){
       g.badges[id] = {name, at: nowISO()};
       saveGame(g);
-      renderGameUI();
-      toastMsg(`Badge: ${name}`);
+      toastMsg("Badge: " + name);
+      confettiBurst();
+    }
+  }
+
+  function awardXP(amount, reason){
+    const g = loadGame();
+    g.xp += amount;
+    const before = g.level;
+    const lv = levelForXP(g.xp);
+    g.level = lv.level;
+    saveGame(g);
+
+    if (g.level > before){
+      toastMsg("Level up: " + before + " -> " + g.level);
+      confettiBurst();
+    } else if (reason){
+      toastMsg(reason + " +" + amount + " XP");
     }
   }
 
@@ -1199,14 +989,13 @@
     const seed = "quests|" + today;
     const cats = ["social","help","food","career","negotiation","weird"];
     const catPick = cats[seededIndex(cats.length, seed)];
-    const quests = [
-      {id:"q_rej", title:"Get 1 no today", desc:"Log at least one “Got a no” today.", reward: 60},
-      {id:"q_newcat", title:`Try: ${catPick}`, desc:"Log any result in today’s category.", reward: 40, cat: catPick},
-      {id:"q_hard", title:"Heat 4+", desc:"Log any result at heat 4 or 5.", reward: 50}
-    ];
 
     g.questDay = today;
-    g.quests = quests;
+    g.quests = [
+      {id:"q_rej", title:"Get 1 rejection", desc:"Log at least one Rejected result today.", reward: 60},
+      {id:"q_cat", title:"Try " + catPick, desc:"Log any result in the category of the day.", reward: 40, cat: catPick},
+      {id:"q_hard", title:"Do a 4+ rep", desc:"Log any result at difficulty 4 or 5.", reward: 50}
+    ];
     g.questDone = g.questDone || {};
     saveGame(g);
   }
@@ -1223,23 +1012,17 @@
     const todayLogs = logs.filter(l => (l.time || "").slice(0,10) === today);
 
     if (!g.questDone[doneKey("q_rej")] && todayLogs.some(l => l.result === "rejected")){
-      markDone("q_rej");
-      awardXP(60, "Quest");
+      markDone("q_rej"); awardXP(60, "Quest"); 
     }
-
-    const qCat = g.quests?.find(q => q.id === "q_newcat")?.cat;
-    if (qCat && !g.questDone[doneKey("q_newcat")] && todayLogs.some(l => l.cat === qCat)){
-      markDone("q_newcat");
-      awardXP(40, "Quest");
+    const qCat = g.quests?.find(q => q.id === "q_cat")?.cat;
+    if (qCat && !g.questDone[doneKey("q_cat")] && todayLogs.some(l => l.cat === qCat)){
+      markDone("q_cat"); awardXP(40, "Quest");
     }
-
     if (!g.questDone[doneKey("q_hard")] && todayLogs.some(l => (l.diff || 0) >= 4)){
-      markDone("q_hard");
-      awardXP(50, "Quest");
+      markDone("q_hard"); awardXP(50, "Quest");
     }
 
     saveGame(g);
-    renderGameUI();
   }
 
   function renderQuests(){
@@ -1254,10 +1037,10 @@
     host.innerHTML = (g.quests || []).map(q => {
       const done = !!g.questDone?.[doneKey(q.id)];
       return `
-        <div class="q">
+        <div style="padding:12px; border-radius:16px; background:rgba(255,246,240,.05); border:1px solid rgba(255,246,240,.12); display:flex; justify-content:space-between; gap:10px">
           <div>
-            <div class="t">${escapeHtml(q.title)}</div>
-            <div class="d">${escapeHtml(q.desc)} <span class="tag" style="margin-left:6px">+${q.reward} XP</span></div>
+            <div style="font-weight:900">${escapeHtml(q.title)}</div>
+            <div class="muted" style="font-size:12px; margin-top:4px">${escapeHtml(q.desc)} <span class="tag" style="margin-left:6px">+${q.reward} XP</span></div>
           </div>
           <div class="tag" style="min-width:70px; text-align:center">${done ? "done" : "open"}</div>
         </div>
@@ -1268,135 +1051,207 @@
   function renderBadges(){
     const host = $("badges");
     if (!host) return;
-
     const g = loadGame();
     const all = [
       {id:"b_first_no", name:"First No"},
       {id:"b_three_streak", name:"3-day streak"},
-      {id:"b_week_boss", name:"Boss down"},
       {id:"b_neg_5", name:"Negotiator"},
       {id:"b_career_5", name:"Networker"},
-      {id:"b_social_10", name:"Social beast"}
+      {id:"b_social_10", name:"Social machine"}
     ];
-
     host.innerHTML = all.map(b => {
       const have = !!g.badges?.[b.id];
-      return `<span class="badge ${have ? "" : "locked"}">${escapeHtml(b.name)}</span>`;
+      return `<span class="tag" style="opacity:${have?1:.45}">${escapeHtml(b.name)}</span>`;
     }).join("");
   }
 
   function renderLevel(){
     const g = loadGame();
-    const levelEl = $("level");
-    const xpEl = $("xp");
-    const shieldsEl = $("shields");
-    if (levelEl) levelEl.textContent = String(g.level);
-    if (xpEl) xpEl.textContent = String(g.xp);
-    if (shieldsEl) shieldsEl.textContent = String(g.shields || 0);
+    const lv = levelForXP(g.xp);
+    levelEl.textContent = String(g.level);
+    xpEl.textContent = String(g.xp);
+    shieldsEl.textContent = String(g.shields || 0);
+
+    xpIntoEl.textContent = String(lv.into);
+    xpNeedEl.textContent = String(lv.need);
+    const pct = Math.max(0, Math.min(100, Math.round((lv.into / lv.need) * 100)));
+    xpFill.style.width = pct + "%";
   }
 
   function renderStreakHint(){
-    const el = $("streakHint");
-    if (!el) return;
     const today = dayKey();
     const last = localStorage.getItem(LAST_REJ_DAY_KEY);
-
-    if (!last) { el.textContent = "Log one “no” today to start."; return; }
-    if (last === today) { el.textContent = "Counted for today. Extra no’s welcome."; return; }
-
+    if (!last){ streakHint.textContent = "Log 1 rejection today to start."; return; }
+    if (last === today){ streakHint.textContent = "Counted for today. Want another one?"; return; }
     const lastDate = new Date(last + "T00:00:00");
     const todayDate = new Date(today + "T00:00:00");
     const diffDays = Math.round((todayDate - lastDate) / (24*60*60*1000));
-    el.textContent = (diffDays === 1)
-      ? "One “no” today keeps it going."
-      : "Log a “no” today to restart the streak.";
+    streakHint.textContent = (diffDays === 1) ? "Log 1 rejection today to extend." : "Log 1 rejection today to restart.";
   }
 
-  function bossChallengeForWeek(){
-    const wk = isoWeekKey(new Date());
-    const seedStr = "boss|" + wk;
-    const pool = challenges.filter(c => (c.diff >= 4) && (c.cat === "career" || c.cat === "negotiation" || c.cat === "social"));
-    const chosen = pool[seededIndex(pool.length, seedStr)];
-    const reward = 160 + chosen.diff * 20;
-    return {week: wk, text: chosen.text, cat: chosen.cat, diff: chosen.diff, reward};
+  function renderLogs(logs){
+    if (!logs.length){
+      logBody.innerHTML = `<tr><td colspan="3" class="muted">No logs yet.</td></tr>`;
+      return;
+    }
+    const rows = logs.slice().reverse().slice(0, 12).map(l => {
+      const dt = new Date(l.time);
+      const when = dt.toLocaleString([], {month:"short", day:"2-digit", hour:"2-digit", minute:"2-digit"});
+      const res = (l.result === "rejected") ? "Rejected" : "Accepted";
+      return `
+        <tr>
+          <td>${escapeHtml(when)}</td>
+          <td>
+            <div style="font-weight:900">${escapeHtml(l.challenge)}</div>
+            <div class="muted" style="margin-top:6px; display:flex; gap:6px; flex-wrap:wrap">
+              <span class="tag">${escapeHtml(l.cat)}</span>
+              <span class="tag">d${escapeHtml(String(l.diff))}</span>
+              ${l.where ? `<span class="tag">${escapeHtml(l.where)}</span>` : ""}
+            </div>
+            ${l.note ? `<div class="muted" style="margin-top:6px">${escapeHtml(l.note)}</div>` : ""}
+          </td>
+          <td>${res}</td>
+        </tr>
+      `;
+    }).join("");
+    logBody.innerHTML = rows;
   }
 
-  function renderBoss(){
-    const bossText = $("bossText");
-    const bossWeekTag = $("bossWeekTag");
-    const bossRewardTag = $("bossRewardTag");
-    if (!bossText || !bossWeekTag || !bossRewardTag) return;
-
-    const b = bossChallengeForWeek();
-    const g = loadGame();
-    if (g.bossWeek !== b.week){
-      g.bossWeek = b.week;
-      g.bossDone = false;
-      saveGame(g);
-    }
-
-    bossWeekTag.textContent = b.week;
-    bossRewardTag.textContent = `+${b.reward} XP`;
-    bossText.textContent = g.bossDone ? (b.text + " (done)") : b.text;
-
-    const loadBtn = $("loadBossBtn");
-    const markBtn = $("markBossBtn");
-
-    if (loadBtn && !loadBtn._wired){
-      loadBtn._wired = true;
-      loadBtn.addEventListener("click", () => {
-        category.value = b.cat;
-        difficulty.value = String(b.diff);
-        currentMode = "today";
-        updateTags();
-        setChallenge({cat:b.cat, diff:b.diff, text: b.text + " (boss)"});
-        startTimer();
-        updateTags();
-        location.hash = "#tracker";
-        toastMsg("Boss loaded.");
-      });
-    }
-
-    if (markBtn && !markBtn._wired){
-      markBtn._wired = true;
-      markBtn.addEventListener("click", () => {
-        const gg = loadGame();
-        const bb = bossChallengeForWeek();
-        if (gg.bossDone){ toastMsg("Already done this week."); return; }
-        gg.bossDone = true;
-        saveGame(gg);
-        awardXP(bb.reward, "Boss");
-        unlockBadge("b_week_boss", "Boss down");
-        renderGameUI();
-      });
-    }
-  }
-
-  function maybeGrantWeeklyShield(){
-    const g = loadGame();
-    const wk = isoWeekKey(new Date());
-    if (g.lastShieldWeek !== wk){
-      g.lastShieldWeek = wk;
-      g.shields = (g.shields || 0) + 1;
-      saveGame(g);
-      toastMsg("Weekly shield earned.");
-    }
-  }
-
-  function renderGameUI(){
+  function updateStats(){
     maybeGrantWeeklyShield();
+    const logs = loadLogs();
+    totalEl.textContent = logs.length;
+
+    const rejected = logs.filter(x => x.result === "rejected").length;
+    const rate = logs.length ? Math.round((rejected / logs.length) * 100) : 0;
+    rateEl.textContent = rate + "%";
+
+    streakEl.textContent = loadStreak();
+
+    renderLogs(logs);
     renderLevel();
     renderQuests();
     renderBadges();
-    renderBoss();
     renderStreakHint();
   }
 
-  function logResult(result){
-    if (!currentChallenge){
-      toastMsg("Deal a prompt first.");
-      return;
+  async function copyCurrentLink(){
+    const url = location.href;
+    try{ await navigator.clipboard.writeText(url); toastMsg("Link copied."); }
+    catch { prompt("Copy this link:", url); }
+  }
+
+  async function shareApp(){
+    const url = location.origin + location.pathname;
+    if (navigator.share){
+      try{ await navigator.share({title:"Rejection Challenge", text:"Try this:", url}); } catch {}
+    } else {
+      try{ await navigator.clipboard.writeText(url); toastMsg("App link copied."); }
+      catch { prompt("Copy this app link:", url); }
     }
+  }
+
+  async function renderShareCardToCanvas(){
+    await new Promise(r => setTimeout(r, 50));
+    const canvas = await html2canvas(shareCard, {backgroundColor: null, scale: 2});
+    return canvas;
+  }
+
+  async function copyShareCardAsImage(){
+    if (!currentChallenge){ toastMsg("Generate a prompt first."); return; }
+    try{
+      const canvas = await renderShareCardToCanvas();
+      const blob = await new Promise(res => canvas.toBlob(res, "image/png"));
+      if (!blob) throw new Error("No image blob");
+
+      if (navigator.clipboard && window.ClipboardItem){
+        await navigator.clipboard.write([new ClipboardItem({"image/png": blob})]);
+        toastMsg("Copied.");
+      } else {
+        toastMsg("Clipboard not supported. Use Download.");
+      }
+    } catch {
+      toastMsg("Couldn’t copy. Use Download.");
+    }
+  }
+
+  async function downloadShareCard(){
+    if (!currentChallenge){ toastMsg("Generate a prompt first."); return; }
+    const canvas = await renderShareCardToCanvas();
+    const url = canvas.toDataURL("image/png");
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "rejection-card.png";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    toastMsg("Downloaded.");
+  }
+
+  function exportCSV(){
+    const logs = loadLogs();
+    if (!logs.length){ toastMsg("Nothing to export yet."); return; }
+
+    const header = ["time_iso","result","mode","pack","category","difficulty","challenge","where","who","before","after","note"];
+    const rows = logs.map(l => [
+      l.time, l.result, l.mode || "", l.pack || "", l.cat, String(l.diff),
+      (l.challenge || "").replaceAll('"','""'),
+      (l.where || "").replaceAll('"','""'),
+      (l.who || "").replaceAll('"','""'),
+      String(l.before ?? ""), String(l.after ?? ""),
+      (l.note || "").replaceAll('"','""')
+    ]);
+
+    const csv = [header.join(","), ...rows.map(r => r.map(v => `"${v}"`).join(","))].join("\n");
+    const blob = new Blob([csv], {type:"text/csv;charset=utf-8"});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "rejection-logs.csv";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  }
+
+  function spinEffect(on){
+    challengeBox.classList.toggle("spinning", !!on);
+    spinTicker.textContent = on ? "spinning…" : "";
+  }
+
+  function generate(mode){
+    currentMode = mode;
+    updateTags();
+    const ch = (mode === "today") ? pickTodaysChallenge() : pickRandomChallenge();
+    setChallenge(ch);
+    startTimer();
+    updateTags();
+  }
+
+  function spinGenerate(){
+    spinEffect(true);
+    const steps = 9;
+    let i = 0;
+    const spin = () => {
+      i++;
+      const ch = pickRandomChallenge();
+      challengeText.textContent = ch.text;
+      shareText.textContent = ch.text;
+      if (i < steps){
+        setTimeout(spin, 70 + i*18);
+      } else {
+        spinEffect(false);
+        currentMode = "random";
+        setChallenge(ch);
+        startTimer();
+        updateTags();
+      }
+    };
+    spin();
+  }
+
+  function logResult(result){
+    if (!currentChallenge){ toastMsg("Generate a prompt first."); return; }
     const logs = loadLogs();
     const entry = {
       time: nowISO(),
@@ -1415,163 +1270,30 @@
     logs.push(entry);
     saveLogs(logs);
 
-    if (result === "rejected"){
-      updateRejectionStreakOnRejectedLog();
-      toastMsg("Logged. Nice.");
-    } else {
-      toastMsg("Logged.");
-    }
+    if (result === "rejected") updateRejectionStreakOnRejectedLog();
 
     awardXP(xpForLog(entry), "Logged");
     checkQuestCompletionOnLog();
 
     const allLogs = loadLogs();
     if (allLogs.some(l => l.result === "rejected")) unlockBadge("b_first_no", "First No");
-
-    const negCount = allLogs.filter(l => l.cat === "negotiation").length;
-    if (negCount >= 5) unlockBadge("b_neg_5", "Negotiator");
-
-    const careerCount = allLogs.filter(l => l.cat === "career").length;
-    if (careerCount >= 5) unlockBadge("b_career_5", "Networker");
-
-    const socialCount = allLogs.filter(l => l.cat === "social").length;
-    if (socialCount >= 10) unlockBadge("b_social_10", "Social beast");
-
     if (loadStreak() >= 3) unlockBadge("b_three_streak", "3-day streak");
+    if (allLogs.filter(l => l.cat === "negotiation").length >= 5) unlockBadge("b_neg_5", "Negotiator");
+    if (allLogs.filter(l => l.cat === "career").length >= 5) unlockBadge("b_career_5", "Networker");
+    if (allLogs.filter(l => l.cat === "social").length >= 10) unlockBadge("b_social_10", "Social machine");
 
     clearLogFields();
     updateStats();
   }
 
-  function daySpec(day){
-    if (day <= 5) return {diff: 1 + (day >= 3 ? 1 : 0), cat: (day % 2 ? "social" : "help"), label:"low"};
-    if (day <= 15) return {diff: 2 + (day >= 10 ? 1 : 0), cat: (day % 3 === 0 ? "career" : "social"), label:"mid"};
-    const stretchCat = (day % 4 === 0) ? "career" : (day % 3 === 0 ? "negotiation" : "social");
-    const stretchDiff = (day <= 20) ? 3 : (day <= 25 ? 4 : 5);
-    return {diff: stretchDiff, cat: stretchCat, label:"spicy"};
-  }
-
-  function planDoneCount(){
-    const done = loadPlanDone();
-    return Object.values(done).filter(Boolean).length;
-  }
-
-  function updateHeroProgress(){
-    const completed = planDoneCount();
-    const pct = Math.round((completed / 30) * 100);
-    heroProgressFill.style.width = pct + "%";
-    heroProgressText.textContent = completed + "/30";
-  }
-
-  function renderPlan(){
-    const done = loadPlanDone();
-    let completed = 0;
-
-    const cards = [];
-    for (let day = 1; day <= 30; day++){
-      const checked = !!done[String(day)];
-      if (checked) completed++;
-
-      const spec = daySpec(day);
-      const seedStr = "plan|" + String(day);
-      const pool = challenges.filter(c => c.cat === spec.cat && c.diff === spec.diff);
-      const chosen = pool.length ? pool[seededIndex(pool.length, seedStr)] : challenges[seededIndex(challenges.length, seedStr)];
-
-      cards.push(`
-        <div class="dayCard">
-          <div class="dayTop">
-            <div>
-              <div class="dayTitle">Day ${day} <span class="tag" style="margin-left:6px">${spec.label}</span></div>
-              <div class="dayMeta">
-                <span class="tag">${spec.cat}</span>
-                <span class="tag">d${spec.diff}</span>
-              </div>
-            </div>
-            <label class="tag" style="cursor:pointer; user-select:none">
-              <input type="checkbox" data-day="${day}" ${checked ? "checked" : ""} style="margin-right:6px; transform:translateY(1px)" />
-              done
-            </label>
-          </div>
-
-          <div class="dayText">${escapeHtml(chosen.text)}</div>
-
-          <div class="dayActions">
-            <button class="btn small" data-start-day="${day}" data-cat="${spec.cat}" data-diff="${spec.diff}">Start</button>
-            <button class="btn small" data-copy-day="${day}" data-text="${escapeHtml(chosen.text)}">Copy</button>
-          </div>
-        </div>
-      `);
-    }
-
-    planGrid.innerHTML = cards.join("");
-
-    const pct = Math.round((completed / 30) * 100);
-    planProgressFill.style.width = pct + "%";
-    planProgressText.textContent = completed + "/30";
-
-    planGrid.querySelectorAll('input[type="checkbox"][data-day]').forEach(cb => {
-      cb.addEventListener("change", (e) => {
-        const d = parseInt(e.target.getAttribute("data-day"), 10);
-        const obj = loadPlanDone();
-        obj[String(d)] = !!e.target.checked;
-        savePlanDone(obj);
-        renderPlan();
-        updateHeroProgress();
-      });
-    });
-
-    planGrid.querySelectorAll('button[data-start-day]').forEach(btn => {
-      btn.addEventListener("click", () => {
-        const cat = btn.getAttribute("data-cat");
-        const diff = btn.getAttribute("data-diff");
-
-        category.value = cat;
-        difficulty.value = diff;
-
-        location.hash = "#tracker";
-        currentMode = "today";
-        updateTags();
-        setChallenge(pickTodaysChallenge());
-        startTimer();
-        updateTags();
-        toastMsg("Loaded.");
-      });
-    });
-
-    planGrid.querySelectorAll('button[data-copy-day]').forEach(btn => {
-      btn.addEventListener("click", async () => {
-        const text = btn.getAttribute("data-text") || "";
-        try{
-          await navigator.clipboard.writeText(text);
-          toastMsg("Copied.");
-        } catch {
-          prompt("Copy this:", text);
-        }
-      });
-    });
-  }
-
-  function generate(mode){
-    currentMode = mode;
-    updateTags();
-    const ch = (mode === "today") ? pickTodaysChallenge() : pickRandomChallenge();
-    setChallenge(ch);
-    startTimer();
-    updateTags();
-  }
-
   function resetAll(){
-    if (!confirm("Reset everything on this device?")) return;
+    if (!confirm("Reset everything?")) return;
     localStorage.removeItem(STORAGE_KEY);
     localStorage.removeItem(STREAK_KEY);
     localStorage.removeItem(LAST_REJ_DAY_KEY);
-    localStorage.removeItem(PLAN_DONE_KEY);
     localStorage.removeItem(GAME_KEY);
     toastMsg("Reset.");
-    renderPlan();
-    updateHeroProgress();
     updateStats();
-    renderGameUI();
   }
 
   function syncMeta(){ updateTags(); }
@@ -1584,6 +1306,9 @@
 
   newBtn.addEventListener("click", () => generate("random"));
   todayBtn.addEventListener("click", () => generate("today"));
+  spinBtn.addEventListener("click", spinGenerate);
+  startTodayBtn.addEventListener("click", () => { location.hash="#tracker"; generate("today"); });
+
   acceptedBtn.addEventListener("click", () => logResult("accepted"));
   rejectedBtn.addEventListener("click", () => logResult("rejected"));
   exportBtn.addEventListener("click", exportCSV);
@@ -1593,11 +1318,6 @@
   copyImageBtn.addEventListener("click", copyShareCardAsImage);
   downloadImageBtn.addEventListener("click", downloadShareCard);
 
-  startTodayBtn.addEventListener("click", () => {
-    location.hash = "#tracker";
-    generate("today");
-  });
-
   document.addEventListener("keydown", (e) => {
     const k = e.key.toLowerCase();
     if (k === "g") generate("random");
@@ -1605,25 +1325,17 @@
     if (k === "r") logResult("rejected");
   });
 
-  markAllDoneBtn.addEventListener("click", () => {
-    const obj = {};
-    for (let d=1; d<=30; d++) obj[String(d)] = true;
-    savePlanDone(obj);
-    renderPlan();
-    updateHeroProgress();
-    toastMsg("Marked.");
-  });
-
-  clearPlanBtn.addEventListener("click", () => {
-    localStorage.removeItem(PLAN_DONE_KEY);
-    renderPlan();
-    updateHeroProgress();
-    toastMsg("Cleared.");
-  });
-
-  printPlanBtn.addEventListener("click", () => {
-    location.hash = "#plan";
-    setTimeout(() => window.print(), 150);
+  document.querySelectorAll("button[data-copy]").forEach(btn => {
+    btn.addEventListener("click", async () => {
+      const key = btn.getAttribute("data-copy");
+      const map = {
+        coffee: "Quick one — would you be open to a 10-minute coffee chat sometime this week? Totally okay if not.",
+        no: "All good — thanks anyway. If you’re open to it, what’s one thing I could improve next time?"
+      };
+      const text = map[key] || "";
+      try{ await navigator.clipboard.writeText(text); toastMsg("Copied."); }
+      catch { prompt("Copy this:", text); }
+    });
   });
 
   const params = new URLSearchParams(location.search);
@@ -1638,28 +1350,12 @@
       if (decoded.pack && packFilters[decoded.pack]) pack.value = decoded.pack;
       category.value = ["food","social","help","negotiation","weird","career"].includes(decoded.cat) ? decoded.cat : "any";
       difficulty.value = String(Math.min(5, Math.max(1, parseInt(decoded.diff || 3,10) || 3)));
-
       currentMode = (decoded.mode === "today") ? "today" : "random";
     }
   }
 
-  function renderGameUI(){
-    // weekly shield + UI render
-    maybeGrantWeeklyShield();
-    renderLevel();
-    renderQuests();
-    renderBadges();
-    renderBoss();
-    renderStreakHint();
-  }
-
-  function renderStreakHint(){ /* redefined above, kept */ }
-
   updateTags();
-  renderPlan();
-  updateHeroProgress();
   updateStats();
-  renderGameUI();
 })();
 </script>
 </body>
