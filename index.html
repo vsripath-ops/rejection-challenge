@@ -4,7 +4,14 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Rejection Roulette</title>
-  <meta name="description" content="Generate in-person rejection challenges and track your streak. No login." />
+  <meta name="description" content="Generate in-person rejection challenges, track streaks, and export your log. No login." />
+
+  <!-- Favicon (tiny but makes it feel legit) -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎯</text></svg>">
+
+  <!-- html2canvas for share-card image capture -->
+  <script defer src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
   <style>
     :root{
       --bg:#0b0f19; --card:#121a2a; --muted:#93a4c7; --text:#e8eefc;
@@ -16,24 +23,945 @@
     }
     *{box-sizing:border-box}
     body{
-      margin:0; font-family:var(--sans); color:var(--text); background:radial-gradient(1200px 600px at 20% -10%, rgba(124,92,255,.35), transparent 60%),
-      radial-gradient(900px 500px at 100% 0%, rgba(54,211,153,.25), transparent 55%),
-      var(--bg);
+      margin:0; font-family:var(--sans); color:var(--text);
+      background:
+        radial-gradient(1200px 600px at 20% -10%, rgba(124,92,255,.35), transparent 60%),
+        radial-gradient(900px 500px at 100% 0%, rgba(54,211,153,.25), transparent 55%),
+        var(--bg);
       min-height:100vh;
     }
     a{color:inherit}
-    .wrap{max-width:980px; margin:0 auto; padding:28px 16px 60px}
+    .wrap{max-width:1100px; margin:0 auto; padding:28px 16px 60px}
     header{
       display:flex; align-items:flex-start; justify-content:space-between; gap:16px;
-      margin-bottom:18px;
+      margin-bottom:14px;
     }
-    .brand{
-      display:flex; flex-direction:column; gap:6px;
+    .brand{display:flex; flex-direction:column; gap:6px}
+    .title{display:flex; align-items:center; gap:10px; font-size:22px; font-weight:900; letter-spacing:.2px}
+    .pill{
+      font-family:var(--mono);
+      font-size:12px; color:rgba(232,238,252,.9);
+      border:1px solid rgba(255,255,255,.12);
+      padding:4px 8px; border-radius:999px;
+      background:rgba(18,26,42,.55);
+      white-space:nowrap;
     }
-    .title{
-      display:flex; align-items:center; gap:10px;
-      font-size:22px; font-weight:800; letter-spacing:.2px;
+    .sub{color:var(--muted); font-size:14px; line-height:1.35; max-width:72ch}
+    .grid{display:grid; grid-template-columns:1.25fr .75fr; gap:14px; margin-top:14px}
+    @media (max-width: 980px){ .grid{grid-template-columns:1fr} header{flex-direction:column} }
+    .card{
+      background:linear-gradient(180deg, rgba(18,26,42,.92), rgba(18,26,42,.78));
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:16px;
     }
+    .card h2{margin:0 0 10px; font-size:15px; letter-spacing:.2px}
+    .row{display:flex; gap:10px; align-items:center; flex-wrap:wrap}
+    .row > *{flex: 1 1 auto}
+    label{display:block; font-size:12px; color:var(--muted); margin-bottom:6px}
+    select, input[type="range"], input[type="text"], textarea{
+      width:100%;
+      background:rgba(11,15,25,.65);
+      border:1px solid rgba(255,255,255,.12);
+      color:var(--text);
+      border-radius:12px;
+      padding:10px 12px;
+      outline:none;
+    }
+    textarea{min-height:88px; resize:vertical}
+    .btn{
+      appearance:none; border:0; cursor:pointer;
+      padding:10px 12px;
+      border-radius:12px;
+      font-weight:800;
+      color:var(--text);
+      background:rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.12);
+      transition:transform .05s ease, background .15s ease;
+      user-select:none;
+    }
+    .btn:hover{background:rgba(255,255,255,.12)}
+    .btn:active{transform:translateY(1px)}
+    .btn.primary{background:linear-gradient(90deg, rgba(124,92,255,.95), rgba(124,92,255,.7)); border-color:rgba(124,92,255,.6)}
+    .btn.good{background:linear-gradient(90deg, rgba(54,211,153,.92), rgba(54,211,153,.65)); border-color:rgba(54,211,153,.55)}
+    .btn.bad{background:linear-gradient(90deg, rgba(255,92,122,.92), rgba(255,92,122,.65)); border-color:rgba(255,92,122,.55)}
+    .btn.small{padding:8px 10px; font-size:13px}
+    .challenge{
+      border:1px dashed rgba(255,255,255,.18);
+      border-radius:16px;
+      padding:14px;
+      background:rgba(11,15,25,.45);
+    }
+    .challenge .headline{display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap}
+    .challenge .text{font-size:18px; font-weight:900; margin:8px 0 6px; line-height:1.25}
+    .challenge .meta{display:flex; gap:8px; flex-wrap:wrap; color:var(--muted); font-size:12px}
+    .tag{
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(18,26,42,.55);
+      padding:3px 8px;
+      border-radius:999px;
+      font-family:var(--mono);
+      font-size:12px;
+    }
+    .statgrid{display:grid; grid-template-columns:repeat(3,1fr); gap:10px}
+    @media (max-width: 520px){ .statgrid{grid-template-columns:1fr} }
+    .stat{
+      padding:12px;
+      border-radius:14px;
+      background:rgba(11,15,25,.45);
+      border:1px solid rgba(255,255,255,.10);
+    }
+    .stat .k{font-size:11px; color:var(--muted)}
+    .stat .v{font-size:20px; font-weight:1000; margin-top:4px}
+    table{width:100%; border-collapse:collapse; margin-top:8px; font-size:13px}
+    th,td{padding:10px 8px; border-bottom:1px solid rgba(255,255,255,.08); vertical-align:top}
+    th{color:var(--muted); font-weight:800; text-align:left; font-size:12px}
+    .muted{color:var(--muted)}
+    .toast{
+      position:fixed; left:50%; bottom:18px; transform:translateX(-50%);
+      background:rgba(18,26,42,.92);
+      border:1px solid rgba(255,255,255,.12);
+      padding:10px 12px; border-radius:999px;
+      box-shadow:var(--shadow);
+      display:none;
+      font-size:13px;
+      z-index:9999;
+      max-width:min(92vw, 720px);
+      text-align:center;
+    }
+    .footer{
+      margin-top:14px;
+      color:var(--muted);
+      font-size:12px;
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .kbd{
+      font-family:var(--mono);
+      border:1px solid rgba(255,255,255,.14);
+      background:rgba(11,15,25,.55);
+      padding:2px 6px;
+      border-radius:8px;
+    }
+
+    /* Share card look */
+    .shareCard{
+      border-radius:18px;
+      border:1px solid rgba(255,255,255,.12);
+      background:
+        radial-gradient(900px 400px at 0% 0%, rgba(124,92,255,.28), transparent 60%),
+        radial-gradient(900px 400px at 100% 0%, rgba(54,211,153,.20), transparent 60%),
+        rgba(11,15,25,.55);
+      padding:14px;
+    }
+    .shareCard .top{
+      display:flex; justify-content:space-between; gap:10px; align-items:flex-start; flex-wrap:wrap;
+    }
+    .shareCard .app{
+      font-weight:1000; letter-spacing:.2px; display:flex; gap:8px; align-items:center;
+    }
+    .shareCard .big{
+      font-size:18px; font-weight:1000; margin:10px 0 8px; line-height:1.25;
+    }
+    .shareCard .small{
+      font-size:12px; color:var(--muted); display:flex; gap:8px; flex-wrap:wrap; align-items:center;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="brand">
+        <div class="title">🎯 Rejection Roulette <span class="pill">public • no login • shareable • exportable</span></div>
+        <div class="sub">
+          Generate an in-person “ask” designed to make you a little uncomfortable (politely). Log what happened, build a rejection streak, export proof.
+        </div>
+      </div>
+      <div class="row" style="justify-content:flex-end; min-width:280px">
+        <button class="btn small" id="resetBtn" title="Clears logs + streak">Reset</button>
+        <button class="btn small" id="exportBtn" title="Download CSV of your logs">Export CSV</button>
+        <button class="btn small" id="shareAppBtn" title="Share the app">Share App</button>
+      </div>
+    </header>
+
+    <!-- How it works + Rules -->
+    <div class="grid" style="grid-template-columns:1fr 1fr; margin-top:0">
+      <div class="card">
+        <h2>How it works</h2>
+        <div class="muted" style="line-height:1.5">
+          1) Pick a pack + difficulty → 2) Generate a challenge (or use “Today’s”) → 3) Do it <b>in person</b> →
+          4) Log <b>Accepted</b> or <b>Rejected</b> → 5) Your streak counts only on days you logged at least one <b>rejection</b>.
+        </div>
+      </div>
+      <div class="card">
+        <h2>Safety rules (no-jerk policy)</h2>
+        <ul class="muted" style="margin:0; padding-left:18px; line-height:1.5">
+          <li>Be respectful, brief, and specific.</li>
+          <li>“No” ends it. No arguing. No guilt.</li>
+          <li>Consent required for photos/videos.</li>
+          <li>Don’t block people working / in a rush.</li>
+          <li>Pick challenges that are safe + legal in your setting.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="grid">
+      <!-- Left: Generator + Logger -->
+      <div class="card">
+        <h2>New challenge</h2>
+
+        <div class="row">
+          <div style="min-width:220px">
+            <label for="pack">Challenge pack</label>
+            <select id="pack">
+              <option value="all" selected>All (mixed)</option>
+              <option value="beginner">Beginner Pack</option>
+              <option value="networking">Networking Pack</option>
+              <option value="wholesome">Wholesome Chaos Pack</option>
+              <option value="negotiation">Negotiation Pack</option>
+            </select>
+          </div>
+
+          <div style="min-width:220px">
+            <label for="category">Category</label>
+            <select id="category">
+              <option value="any">Any</option>
+              <option value="food">Food & café</option>
+              <option value="social">Social & compliments</option>
+              <option value="help">Asking for help</option>
+              <option value="negotiation">Negotiation</option>
+              <option value="weird">Wholesome-weird</option>
+              <option value="career">Career & networking</option>
+            </select>
+          </div>
+
+          <div style="min-width:220px">
+            <label for="difficulty">Difficulty: <span id="diffLabel" class="pill">3</span></label>
+            <input id="difficulty" type="range" min="1" max="5" value="3" />
+          </div>
+
+          <div style="min-width:220px">
+            <label for="timebox">Timebox (minutes)</label>
+            <select id="timebox">
+              <option value="0">No timer</option>
+              <option value="5">5</option>
+              <option value="10">10</option>
+              <option value="15" selected>15</option>
+              <option value="30">30</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="challenge" style="margin-top:12px">
+          <div class="headline">
+            <div class="meta">
+              <span class="tag" id="tagPack">pack: all</span>
+              <span class="tag" id="tagCat">any</span>
+              <span class="tag" id="tagDiff">difficulty: 3</span>
+              <span class="tag" id="tagMode">mode: random</span>
+            </div>
+            <div class="row" style="flex:0 0 auto">
+              <button class="btn small" id="copyLinkBtn">Copy link</button>
+              <button class="btn small" id="todayBtn" title="Same challenge for everyone today (deterministic)">Today’s</button>
+              <button class="btn primary" id="newBtn">Generate</button>
+            </div>
+          </div>
+          <div class="text" id="challengeText">Click “Generate” to get your first challenge.</div>
+          <div class="muted" id="timerText" style="margin-top:6px"></div>
+        </div>
+
+        <!-- Logging fields -->
+        <div style="margin-top:12px">
+          <div class="row">
+            <div style="min-width:220px">
+              <label for="where">Where (optional)</label>
+              <input id="where" type="text" placeholder="e.g., coffee shop, campus, gym" />
+            </div>
+            <div style="min-width:220px">
+              <label for="who">Who (optional)</label>
+              <input id="who" type="text" placeholder="e.g., barista, stranger, classmate" />
+            </div>
+          </div>
+
+          <div class="row" style="margin-top:10px">
+            <div style="min-width:220px">
+              <label for="before">Feeling BEFORE (1–5): <span id="beforeLabel" class="pill">3</span></label>
+              <input id="before" type="range" min="1" max="5" value="3" />
+            </div>
+            <div style="min-width:220px">
+              <label for="after">Feeling AFTER (1–5): <span id="afterLabel" class="pill">3</span></label>
+              <input id="after" type="range" min="1" max="5" value="3" />
+            </div>
+          </div>
+
+          <div style="margin-top:10px">
+            <label for="note">Quick note (optional)</label>
+            <textarea id="note" placeholder="What did you say? What did they say? Any funny detail?"></textarea>
+          </div>
+
+          <div class="row" style="margin-top:10px">
+            <button class="btn good" id="acceptedBtn">Accepted 😳</button>
+            <button class="btn bad" id="rejectedBtn">Rejected ✅</button>
+          </div>
+
+          <div class="footer">
+            <div>Tip: “polite, specific, and uncomfortable.”</div>
+            <div>Shortcuts: <span class="kbd">G</span> generate • <span class="kbd">T</span> today’s • <span class="kbd">R</span> log rejected</div>
+          </div>
+        </div>
+
+        <!-- Share card -->
+        <div style="margin-top:14px" class="card">
+          <h2>Share card</h2>
+          <div class="muted" style="font-size:12px; margin-top:-6px">Post this challenge to friends. Copy it as an image (no backend).</div>
+
+          <div id="shareCard" class="shareCard" style="margin-top:10px">
+            <div class="top">
+              <div class="app">🎯 Rejection Roulette <span class="pill" id="shareStamp">today</span></div>
+              <div class="small">
+                <span class="tag" id="sharePack">pack: all</span>
+                <span class="tag" id="shareCat">any</span>
+                <span class="tag" id="shareDiff">d3</span>
+              </div>
+            </div>
+            <div class="big" id="shareText">Generate a challenge to fill this card.</div>
+            <div class="small">
+              <span class="tag">rule: be polite</span>
+              <span class="tag">rule: accept no</span>
+              <span class="tag">in person</span>
+            </div>
+          </div>
+
+          <div class="row" style="margin-top:10px">
+            <button class="btn small" id="copyImageBtn">Copy as image</button>
+            <button class="btn small" id="downloadImageBtn">Download PNG</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Stats + Logs -->
+      <div class="card">
+        <h2>Your stats</h2>
+        <div class="statgrid">
+          <div class="stat">
+            <div class="k">Rejection streak (days)</div>
+            <div class="v" id="streak">0</div>
+          </div>
+          <div class="stat">
+            <div class="k">Total logs</div>
+            <div class="v" id="total">0</div>
+          </div>
+          <div class="stat">
+            <div class="k">Rejection rate</div>
+            <div class="v" id="rate">0%</div>
+          </div>
+        </div>
+
+        <div class="muted" style="font-size:12px; margin-top:10px; line-height:1.4">
+          Stored in your browser (localStorage). No account required.
+          <br><b>Streak only updates</b> on days you log at least one <b>Rejected ✅</b>.
+        </div>
+
+        <h2 style="margin-top:14px">Recent logs</h2>
+        <div style="overflow:auto; margin-top:6px">
+          <table>
+            <thead>
+              <tr>
+                <th style="min-width:140px">Time</th>
+                <th>Challenge</th>
+                <th style="min-width:120px">Result</th>
+              </tr>
+            </thead>
+            <tbody id="logBody">
+              <tr><td colspan="3" class="muted">No logs yet. Go get rejected (respectfully).</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+  </div>
+
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+
+  // Controls
+  const pack = $("pack");
+  const category = $("category");
+  const difficulty = $("difficulty");
+  const timebox = $("timebox");
+
+  // Labels/tags
+  const diffLabel = $("diffLabel");
+  const tagPack = $("tagPack");
+  const tagCat = $("tagCat");
+  const tagDiff = $("tagDiff");
+  const tagMode = $("tagMode");
+
+  // Challenge
+  const challengeText = $("challengeText");
+  const timerText = $("timerText");
+
+  // Log fields
+  const where = $("where");
+  const who = $("who");
+  const before = $("before");
+  const after = $("after");
+  const beforeLabel = $("beforeLabel");
+  const afterLabel = $("afterLabel");
+  const note = $("note");
+
+  // Buttons
+  const newBtn = $("newBtn");
+  const todayBtn = $("todayBtn");
+  const acceptedBtn = $("acceptedBtn");
+  const rejectedBtn = $("rejectedBtn");
+  const exportBtn = $("exportBtn");
+  const resetBtn = $("resetBtn");
+  const copyLinkBtn = $("copyLinkBtn");
+  const shareAppBtn = $("shareAppBtn");
+  const copyImageBtn = $("copyImageBtn");
+  const downloadImageBtn = $("downloadImageBtn");
+
+  // Share card
+  const shareCard = $("shareCard");
+  const shareStamp = $("shareStamp");
+  const sharePack = $("sharePack");
+  const shareCat = $("shareCat");
+  const shareDiff = $("shareDiff");
+  const shareText = $("shareText");
+
+  // Stats/logs
+  const streakEl = $("streak");
+  const totalEl = $("total");
+  const rateEl = $("rate");
+  const logBody = $("logBody");
+  const toast = $("toast");
+
+  // Storage
+  const STORAGE_KEY = "rr_logs_v2";
+  const STREAK_KEY = "rr_rej_streak_v2";
+  const LAST_REJ_DAY_KEY = "rr_last_rej_day_v2";
+
+  let currentChallenge = null;
+  let currentMode = "random"; // "random" | "today"
+  let timer = null;
+  let timerEndsAt = null;
+
+  // Packs are just filters (no backend)
+  const packFilters = {
+    all: (c) => true,
+    beginner: (c) => c.diff <= 2,
+    networking: (c) => c.cat === "career" || (c.cat === "social" && c.diff <= 4),
+    wholesome: (c) => c.cat === "weird" || (c.cat === "social" && c.diff >= 2),
+    negotiation: (c) => c.cat === "negotiation"
+  };
+
+  const challenges = [
+    // Food & café
+    {cat:"food", diff:1, text:"Ask a barista if they can recommend something *not* on the menu."},
+    {cat:"food", diff:2, text:"Ask for a sample of a pastry before buying (politely accept no)."},
+    {cat:"food", diff:3, text:"Ask if they can make your drink ‘half sweet’ and explain you’re testing taste sensitivity."},
+    {cat:"food", diff:4, text:"Ask the cashier for a ‘surprise’ under $5 and let them choose."},
+    {cat:"food", diff:5, text:"Ask a restaurant if they can do a custom off-menu swap (e.g., change a side). Take the no gracefully."},
+
+    // Social & compliments
+    {cat:"social", diff:1, text:"Give a sincere compliment to a stranger (then walk away, no follow-up)."},
+    {cat:"social", diff:2, text:"Ask someone where they got an item (shoes/bag/jacket) because you like it."},
+    {cat:"social", diff:3, text:"Ask a stranger to rate your fit from 1–10. Thank them either way."},
+    {cat:"social", diff:4, text:"Ask someone for a quick photo of you (then offer to take one for them too)."},
+    {cat:"social", diff:5, text:"Ask a group if you can join for 2 minutes just to practice small talk, then leave."},
+
+    // Asking for help
+    {cat:"help", diff:1, text:"Ask a stranger for directions to a nearby place you already know."},
+    {cat:"help", diff:2, text:"Ask someone to recommend a nearby spot they genuinely like."},
+    {cat:"help", diff:3, text:"Ask if you can borrow a pen for 30 seconds."},
+    {cat:"help", diff:4, text:"Ask a store employee to help you pick between two options—and explain why."},
+    {cat:"help", diff:5, text:"Ask someone to practice a 30-second intro with you (‘I’m working on confidence—can I try?’)."},
+    
+    // Negotiation
+    {cat:"negotiation", diff:1, text:"Ask if there’s a student discount (even if you’re not sure)."},
+    {cat:"negotiation", diff:2, text:"Ask if they can waive an add-on fee ‘just this once’ (accept no)."},
+    {cat:"negotiation", diff:3, text:"Ask for a small upgrade (bigger size, better seat, etc.) politely."},
+    {cat:"negotiation", diff:4, text:"Ask for a $1–$2 discount on a small purchase ‘for fun’ (smile, accept no)."},
+    {cat:"negotiation", diff:5, text:"Ask for a free extra (topping/add-on). No arguing if they say no."},
+
+    // Wholesome-weird
+    {cat:"weird", diff:1, text:"Ask someone if they think pigeons have a leader."},
+    {cat:"weird", diff:2, text:"Ask a cashier to pick: ‘Is today more of a 7 or a 9?’"},
+    {cat:"weird", diff:3, text:"Ask someone for a 10-second pep talk (tell them you’ll time it)."},
+    {cat:"weird", diff:4, text:"Ask a stranger for a ‘life hack’ that saves time."},
+    {cat:"weird", diff:5, text:"Ask if you can record a 5-second video of them saying ‘you’ve got this’ (consent matters)."},
+    
+    // Career & networking
+    {cat:"career", diff:1, text:"Ask someone what they do for work (then ask what they actually enjoy about it)."},
+    {cat:"career", diff:2, text:"Ask for one piece of advice for someone early in their career."},
+    {cat:"career", diff:3, text:"Ask if they’d be open to a 10-minute coffee chat sometime (accept no warmly)."},
+    {cat:"career", diff:4, text:"Ask if they know one person you should meet—and why."},
+    {cat:"career", diff:5, text:"Ask a professional for feedback on your 15-second self-intro—on the spot."},
+  ];
+
+  function nowISO() { return new Date().toISOString(); }
+  function dayKey(d = new Date()) { return d.toISOString().slice(0,10); }
+
+  function loadLogs(){
+    try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]"); }
+    catch { return []; }
+  }
+  function saveLogs(logs){ localStorage.setItem(STORAGE_KEY, JSON.stringify(logs)); }
+
+  function loadStreak(){
+    try { return JSON.parse(localStorage.getItem(STREAK_KEY) || "0"); }
+    catch { return 0; }
+  }
+  function saveStreak(n){ localStorage.setItem(STREAK_KEY, JSON.stringify(n)); }
+
+  function toastMsg(msg){
+    toast.textContent = msg;
+    toast.style.display = "block";
+    clearTimeout(toast._t);
+    toast._t = setTimeout(()=> toast.style.display="none", 1900);
+  }
+
+  // Tiny stable hash -> deterministic "random"
+  function hash32(str){
+    let h = 2166136261;
+    for (let i=0;i<str.length;i++){
+      h ^= str.charCodeAt(i);
+      h = Math.imul(h, 16777619);
+    }
+    return h >>> 0;
+  }
+  function seededIndex(n, seedStr){
+    const seed = hash32(seedStr);
+    // simple LCG-ish step
+    const x = (Math.imul(seed, 1664525) + 1013904223) >>> 0;
+    return n ? (x % n) : 0;
+  }
+
+  function encodeChallenge(ch){
+    const payload = {cat:ch.cat, diff:ch.diff, text:ch.text, mode: currentMode, pack: pack.value};
+    const b64 = btoa(unescape(encodeURIComponent(JSON.stringify(payload))));
+    return b64.replaceAll("=", "");
+  }
+  function decodeChallenge(str){
+    try{
+      const pad = str + "===".slice((str.length % 4) || 4);
+      const json = decodeURIComponent(escape(atob(pad)));
+      const obj = JSON.parse(json);
+      if (!obj || !obj.text) return null;
+      return obj;
+    } catch { return null; }
+  }
+
+  function escapeHtml(s){
+    return String(s).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;")
+      .replaceAll('"',"&quot;").replaceAll("'","&#039;");
+  }
+
+  function updateTags(){
+    diffLabel.textContent = difficulty.value;
+    beforeLabel.textContent = before.value;
+    afterLabel.textContent = after.value;
+
+    tagPack.textContent = "pack: " + pack.value;
+    tagCat.textContent = category.value;
+    tagDiff.textContent = "difficulty: " + difficulty.value;
+    tagMode.textContent = "mode: " + currentMode;
+
+    // Share card meta
+    sharePack.textContent = "pack: " + pack.value;
+    shareCat.textContent = category.value;
+    shareDiff.textContent = "d" + difficulty.value;
+    shareStamp.textContent = currentMode === "today" ? "today" : "random";
+  }
+
+  function setChallenge(ch){
+    currentChallenge = ch;
+    challengeText.textContent = ch.text;
+
+    // Update share card text
+    shareText.textContent = ch.text;
+
+    // Update URL with share payload
+    const share = new URL(location.href);
+    share.searchParams.set("c", encodeChallenge(ch));
+    history.replaceState(null, "", share.toString());
+  }
+
+  function filteredPool(){
+    const p = pack.value;
+    const cat = category.value;
+    const diff = parseInt(difficulty.value, 10);
+
+    return challenges.filter(c => {
+      if (!packFilters[p](c)) return false;
+      if (cat !== "any" && c.cat !== cat) return false;
+      if (c.diff !== diff) return false;
+      return true;
+    });
+  }
+
+  function fallbackPool(){
+    const p = pack.value;
+    const cat = category.value;
+    return challenges.filter(c => {
+      if (!packFilters[p](c)) return false;
+      if (cat !== "any" && c.cat !== cat) return false;
+      return true;
+    });
+  }
+
+  function pickRandomChallenge(){
+    let pool = filteredPool();
+    if (!pool.length) pool = fallbackPool();
+    if (!pool.length) pool = challenges.slice();
+    return pool[Math.floor(Math.random() * pool.length)];
+  }
+
+  function pickTodaysChallenge(){
+    // deterministic per day + selected filters (so it's stable but still respects your pack/category/difficulty choices)
+    let pool = filteredPool();
+    if (!pool.length) pool = fallbackPool();
+    if (!pool.length) pool = challenges.slice();
+    const seedStr = dayKey() + "|" + pack.value + "|" + category.value + "|" + difficulty.value;
+    return pool[seededIndex(pool.length, seedStr)];
+  }
+
+  function startTimer(){
+    stopTimer();
+    const minutes = parseInt(timebox.value, 10);
+    if (!minutes){ timerText.textContent = ""; return; }
+    timerEndsAt = Date.now() + minutes * 60 * 1000;
+    const tick = () => {
+      const ms = timerEndsAt - Date.now();
+      if (ms <= 0){
+        timerText.textContent = "⏱️ Timebox complete. Go do it now.";
+        stopTimer();
+        return;
+      }
+      const m = Math.floor(ms / 60000);
+      const s = Math.floor((ms % 60000) / 1000);
+      timerText.textContent = `⏱️ Time left: ${m}:${String(s).padStart(2,"0")}`;
+    };
+    tick();
+    timer = setInterval(tick, 250);
+  }
+  function stopTimer(){
+    if (timer) clearInterval(timer);
+    timer = null;
+    timerEndsAt = null;
+  }
+
+  function updateStats(){
+    const logs = loadLogs();
+    totalEl.textContent = logs.length;
+
+    const rejected = logs.filter(x => x.result === "rejected").length;
+    const rate = logs.length ? Math.round((rejected / logs.length) * 100) : 0;
+    rateEl.textContent = rate + "%";
+
+    streakEl.textContent = loadStreak();
+    renderLogs(logs);
+  }
+
+  function renderLogs(logs){
+    if (!logs.length){
+      logBody.innerHTML = `<tr><td colspan="3" class="muted">No logs yet. Go get rejected (respectfully).</td></tr>`;
+      return;
+    }
+    const rows = logs.slice().reverse().slice(0, 12).map(l => {
+      const dt = new Date(l.time);
+      const when = dt.toLocaleString([], {year:"numeric", month:"short", day:"2-digit", hour:"2-digit", minute:"2-digit"});
+      const res = l.result === "rejected" ? "Rejected ✅" : "Accepted 😳";
+
+      const metaBits = [
+        `<span class="tag">${escapeHtml(l.pack || "all")}</span>`,
+        `<span class="tag">${escapeHtml(l.cat)}</span>`,
+        `<span class="tag">d${escapeHtml(String(l.diff))}</span>`,
+        l.where ? `<span class="tag">where: ${escapeHtml(l.where)}</span>` : "",
+        l.who ? `<span class="tag">who: ${escapeHtml(l.who)}</span>` : "",
+        (l.before && l.after) ? `<span class="tag">feel ${escapeHtml(String(l.before))}→${escapeHtml(String(l.after))}</span>` : ""
+      ].filter(Boolean).join(" ");
+
+      const extra = l.note ? `<div class="muted" style="margin-top:6px">${escapeHtml(l.note)}</div>` : "";
+
+      return `
+        <tr>
+          <td>${escapeHtml(when)}</td>
+          <td>
+            <div style="font-weight:900">${escapeHtml(l.challenge)}</div>
+            <div class="muted" style="margin-top:6px; display:flex; gap:6px; flex-wrap:wrap">
+              ${metaBits}
+            </div>
+            ${extra}
+          </td>
+          <td>${res}</td>
+        </tr>
+      `;
+    }).join("");
+    logBody.innerHTML = rows;
+  }
+
+  // Streak logic: counts ONLY on days you log at least one rejection
+  function updateRejectionStreakOnRejectedLog(){
+    const today = dayKey();
+    const last = localStorage.getItem(LAST_REJ_DAY_KEY);
+    let streak = loadStreak();
+
+    if (!last){
+      streak = 1;
+    } else {
+      const lastDate = new Date(last + "T00:00:00");
+      const todayDate = new Date(today + "T00:00:00");
+      const diffDays = Math.round((todayDate - lastDate) / (24*60*60*1000));
+
+      if (diffDays === 0){
+        // already counted today
+      } else if (diffDays === 1){
+        streak += 1;
+      } else {
+        streak = 1; // broke streak
+      }
+    }
+    localStorage.setItem(LAST_REJ_DAY_KEY, today);
+    saveStreak(streak);
+  }
+
+  function clearLogFields(){
+    where.value = "";
+    who.value = "";
+    note.value = "";
+    before.value = "3";
+    after.value = "3";
+    beforeLabel.textContent = "3";
+    afterLabel.textContent = "3";
+  }
+
+  function logResult(result){
+    if (!currentChallenge){
+      toastMsg("Generate a challenge first.");
+      return;
+    }
+    const logs = loadLogs();
+    const entry = {
+      time: nowISO(),
+      result,
+      mode: currentMode,
+      pack: pack.value,
+      cat: currentChallenge.cat,
+      diff: currentChallenge.diff,
+      challenge: currentChallenge.text,
+      where: where.value.trim(),
+      who: who.value.trim(),
+      before: parseInt(before.value,10),
+      after: parseInt(after.value,10),
+      note: note.value.trim()
+    };
+    logs.push(entry);
+    saveLogs(logs);
+
+    if (result === "rejected"){
+      updateRejectionStreakOnRejectedLog();
+    }
+
+    toastMsg(result === "rejected" ? "Logged: Rejected ✅ (streak updated if first rejection today)" : "Logged: Accepted 😳");
+    clearLogFields();
+    updateStats();
+  }
+
+  function exportCSV(){
+    const logs = loadLogs();
+    if (!logs.length){ toastMsg("Nothing to export yet."); return; }
+
+    const header = ["time_iso","result","mode","pack","category","difficulty","challenge","where","who","feeling_before","feeling_after","note"];
+    const rows = logs.map(l => [
+      l.time,
+      l.result,
+      l.mode || "",
+      l.pack || "",
+      l.cat,
+      String(l.diff),
+      (l.challenge || "").replaceAll('"','""'),
+      (l.where || "").replaceAll('"','""'),
+      (l.who || "").replaceAll('"','""'),
+      String(l.before ?? ""),
+      String(l.after ?? ""),
+      (l.note || "").replaceAll('"','""')
+    ]);
+
+    const csv = [header.join(","), ...rows.map(r => r.map(v => `"${v}"`).join(","))].join("\n");
+    const blob = new Blob([csv], {type:"text/csv;charset=utf-8"});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "rejection-roulette-logs.csv";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  }
+
+  async function copyCurrentLink(){
+    const url = location.href;
+    try{
+      await navigator.clipboard.writeText(url);
+      toastMsg("Link copied.");
+    } catch {
+      prompt("Copy this link:", url);
+    }
+  }
+
+  async function shareApp(){
+    const url = location.origin + location.pathname;
+    if (navigator.share){
+      try{ await navigator.share({title:"Rejection Roulette", text:"Try this challenge generator + tracker:", url}); }
+      catch {}
+    } else {
+      try{
+        await navigator.clipboard.writeText(url);
+        toastMsg("App link copied.");
+      } catch {
+        prompt("Copy this app link:", url);
+      }
+    }
+  }
+
+  async function renderShareCardToCanvas(){
+    // Ensure fonts/layout settle
+    await new Promise(r => setTimeout(r, 50));
+    const canvas = await html2canvas(shareCard, {backgroundColor: null, scale: 2});
+    return canvas;
+  }
+
+  async function copyShareCardAsImage(){
+    if (!currentChallenge){
+      toastMsg("Generate a challenge first (so the share card has content).");
+      return;
+    }
+    try{
+      const canvas = await renderShareCardToCanvas();
+      const blob = await new Promise(res => canvas.toBlob(res, "image/png"));
+      if (!blob) throw new Error("Failed to create image");
+
+      // Clipboard image API (works in many modern browsers)
+      if (navigator.clipboard && window.ClipboardItem){
+        await navigator.clipboard.write([new ClipboardItem({"image/png": blob})]);
+        toastMsg("Copied share card as image ✅");
+      } else {
+        // fallback to download
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "rejection-roulette-card.png";
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+        toastMsg("Clipboard not supported — downloaded PNG instead.");
+      }
+    } catch (e){
+      toastMsg("Couldn’t copy image. Try Download PNG instead.");
+    }
+  }
+
+  async function downloadShareCard(){
+    if (!currentChallenge){
+      toastMsg("Generate a challenge first (so the share card has content).");
+      return;
+    }
+    const canvas = await renderShareCardToCanvas();
+    const url = canvas.toDataURL("image/png");
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "rejection-roulette-card.png";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    toastMsg("Downloaded PNG ✅");
+  }
+
+  function resetAll(){
+    if (!confirm("Reset logs and streak?")) return;
+    localStorage.removeItem(STORAGE_KEY);
+    localStorage.removeItem(STREAK_KEY);
+    localStorage.removeItem(LAST_REJ_DAY_KEY);
+    toastMsg("Reset complete.");
+    updateStats();
+  }
+
+  function generate(mode){
+    currentMode = mode;
+    updateTags();
+
+    const ch = (mode === "today") ? pickTodaysChallenge() : pickRandomChallenge();
+    setChallenge(ch);
+    startTimer();
+    updateTags();
+  }
+
+  // Wire up UI
+  function syncMeta(){
+    updateTags();
+  }
+  difficulty.addEventListener("input", syncMeta);
+  before.addEventListener("input", syncMeta);
+  after.addEventListener("input", syncMeta);
+  category.addEventListener("change", syncMeta);
+  pack.addEventListener("change", syncMeta);
+  timebox.addEventListener("change", () => startTimer());
+
+  newBtn.addEventListener("click", () => generate("random"));
+  todayBtn.addEventListener("click", () => generate("today"));
+  acceptedBtn.addEventListener("click", () => logResult("accepted"));
+  rejectedBtn.addEventListener("click", () => logResult("rejected"));
+  exportBtn.addEventListener("click", exportCSV);
+  resetBtn.addEventListener("click", resetAll);
+  copyLinkBtn.addEventListener("click", copyCurrentLink);
+  shareAppBtn.addEventListener("click", shareApp);
+
+  copyImageBtn.addEventListener("click", copyShareCardAsImage);
+  downloadImageBtn.addEventListener("click", downloadShareCard);
+
+  document.addEventListener("keydown", (e) => {
+    const k = e.key.toLowerCase();
+    if (k === "g") generate("random");
+    if (k === "t") generate("today");
+    if (k === "r") logResult("rejected");
+  });
+
+  // Load from share link if present
+  const params = new URLSearchParams(location.search);
+  const c = params.get("c");
+  if (c){
+    const decoded = decodeChallenge(c);
+    if (decoded){
+      currentChallenge = decoded;
+      challengeText.textContent = decoded.text;
+      shareText.textContent = decoded.text;
+
+      // restore some UI state if present
+      if (decoded.pack && packFilters[decoded.pack]) pack.value = decoded.pack;
+      category.value = ["food","social","help","negotiation","weird","career"].includes(decoded.cat) ? decoded.cat : "any";
+      difficulty.value = String(Math.min(5, Math.max(1, parseInt(decoded.diff || 3,10) || 3)));
+
+      currentMode = (decoded.mode === "today") ? "today" : "random";
+      updateTags();
+    }
+  } else {
+    updateTags();
+  }
+
+  updateStats();
+})();
+</script>
+</body>
+</html>
     .pill{
       font-family:var(--mono);
       font-size:12px; color:rgba(232,238,252,.9);
