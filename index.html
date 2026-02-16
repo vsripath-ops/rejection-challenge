@@ -4,46 +4,41 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Rejection Challenge</title>
-  <meta name="description" content="Spin an in-person prompt. Log accepted or rejected. Build a rejection streak. No login." />
+  <meta name="description" content="Spin a prompt. Do it in person. Log reps. Streak, XP, combos, boss challenges. No login." />
 
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23140b09'/%3E%3Cpath d='M18 38c10 6 18 6 28 0' stroke='%23fff2ea' stroke-width='4' fill='none' stroke-linecap='round'/%3E%3Cpath d='M22 26h0' stroke='%23fff2ea' stroke-width='6' stroke-linecap='round'/%3E%3Cpath d='M42 26h0' stroke='%23fff2ea' stroke-width='6' stroke-linecap='round'/%3E%3C/svg%3E" />
-
-  <!-- Better typography -->
+  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,650;9..144,760&family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 
-  <!-- Share-card capture -->
+  <!-- html2canvas (for copy/download prompt card as image) -->
   <script defer src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 
   <style>
     :root{
-      --bg:#120807;
-      --card:#1a0f0d;
-      --text:#fff2ea;
-      --muted:rgba(255,242,234,.72);
-      --muted2:rgba(255,242,234,.56);
+      --bg0:#120a07;
+      --bg1:#1a0f0a;
 
-      --accent:#ff7a59;
-      --accent2:#ffb86b;
-      --mint:#53e2b0;
-      --pink:#ff5b85;
+      --text:#fff6f0;
+      --muted:rgba(255,246,240,.72);
 
-      --border:rgba(255,242,234,.10);
-      --border2:rgba(255,242,234,.14);
+      --card: rgba(255,255,255,.06);
+      --card2: rgba(255,255,255,.08);
+      --border: rgba(255,255,255,.14);
 
-      --shadow: 0 18px 60px rgba(0,0,0,.45);
-      --shadow2: 0 10px 26px rgba(0,0,0,.35);
+      --accent:#ff6f4c;   /* warm coral */
+      --accent2:#ffb36a;  /* warm amber */
+      --good:#38d39f;     /* mint */
+      --bad:#ff5575;      /* rose */
+      --ink: rgba(0,0,0,.22);
 
-      --r1:22px;
-      --r2:16px;
-      --r3:12px;
+      --shadow: 0 18px 60px rgba(0,0,0,.48);
+      --shadow2: 0 10px 30px rgba(0,0,0,.35);
 
-      --display: "Fraunces", ui-serif, Georgia, serif;
-      --sans: "Outfit", ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
-      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-
-      --gap:14px;
+      --r: 22px;
+      --sans: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+      --serif: Fraunces, ui-serif, Georgia, serif;
+      --mono: JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
     }
 
     *{box-sizing:border-box}
@@ -53,689 +48,589 @@
       font-family:var(--sans);
       color:var(--text);
       background:
-        radial-gradient(900px 520px at 10% 0%, rgba(255,122,89,.35), transparent 60%),
-        radial-gradient(900px 520px at 100% 10%, rgba(255,184,107,.22), transparent 55%),
-        radial-gradient(700px 420px at 40% 120%, rgba(83,226,176,.12), transparent 60%),
-        var(--bg);
-      letter-spacing:.1px;
+        radial-gradient(1000px 620px at 8% 0%, rgba(255,111,76,.30), transparent 60%),
+        radial-gradient(1000px 620px at 100% 10%, rgba(255,179,106,.22), transparent 58%),
+        radial-gradient(800px 520px at 30% 110%, rgba(56,211,159,.14), transparent 60%),
+        linear-gradient(180deg, var(--bg0), var(--bg1));
     }
 
     a{color:inherit; text-decoration:none}
-    .wrap{max-width:1160px; margin:0 auto; padding:22px 16px 80px}
+    .wrap{max-width:1120px; margin:0 auto; padding:26px 16px 64px}
 
-    /* Top header */
-    .topbar{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      padding:10px 10px;
-      border-radius:var(--r1);
-      border:1px solid rgba(255,242,234,.10);
-      background:rgba(255,242,234,.04);
-      box-shadow: var(--shadow2);
-      backdrop-filter: blur(10px);
+    header{
+      display:flex; align-items:flex-start; justify-content:space-between; gap:14px;
+      margin-bottom:16px;
     }
-
-    .brand{
-      display:flex;
-      align-items:center;
-      gap:12px;
-      min-width:240px;
-    }
-
-    .logo{
-      width:42px; height:42px;
-      border-radius:16px;
-      border:1px solid var(--border);
-      background:
-        radial-gradient(18px 18px at 30% 30%, rgba(255,184,107,.55), transparent 70%),
-        radial-gradient(18px 18px at 70% 70%, rgba(255,122,89,.45), transparent 70%),
-        rgba(255,242,234,.08);
-      box-shadow: var(--shadow2);
-      display:grid; place-items:center;
-      flex:0 0 auto;
-    }
-
-    .logo svg{opacity:.95}
-
-    .brandText{display:flex; flex-direction:column; gap:2px}
-    .brandName{
-      font-weight:900;
+    .brand{display:flex; flex-direction:column; gap:8px}
+    .brandTop{display:flex; align-items:baseline; gap:10px; flex-wrap:wrap}
+    .name{
+      font-family:var(--serif);
+      font-weight:760;
       letter-spacing:.2px;
-      display:flex;
-      align-items:center;
-      gap:10px;
-      flex-wrap:wrap;
+      font-size:28px;
+      line-height:1.05;
     }
-    .brandName .name{font-size:16px}
-    .brandSub{color:var(--muted); font-size:12px; font-weight:500}
-
-    .pills{display:flex; gap:8px; flex-wrap:wrap}
-    .pill{
+    .chips{display:flex; gap:8px; flex-wrap:wrap}
+    .chip{
       font-family:var(--mono);
       font-size:12px;
-      padding:5px 9px;
+      padding:4px 9px;
       border-radius:999px;
-      border:1px solid rgba(255,242,234,.12);
-      background:rgba(255,242,234,.06);
-      color:var(--muted);
+      border:1px solid rgba(255,255,255,.16);
+      background:rgba(255,255,255,.06);
+      color:rgba(255,246,240,.86);
       white-space:nowrap;
     }
-
+    .tagline{
+      color:var(--muted);
+      max-width:78ch;
+      line-height:1.45;
+      font-size:14px;
+    }
     .actions{display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end}
 
-    /* Buttons */
-    .btn{
-      appearance:none;
-      border:1px solid rgba(255,242,234,.14);
-      background:rgba(255,242,234,.08);
-      color:var(--text);
-      padding:10px 12px;
-      border-radius:14px;
-      font-weight:750;
-      cursor:pointer;
-      transition: transform .06s ease, filter .15s ease, background .15s ease;
-      user-select:none;
-      text-align:center;
-    }
-    .btn:hover{filter:brightness(1.06)}
-    .btn:active{transform:translateY(1px) scale(.99)}
-    .btn.small{padding:8px 10px; font-size:13px}
-    .btn.primary{
-      border-color:rgba(255,184,107,.28);
-      background:linear-gradient(90deg, rgba(255,122,89,.95), rgba(255,184,107,.82));
-    }
-    .btn.good{
-      border-color:rgba(83,226,176,.32);
-      background:linear-gradient(90deg, rgba(83,226,176,.92), rgba(83,226,176,.62));
-    }
-    .btn.bad{
-      border-color:rgba(255,91,133,.32);
-      background:linear-gradient(90deg, rgba(255,91,133,.92), rgba(255,91,133,.62));
-    }
-    .btn.ghost{background:rgba(255,242,234,.06)}
-
-    /* Sections */
-    .hero{
-      margin-top:var(--gap);
-      border-radius:var(--r1);
-      border:1px solid rgba(255,242,234,.10);
-      background:
-        radial-gradient(1200px 420px at 0% 0%, rgba(255,122,89,.22), transparent 60%),
-        radial-gradient(1200px 420px at 100% 0%, rgba(255,184,107,.18), transparent 60%),
-        rgba(255,242,234,.04);
-      box-shadow: var(--shadow);
-      padding:18px;
-    }
-
-    .heroTop{
-      display:flex;
-      align-items:flex-start;
-      justify-content:space-between;
-      gap:14px;
-      flex-wrap:wrap;
-    }
-
-    .hero h1{
-      margin:0;
-      font-family:var(--display);
-      font-size:36px;
-      line-height:1.03;
-      letter-spacing:.2px;
-      max-width:18ch;
-    }
-
-    .hero p{
-      margin:10px 0 0;
-      color:var(--muted);
-      line-height:1.55;
-      max-width:70ch;
-      font-weight:500;
-      font-size:15px;
-    }
-
-    .toggle{
-      display:flex;
-      gap:8px;
-      align-items:center;
-      border:1px solid rgba(255,242,234,.12);
-      background:rgba(255,242,234,.06);
-      border-radius:999px;
-      padding:6px;
-      height:fit-content;
-    }
-    .chip{
-      border:0;
-      background:transparent;
-      color:var(--muted);
-      padding:8px 10px;
-      border-radius:999px;
-      font-weight:850;
-      cursor:pointer;
-      font-family:var(--sans);
-      letter-spacing:.1px;
-    }
-    .chip.on{
-      color:var(--text);
-      background:rgba(255,242,234,.10);
-      border:1px solid rgba(255,242,234,.12);
-    }
-
-    details{
-      margin-top:12px;
-      border:1px solid rgba(255,242,234,.10);
-      border-radius:18px;
-      background:rgba(0,0,0,.14);
-      padding:10px 12px;
-    }
-    summary{
-      cursor:pointer;
-      font-weight:800;
-      color:var(--text);
-      list-style:none;
-    }
-    summary::-webkit-details-marker{display:none}
-    .smallList{margin:10px 0 0; padding-left:18px; color:var(--muted); line-height:1.55}
-    .smallList li{margin:6px 0}
-
-    /* Main layout */
-    .wheelWrap{
-      margin-top:var(--gap);
+    .grid{
       display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap:var(--gap);
-      align-items:stretch;
+      grid-template-columns: 1.25fr .75fr;
+      gap:14px;
+      margin-top:14px;
     }
-    @media (max-width: 860px){
-      .wheelWrap{grid-template-columns:1fr}
+    @media (max-width: 980px){
+      header{flex-direction:column}
+      .actions{justify-content:flex-start}
+      .grid{grid-template-columns:1fr}
     }
 
     .card{
       border:1px solid var(--border);
-      border-radius:var(--r1);
-      background: linear-gradient(180deg, rgba(26,15,13,.92), rgba(26,15,13,.72));
-      box-shadow: var(--shadow);
+      background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.05));
+      border-radius: var(--r);
+      box-shadow: var(--shadow2);
       padding:16px;
+      overflow:hidden;
+    }
+    .cardTitle{
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      margin:0 0 10px;
+    }
+    h2{
+      margin:0;
+      font-size:14px;
+      letter-spacing:.18px;
+      color:rgba(255,246,240,.92);
+    }
+    .muted{color:var(--muted)}
+    .small{font-size:12px; line-height:1.45}
+    .mono{font-family:var(--mono)}
+
+    .btn{
+      appearance:none;
+      border:1px solid rgba(255,255,255,.16);
+      background: rgba(255,255,255,.07);
+      color:var(--text);
+      border-radius: 14px;
+      padding:10px 12px;
+      font-weight:800;
+      cursor:pointer;
+      user-select:none;
+      transition: transform .08s ease, filter .18s ease, background .18s ease;
+      box-shadow: 0 10px 26px rgba(0,0,0,.18);
+    }
+    .btn:hover{filter:brightness(1.05)}
+    .btn:active{transform:translateY(1px) scale(.99)}
+    .btn.slim{padding:9px 10px; font-size:13px; box-shadow:none}
+    .btn.ghost{background:rgba(255,255,255,.04); box-shadow:none}
+    .btn.primary{
+      background: linear-gradient(90deg, rgba(255,111,76,.95), rgba(255,179,106,.85));
+      border-color: rgba(255,179,106,.26);
+    }
+    .btn.good{
+      background: linear-gradient(90deg, rgba(56,211,159,.92), rgba(56,211,159,.62));
+      border-color: rgba(56,211,159,.30);
+    }
+    .btn.bad{
+      background: linear-gradient(90deg, rgba(255,85,117,.92), rgba(255,85,117,.62));
+      border-color: rgba(255,85,117,.30);
     }
 
-    /* Wheel */
-    .wheelBox{
-      display:flex;
-      align-items:center;
-      justify-content:center;
+    .row{display:flex; gap:10px; flex-wrap:wrap; align-items:center}
+    .row > *{flex:1 1 auto}
+    label{display:block; font-size:12px; color:var(--muted); margin-bottom:6px}
+    select, input[type="range"], input[type="text"], textarea{
+      width:100%;
+      border-radius:14px;
+      padding:10px 12px;
+      border:1px solid rgba(255,255,255,.14);
+      background: var(--ink);
+      color:var(--text);
+      outline:none;
+    }
+    textarea{min-height:84px; resize:vertical}
+
+    .pill{
+      font-family:var(--mono);
+      font-size:12px;
+      padding:4px 8px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.05);
+      color:rgba(255,246,240,.88);
+      white-space:nowrap;
+    }
+
+    /* Prompt + wheel zone */
+    .arena{
+      display:grid;
+      grid-template-columns: 340px 1fr;
+      gap:14px;
+      align-items:start;
+      margin-top:12px;
+    }
+    @media (max-width: 980px){
+      .arena{grid-template-columns:1fr}
+    }
+
+    .wheelWrap{
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,.16);
+      background:
+        radial-gradient(700px 260px at 0% 0%, rgba(255,111,76,.18), transparent 60%),
+        radial-gradient(700px 260px at 100% 0%, rgba(255,179,106,.14), transparent 60%),
+        rgba(0,0,0,.18);
       padding:14px;
-      border-radius:var(--r1);
-      border:1px solid rgba(255,242,234,.10);
-      background:rgba(0,0,0,.12);
+      box-shadow: var(--shadow2);
+    }
+    .wheelTop{
+      display:flex; justify-content:space-between; gap:10px; align-items:center; flex-wrap:wrap;
+      margin-bottom:10px;
+    }
+    .wheelStage{
       position:relative;
-      overflow:hidden;
-      min-height:340px;
+      width: 100%;
+      aspect-ratio: 1/1;
+      display:grid;
+      place-items:center;
     }
     .pointer{
       position:absolute;
-      top:12px;
+      top:-2px;
       left:50%;
       transform:translateX(-50%);
-      width:0; height:0;
-      border-left:12px solid transparent;
-      border-right:12px solid transparent;
-      border-top:18px solid rgba(255,242,234,.92);
-      filter:drop-shadow(0 10px 10px rgba(0,0,0,.35));
-      z-index:6;
+      width:0;height:0;
+      border-left:10px solid transparent;
+      border-right:10px solid transparent;
+      border-bottom:16px solid rgba(255,246,240,.92);
+      filter: drop-shadow(0 10px 10px rgba(0,0,0,.25));
+      z-index:2;
     }
     .wheel{
-      width:260px; height:260px;
-      border-radius:50%;
-      border:1px solid rgba(255,242,234,.14);
-      box-shadow: inset 0 0 0 10px rgba(0,0,0,.18), var(--shadow2);
-      background:
-        conic-gradient(
-          rgba(255,122,89,.92),
-          rgba(255,184,107,.92),
-          rgba(83,226,176,.92),
-          rgba(255,91,133,.92),
-          rgba(255,184,107,.92),
-          rgba(255,122,89,.92)
-        );
-      transform: rotate(0deg);
-      transition: transform 1.95s cubic-bezier(.10,.88,.16,1);
-    }
-    .wheelLabel{
-      position:absolute;
-      width:260px; height:260px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      text-align:center;
-      padding:18px;
-      pointer-events:none;
-      z-index:7;
-    }
-    .wheelLabel .inside{
-      width:198px;
-      border-radius:18px;
-      border:1px solid rgba(255,242,234,.14);
-      background:rgba(18,8,7,.74);
-      box-shadow: var(--shadow2);
-      padding:12px 12px;
-      font-weight:850;
-      line-height:1.22;
-      backdrop-filter: blur(6px);
-    }
-    .wheelLabel .inside .big{
-      font-family:var(--display);
-      font-weight:700;
-      font-size:18px;
-      line-height:1.12;
-      letter-spacing:.2px;
-    }
-    .wheelLabel .inside .sub{
-      display:block;
-      margin-top:8px;
-      font-size:12px;
-      font-weight:650;
-      color:var(--muted);
-      font-family:var(--mono);
-    }
-
-    /* Prompt / tracker */
-    .challenge{
-      border-radius:var(--r1);
-      border:1px solid rgba(255,242,234,.12);
-      background:
-        radial-gradient(900px 260px at 0% 0%, rgba(255,122,89,.14), transparent 60%),
-        radial-gradient(900px 260px at 100% 0%, rgba(255,184,107,.12), transparent 60%),
-        rgba(0,0,0,.14);
-      padding:16px;
-      display:flex;
-      flex-direction:column;
-      gap:10px;
-      min-height:340px;
-    }
-
-    .challengeTop{
-      display:flex;
-      justify-content:space-between;
-      align-items:flex-start;
-      gap:10px;
-      flex-wrap:wrap;
-    }
-    .meta{
-      display:flex;
-      gap:8px;
-      flex-wrap:wrap;
-      color:var(--muted);
-      font-size:12px;
-      font-family:var(--mono);
-    }
-    .tag{
-      border:1px solid rgba(255,242,234,.12);
-      background:rgba(255,242,234,.06);
-      padding:4px 8px;
-      border-radius:999px;
-    }
-
-    .promptTitle{
-      display:flex;
-      align-items:baseline;
-      justify-content:space-between;
-      gap:10px;
-      flex-wrap:wrap;
-    }
-    .promptTitle .h{
-      font-weight:900;
-      letter-spacing:.2px;
-      font-size:13px;
-      color:var(--muted);
-      text-transform:uppercase;
-    }
-    .promptTitle .tip{
-      color:var(--muted2);
-      font-size:12px;
-      font-weight:500;
-    }
-
-    .challengeText{
-      margin:0;
-      font-size:20px;
-      font-weight:900;
-      letter-spacing:.1px;
-      line-height:1.22;
-      min-height:66px;
-    }
-
-    label{display:block; font-size:12px; color:var(--muted); margin:8px 0 6px}
-    select, input[type="text"], textarea, input[type="range"]{
       width:100%;
-      border-radius:14px;
-      border:1px solid rgba(255,242,234,.12);
-      background:rgba(0,0,0,.18);
-      color:var(--text);
-      padding:10px 12px;
-      outline:none;
-      font-family:var(--sans);
-    }
-    textarea{min-height:88px; resize:vertical}
-
-    .row{display:flex; gap:10px; flex-wrap:wrap; align-items:center}
-    .row > *{flex:1 1 180px}
-
-    /* Stats + game */
-    .grid{
-      margin-top:var(--gap);
-      display:grid;
-      grid-template-columns: 1.2fr .8fr;
-      gap:var(--gap);
-    }
-    @media (max-width: 980px){
-      .grid{grid-template-columns:1fr}
-    }
-
-    .sectionHead{
-      display:flex;
-      align-items:flex-start;
-      justify-content:space-between;
-      gap:10px;
-      flex-wrap:wrap;
-      margin-bottom:10px;
-    }
-    .sectionHead h2{
-      margin:0;
-      font-size:14px;
-      font-weight:900;
-      letter-spacing:.2px;
-    }
-    .hint{color:var(--muted); font-size:12px; font-weight:500}
-
-    .statgrid{display:grid; grid-template-columns: repeat(3,1fr); gap:10px}
-    @media (max-width:520px){ .statgrid{grid-template-columns:1fr} }
-    .stat{
-      border-radius:18px;
-      border:1px solid rgba(255,242,234,.10);
-      background:rgba(0,0,0,.16);
-      padding:12px;
-    }
-    .stat .k{color:var(--muted); font-size:11px}
-    .stat .v{font-weight:950; font-size:22px; margin-top:6px}
-
-    .progressWrap{margin-top:10px}
-    .progressRow{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      flex-wrap:wrap;
-      margin-top:6px;
-      color:var(--muted);
-      font-size:12px;
-      font-weight:500;
-    }
-    .progressBar{
-      height:10px;
-      width:100%;
-      border-radius:999px;
-      background:rgba(255,242,234,.08);
-      border:1px solid rgba(255,242,234,.10);
-      overflow:hidden;
-      box-shadow: inset 0 0 0 1px rgba(0,0,0,.12);
-    }
-    .progressFill{
       height:100%;
-      width:0%;
-      background: linear-gradient(90deg, rgba(255,122,89,.92), rgba(255,184,107,.88), rgba(83,226,176,.84));
+      border-radius:50%;
+      border:1px solid rgba(255,255,255,.18);
+      box-shadow: inset 0 0 0 10px rgba(0,0,0,.10), 0 18px 40px rgba(0,0,0,.28);
+      overflow:hidden;
+      position:relative;
+      transform: rotate(0deg);
+      transition: transform 850ms cubic-bezier(.12,.95,.14,1);
     }
-
-    table{width:100%; border-collapse:collapse; font-size:13px; margin-top:10px}
-    th,td{border-bottom:1px solid rgba(255,242,234,.08); padding:10px 8px; vertical-align:top}
-    th{color:var(--muted); font-size:12px; text-align:left}
-    td small{color:var(--muted); font-size:12px}
-
-    /* Badge shelf */
-    .badges{
-      display:grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap:10px;
-      margin-top:10px;
+    .wheel::after{
+      content:"";
+      position:absolute; inset:18%;
+      border-radius:50%;
+      background: radial-gradient(circle at 30% 20%, rgba(255,255,255,.16), rgba(0,0,0,.16));
+      border:1px solid rgba(255,255,255,.16);
+      box-shadow: 0 16px 30px rgba(0,0,0,.18);
     }
-    @media (max-width: 520px){ .badges{grid-template-columns:1fr 1fr} }
-
-    .badge{
-      border-radius:18px;
-      border:1px solid rgba(255,242,234,.10);
-      background:rgba(0,0,0,.16);
-      padding:10px;
-      display:flex;
-      gap:10px;
-      align-items:center;
-      min-height:64px;
-    }
-    .badge.locked{opacity:.45}
-    .badgeIcon{
-      width:38px; height:38px;
-      border-radius:14px;
-      border:1px solid rgba(255,242,234,.12);
-      background:rgba(255,242,234,.06);
+    .wheelCenter{
+      position:absolute;
+      inset:33%;
+      border-radius:50%;
+      background: rgba(0,0,0,.28);
+      border:1px solid rgba(255,255,255,.16);
       display:grid;
       place-items:center;
-      flex:0 0 auto;
+      text-align:center;
+      padding:10px;
+      z-index:1;
+      box-shadow: var(--shadow2);
+      backdrop-filter: blur(10px);
     }
-    .badgeIcon svg{opacity:.95}
-    .badgeText{display:flex; flex-direction:column; gap:2px}
-    .badgeText .t{font-weight:900; font-size:13px}
-    .badgeText .d{color:var(--muted); font-size:11px; font-weight:500}
-
-    /* Share card */
-    .shareCard{
-      margin-top:12px;
-      border-radius:20px;
-      border:1px solid rgba(255,242,234,.12);
-      background:
-        radial-gradient(900px 320px at 0% 0%, rgba(255,122,89,.20), transparent 60%),
-        radial-gradient(900px 320px at 100% 0%, rgba(255,184,107,.16), transparent 60%),
-        rgba(0,0,0,.14);
-      padding:14px;
+    .wheelCenter .big{
+      font-family:var(--serif);
+      font-weight:760;
+      font-size:14px;
+      letter-spacing:.1px;
+      line-height:1.15;
     }
-
-    .shareTop{
-      display:flex;
-      justify-content:space-between;
-      gap:10px;
-      flex-wrap:wrap;
-      align-items:flex-start;
-    }
-
-    .shareTop .name{font-weight:950}
-    .shareBig{
-      margin-top:10px;
-      font-weight:950;
-      font-size:18px;
-      line-height:1.25;
-    }
-    .shareTags{
-      margin-top:10px;
-      display:flex;
-      gap:8px;
-      flex-wrap:wrap;
-      color:var(--muted);
+    .wheelCenter .mini{
       font-family:var(--mono);
-      font-size:12px;
+      margin-top:6px;
+      font-size:11px;
+      color:rgba(255,246,240,.76);
     }
 
-    /* Toast + confetti */
-    .toast{
-      position:fixed;
+    .sliceLabel{
+      position:absolute;
+      width:100%;
+      height:100%;
+      pointer-events:none;
+    }
+    .sliceLabel span{
+      position:absolute;
       left:50%;
-      bottom:18px;
-      transform:translateX(-50%);
+      top:50%;
+      transform-origin: 0 0;
+      font-family:var(--mono);
+      font-size:11px;
+      color:rgba(255,246,240,.90);
+      text-shadow: 0 8px 14px rgba(0,0,0,.35);
+      letter-spacing:.1px;
+      white-space:nowrap;
+    }
+
+    .promptBox{
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,.16);
+      background:
+        radial-gradient(900px 260px at 0% 0%, rgba(255,111,76,.18), transparent 60%),
+        radial-gradient(900px 260px at 100% 0%, rgba(255,179,106,.14), transparent 60%),
+        rgba(0,0,0,.18);
+      padding:14px;
+      box-shadow: var(--shadow2);
+    }
+    .promptMeta{
+      display:flex; gap:8px; flex-wrap:wrap; align-items:center; justify-content:space-between;
+    }
+    .promptPills{display:flex; gap:8px; flex-wrap:wrap; align-items:center}
+    .promptText{
+      font-size:20px;
+      line-height:1.24;
+      margin:10px 0 6px;
+      font-weight:850;
+      letter-spacing:.1px;
+      opacity:.95;
+      transform: translateY(2px);
+      transition: opacity .18s ease, transform .18s ease;
+      min-height: 54px;
+    }
+    .promptText.show{opacity:1; transform:translateY(0)}
+    .hint{font-size:12px; color:var(--muted)}
+
+    .toast{
+      position:fixed; left:50%; bottom:18px; transform:translateX(-50%);
+      background: rgba(0,0,0,.55);
+      border:1px solid rgba(255,255,255,.14);
       padding:10px 12px;
       border-radius:999px;
-      border:1px solid rgba(255,242,234,.14);
-      background:rgba(20,10,8,.85);
       box-shadow: var(--shadow2);
       display:none;
       z-index:9999;
-      max-width:min(92vw, 760px);
+      max-width:min(92vw, 720px);
       text-align:center;
       font-size:13px;
+      backdrop-filter: blur(10px);
     }
 
-    #confetti{
-      position:fixed;
-      inset:0;
-      pointer-events:none;
-      z-index:9998;
+    /* Progress + gamification */
+    .statGrid{display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-top:10px}
+    @media (max-width: 520px){ .statGrid{grid-template-columns:1fr} }
+    .stat{
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.18);
+      border-radius: 16px;
+      padding:12px;
+    }
+    .k{font-size:11px; color:var(--muted)}
+    .v{font-size:20px; font-weight:900; margin-top:4px}
+
+    .bar{
+      height:10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.06);
+      overflow:hidden;
+      margin-top:10px;
+    }
+    .bar > div{
+      height:100%;
+      width:0%;
+      background: linear-gradient(90deg, rgba(255,111,76,.95), rgba(255,179,106,.88));
+    }
+
+    .combo{
+      margin-top:12px;
+      border-radius:16px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.18);
+      padding:12px;
+    }
+    .comboTop{display:flex; justify-content:space-between; gap:10px; align-items:baseline; flex-wrap:wrap}
+    .comboBig{font-family:var(--serif); font-weight:760; letter-spacing:.1px}
+    .comboMult{font-family:var(--mono); font-size:12px; color:rgba(255,246,240,.85)}
+    .comboBar{margin-top:10px}
+    .comboBar > div{
+      background: linear-gradient(90deg, rgba(56,211,159,.92), rgba(255,179,106,.86));
+    }
+
+    .badgeRow{display:flex; gap:8px; flex-wrap:wrap; margin-top:10px}
+
+    /* Boss */
+    .bossCard{
+      margin-top:12px;
+      border-radius: 18px;
+      border:1px solid rgba(255,255,255,.16);
+      background:
+        radial-gradient(800px 280px at 0% 0%, rgba(56,211,159,.14), transparent 60%),
+        radial-gradient(800px 280px at 100% 0%, rgba(255,111,76,.16), transparent 60%),
+        rgba(0,0,0,.18);
+      padding:14px;
+      box-shadow: var(--shadow2);
+    }
+
+    /* Post prompt card */
+    .postCard{
+      margin-top:12px;
+      border-radius: 18px;
+      border:1px solid rgba(255,255,255,.16);
+      background:
+        radial-gradient(900px 360px at 0% 0%, rgba(255,111,76,.22), transparent 60%),
+        radial-gradient(900px 360px at 100% 0%, rgba(255,179,106,.18), transparent 60%),
+        rgba(0,0,0,.18);
+      padding:14px;
+      box-shadow: var(--shadow2);
+    }
+    .shareCanvas{
+      border-radius: 18px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.20);
+      padding:14px;
+    }
+    .shareHeader{
+      display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap; align-items:flex-start;
+      margin-bottom:10px;
+    }
+    .shareTitle{
+      font-family:var(--serif);
+      font-weight:760;
+      letter-spacing:.1px;
+    }
+    .sharePrompt{
+      font-size:18px;
+      font-weight:850;
+      line-height:1.25;
+      margin:8px 0 10px;
+    }
+    .shareFooter{
+      display:flex; gap:8px; flex-wrap:wrap; align-items:center;
+      color:rgba(255,246,240,.78);
+      font-family:var(--mono);
+      font-size:11px;
+    }
+
+    table{width:100%; border-collapse:collapse; margin-top:10px; font-size:13px}
+    th,td{padding:10px 8px; border-bottom:1px solid rgba(255,255,255,.08); vertical-align:top}
+    th{color:var(--muted); font-weight:800; font-size:12px; text-align:left}
+
+    details{
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.14);
+      border-radius: 16px;
+      padding:12px;
+      margin-top:12px;
+    }
+    summary{cursor:pointer; font-weight:850; list-style:none}
+    summary::-webkit-details-marker{display:none}
+
+    @media print{
+      header,.actions,.toast,details,.postCard{display:none !important}
+      body{background:#fff !important; color:#000 !important}
+      .card,.wheelWrap,.promptBox,.bossCard{box-shadow:none !important; background:#fff !important; border:1px solid #ddd !important}
+      .muted{color:#333 !important}
     }
   </style>
 </head>
 
 <body>
-  <canvas id="confetti"></canvas>
-
   <div class="wrap">
-    <div class="topbar">
+    <header>
       <div class="brand">
-        <div class="logo" aria-hidden="true">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-            <path d="M5 16c3.4 2.2 10.6 2.2 14 0" stroke="rgba(255,242,234,.92)" stroke-width="2.4" stroke-linecap="round"/>
-            <path d="M8.2 9.4h0" stroke="rgba(255,242,234,.92)" stroke-width="3.4" stroke-linecap="round"/>
-            <path d="M15.8 9.4h0" stroke="rgba(255,242,234,.92)" stroke-width="3.4" stroke-linecap="round"/>
-          </svg>
-        </div>
-        <div class="brandText">
-          <div class="brandName">
-            <span class="name">Rejection Challenge</span>
-            <div class="pills">
-              <span class="pill">public</span>
-              <span class="pill">no login</span>
-              <span class="pill">local only</span>
-            </div>
+        <div class="brandTop">
+          <div class="name">Rejection Challenge</div>
+          <div class="chips">
+            <span class="chip">public</span>
+            <span class="chip">no login</span>
+            <span class="chip">logs are local</span>
           </div>
-          <div class="brandSub">Spin a prompt. Do it in person. Log it. Repeat.</div>
         </div>
+        <div class="tagline">Spin a prompt. Do it in person. Log it. Level up. Repeat.</div>
       </div>
 
       <div class="actions">
-        <button class="btn small" id="exportBtn" title="Download CSV of your logs">Export</button>
-        <button class="btn small" id="shareBtn" title="Share the app link">Share</button>
-        <button class="btn small" id="resetBtn" title="Clear everything">Reset</button>
+        <button class="btn slim" id="copyAppBtn" title="Copy app link">Copy app link</button>
+        <button class="btn slim" id="exportBtn" title="Export your logs as CSV">Export CSV</button>
+        <button class="btn slim" id="resetBtn" title="Reset logs, streak, XP, boss">Reset</button>
       </div>
-    </div>
-
-    <section class="hero">
-      <div class="heroTop">
-        <div>
-          <h1>Make rejection feel normal.</h1>
-          <p>
-            Quick reps beat motivation. Spin an in-person ask, do it politely, then log the result.
-            Your streak moves only when you log a rejection.
-          </p>
-
-          <details>
-            <summary>Ground rules</summary>
-            <ul class="smallList">
-              <li>In person only. No online asks for the streak.</li>
-              <li>No means stop. No arguing. No guilt.</li>
-              <li>Be brief and respectful. Do not interrupt someone rushing.</li>
-              <li>Consent required for photos or video.</li>
-              <li>Logs are saved only in your browser (not shared).</li>
-            </ul>
-          </details>
-        </div>
-
-        <div class="toggle" role="group" aria-label="Mode toggle">
-          <button class="chip on" id="modeDaily">Daily</button>
-          <button class="chip" id="modeRandom">Random</button>
-        </div>
-      </div>
-
-      <div class="wheelWrap">
-        <div class="wheelBox" aria-label="Prompt wheel">
-          <div class="pointer" aria-hidden="true"></div>
-          <div class="wheel" id="wheel"></div>
-
-          <!-- Prompt now shows in the center -->
-          <div class="wheelLabel">
-            <div class="inside">
-              <div class="big" id="wheelBig">Spin to roll a prompt</div>
-              <span class="sub" id="wheelSub">Space to spin. R = rejected. A = accepted.</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="challenge" aria-label="Tracker">
-          <div class="challengeTop">
-            <div class="meta">
-              <span class="tag" id="mCat">category: any</span>
-              <span class="tag" id="mDiff">difficulty: 3</span>
-              <span class="tag" id="mMode">mode: daily</span>
-            </div>
-            <div class="row" style="flex:0 0 auto">
-              <button class="btn small" id="copyLinkBtn">Copy link</button>
-              <button class="btn primary" id="spinBtn">Spin</button>
-            </div>
-          </div>
-
-          <div class="promptTitle">
-            <div class="h">Your prompt</div>
-            <div class="tip" id="miniHint">Do it, then log accepted or rejected.</div>
-          </div>
-
-          <!-- Prompt also shows here -->
-          <p class="challengeText" id="challengeText">Your prompt will appear here.</p>
-
-          <div class="row">
-            <div>
-              <label for="category">Category</label>
-              <select id="category">
-                <option value="any" selected>Any</option>
-                <option value="food">Food / cafe</option>
-                <option value="social">Social</option>
-                <option value="help">Ask for help</option>
-                <option value="negotiation">Negotiation</option>
-                <option value="weird">Wholesome weird</option>
-                <option value="career">Career</option>
-              </select>
-            </div>
-
-            <div>
-              <label for="difficulty">Difficulty</label>
-              <input id="difficulty" type="range" min="1" max="5" value="3" />
-            </div>
-          </div>
-
-          <div class="row">
-            <div>
-              <label for="where">Where (optional)</label>
-              <input id="where" type="text" placeholder="coffee shop, campus, gym" />
-            </div>
-            <div>
-              <label for="who">Who (optional)</label>
-              <input id="who" type="text" placeholder="barista, stranger, classmate" />
-            </div>
-          </div>
-
-          <label for="note">Note (optional)</label>
-          <textarea id="note" placeholder="One quick detail. Keep it short."></textarea>
-
-          <div class="row" style="margin-top:2px">
-            <button class="btn good" id="acceptedBtn">Accepted</button>
-            <button class="btn bad" id="rejectedBtn">Rejected</button>
-          </div>
-        </div>
-      </div>
-    </section>
+    </header>
 
     <div class="grid">
-      <section class="card">
-        <div class="sectionHead">
-          <h2>Stats</h2>
-          <div class="hint">Streak counts only on days with a rejection log.</div>
+      <!-- LEFT -->
+      <div class="card">
+        <div class="cardTitle">
+          <h2>Prompt roulette</h2>
+          <div class="row" style="flex:0 0 auto">
+            <button class="btn slim ghost" id="modeDailyBtn" title="Same prompt for everyone today">Daily</button>
+            <button class="btn slim ghost" id="modeRandomBtn" title="Variety mode">Random</button>
+          </div>
         </div>
 
-        <div class="statgrid">
+        <div class="row">
+          <div style="min-width:220px">
+            <label for="category">Category</label>
+            <select id="category">
+              <option value="any">Any</option>
+              <option value="food">Food / cafe</option>
+              <option value="social">Social</option>
+              <option value="help">Ask for help</option>
+              <option value="negotiation">Negotiation</option>
+              <option value="weird">Wholesome weird</option>
+              <option value="career">Career</option>
+            </select>
+          </div>
+
+          <div style="min-width:220px">
+            <label for="difficulty">Difficulty <span class="pill" id="diffPill">3</span></label>
+            <input id="difficulty" type="range" min="1" max="5" value="3" />
+          </div>
+
+          <div style="min-width:220px">
+            <label for="variety">Variety helper</label>
+            <select id="variety">
+              <option value="smart" selected>Smart (avoid repeats)</option>
+              <option value="strict">Strict (filters must match)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="arena">
+          <!-- Wheel -->
+          <div class="wheelWrap">
+            <div class="wheelTop">
+              <div class="row" style="gap:8px; flex: 1 1 auto">
+                <span class="pill mono" id="wheelModePill">mode: random</span>
+                <span class="pill mono" id="wheelFilterPill">smart variety</span>
+              </div>
+              <button class="btn primary" id="spinBtn" title="Spin (Space)">Spin</button>
+            </div>
+
+            <div class="wheelStage">
+              <div class="pointer" aria-hidden="true"></div>
+              <div class="wheel" id="wheel" aria-label="Category wheel"></div>
+              <div class="wheelCenter" aria-hidden="true">
+                <div class="big" id="wheelCenterTitle">Spin</div>
+                <div class="mini" id="wheelCenterSub">Space</div>
+              </div>
+              <div class="sliceLabel" id="sliceLabels"></div>
+            </div>
+
+            <div class="small muted" style="margin-top:10px">
+              Tip: If you keep the same filters, Smart mode will rotate through options instead of repeating.
+            </div>
+          </div>
+
+          <!-- Prompt + logging -->
+          <div>
+            <div class="promptBox" id="promptBox">
+              <div class="promptMeta">
+                <div class="promptPills">
+                  <span class="pill mono" id="modePill">mode: random</span>
+                  <span class="pill mono" id="catPill">cat: any</span>
+                  <span class="pill mono" id="dPill">d3</span>
+                </div>
+                <div class="row" style="flex:0 0 auto">
+                  <button class="btn slim ghost" id="copyPromptLinkBtn">Copy prompt link</button>
+                </div>
+              </div>
+
+              <div class="promptText" id="promptText">Spin to roll a prompt.</div>
+              <div class="hint">Shortcuts: Space = spin, R = log rejected, A = log accepted</div>
+            </div>
+
+            <details>
+              <summary>How it works (tap)</summary>
+              <div class="small muted" style="margin-top:8px; line-height:1.55">
+                Do one prompt in person. Log accepted or rejected.
+                Your streak only moves on days you log at least one rejection.
+                Logs are saved only in your browser — visitors do not share logs.
+              </div>
+            </details>
+
+            <div class="row" style="margin-top:12px">
+              <div style="min-width:220px">
+                <label for="where">Where (optional)</label>
+                <input id="where" type="text" placeholder="coffee shop, campus, gym" />
+              </div>
+              <div style="min-width:220px">
+                <label for="who">Who (optional)</label>
+                <input id="who" type="text" placeholder="barista, classmate, stranger" />
+              </div>
+            </div>
+
+            <div style="margin-top:10px">
+              <label for="note">Note (optional)</label>
+              <textarea id="note" placeholder="One line: what happened?"></textarea>
+            </div>
+
+            <div class="row" style="margin-top:10px">
+              <button class="btn good" id="acceptBtn">Accepted</button>
+              <button class="btn bad" id="rejectBtn">Rejected</button>
+            </div>
+
+            <!-- Post prompt -->
+            <div class="postCard">
+              <div class="cardTitle" style="margin:0 0 10px">
+                <h2>Post this prompt</h2>
+                <div class="pill mono" id="shareStamp">ready</div>
+              </div>
+
+              <div id="shareCard" class="shareCanvas">
+                <div class="shareHeader">
+                  <div>
+                    <div class="shareTitle">Rejection Challenge</div>
+                    <div class="small muted" id="shareMeta">mode: random • cat: any • d3</div>
+                  </div>
+                  <div class="pill mono" id="shareWeek">week</div>
+                </div>
+
+                <div class="sharePrompt" id="sharePrompt">Spin to get a prompt.</div>
+
+                <div class="shareFooter">
+                  <span class="pill">in person</span>
+                  <span class="pill">be polite</span>
+                  <span class="pill" id="shareUrlShort">open the link</span>
+                </div>
+              </div>
+
+              <div class="row" style="margin-top:10px">
+                <button class="btn slim" id="copyImageBtn">Copy image</button>
+                <button class="btn slim" id="downloadImageBtn">Download PNG</button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT -->
+      <div class="card">
+        <div class="cardTitle">
+          <h2>Progress</h2>
+          <span class="pill mono">local only</span>
+        </div>
+
+        <div class="statGrid">
           <div class="stat">
-            <div class="k">Rejection streak (days)</div>
+            <div class="k">Streak (days)</div>
             <div class="v" id="streak">0</div>
           </div>
           <div class="stat">
@@ -748,779 +643,1103 @@
           </div>
         </div>
 
-        <div class="progressWrap">
-          <div class="hint" id="milestoneText">Next milestone: 3-day streak</div>
-          <div class="progressBar" aria-label="Streak progress">
-            <div class="progressFill" id="streakProgress"></div>
+        <div class="bar" aria-label="XP progress">
+          <div id="xpFill"></div>
+        </div>
+        <div class="small muted" id="xpText" style="margin-top:8px">0 / 100 to next level</div>
+
+        <!-- Combo -->
+        <div class="combo">
+          <div class="comboTop">
+            <div>
+              <div class="comboBig">Combo</div>
+              <div class="small muted">More reps today = bonus XP</div>
+            </div>
+            <div class="comboMult" id="comboText">x1.00</div>
           </div>
-          <div class="progressRow">
-            <div id="progressLeft">0 / 3</div>
-            <div id="progressRight">Keep it polite. Take the rep.</div>
+          <div class="bar comboBar" aria-label="Combo progress">
+            <div id="comboFill"></div>
           </div>
+          <div class="small muted" style="margin-top:8px" id="comboHint">Do 1 rep to start a combo.</div>
         </div>
 
-        <div style="margin-top:14px">
-          <div class="sectionHead">
+        <!-- Badges -->
+        <div class="card" style="margin-top:12px">
+          <div class="cardTitle" style="margin:0 0 10px">
+            <h2>Badges</h2>
+            <span class="pill mono">unlocked locally</span>
+          </div>
+          <div class="badgeRow" id="badges"></div>
+        </div>
+
+        <!-- Boss -->
+        <div class="bossCard">
+          <div class="cardTitle" style="margin:0 0 10px">
+            <h2>Weekly boss</h2>
+            <span class="pill mono" id="bossWeekPill">week</span>
+          </div>
+
+          <div class="row" style="gap:8px; margin-bottom:10px">
+            <span class="pill mono" id="bossMeta">boss</span>
+            <span class="pill mono" id="bossReward">+0 XP</span>
+          </div>
+
+          <div class="promptText show" id="bossText" style="font-size:18px; min-height:auto">Loading boss...</div>
+
+          <div class="row" style="margin-top:10px">
+            <button class="btn slim" id="loadBossBtn">Load into prompt</button>
+            <button class="btn slim primary" id="markBossBtn">Mark completed</button>
+          </div>
+
+          <div class="small muted" style="margin-top:10px" id="bossHint">One bigger ask per week.</div>
+        </div>
+
+        <!-- Logs -->
+        <div class="card" style="margin-top:12px">
+          <div class="cardTitle" style="margin:0 0 10px">
             <h2>Recent logs</h2>
-            <div class="hint">Saved only on this device/browser.</div>
+            <span class="pill mono">only you see this</span>
           </div>
 
-          <table>
-            <thead>
-              <tr>
-                <th style="min-width:170px">Time</th>
-                <th>Prompt</th>
-                <th style="min-width:110px">Result</th>
-              </tr>
-            </thead>
-            <tbody id="logBody">
-              <tr><td colspan="3" style="color:var(--muted)">No logs yet.</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </section>
-
-      <aside class="card">
-        <div class="sectionHead">
-          <h2>Badges</h2>
-          <div class="hint">Unlocked locally.</div>
-        </div>
-
-        <div class="badges" id="badges"></div>
-
-        <div style="margin-top:16px" class="sectionHead">
-          <h2>Share card</h2>
-          <div class="hint">Generate a prompt first.</div>
-        </div>
-
-        <div class="shareCard" id="shareCard">
-          <div class="shareTop">
-            <div class="name">Rejection Challenge</div>
-            <div class="pill" id="shareStamp">daily</div>
+          <div style="overflow:auto">
+            <table>
+              <thead>
+                <tr>
+                  <th style="min-width:130px">Time</th>
+                  <th>Prompt</th>
+                  <th style="min-width:110px">Result</th>
+                </tr>
+              </thead>
+              <tbody id="logBody">
+                <tr><td colspan="3" class="muted">No logs yet.</td></tr>
+              </tbody>
+            </table>
           </div>
 
-          <div class="shareBig" id="shareText">Spin to get a prompt.</div>
-
-          <div class="shareTags">
-            <span class="tag" id="shareCat">category:any</span>
-            <span class="tag" id="shareDiff">d3</span>
-            <span class="tag">rule:no means stop</span>
+          <div class="row" style="margin-top:10px">
+            <div class="stat" style="flex:1 1 auto">
+              <div class="k">Total logs</div>
+              <div class="v" id="total">0</div>
+            </div>
+            <div class="stat" style="flex:1 1 auto">
+              <div class="k">Rejection rate</div>
+              <div class="v" id="rate">0%</div>
+            </div>
           </div>
         </div>
 
-        <div class="row" style="margin-top:10px">
-          <button class="btn small" id="copyImgBtn">Copy image</button>
-          <button class="btn small" id="downloadImgBtn">Download</button>
-        </div>
-      </aside>
+      </div>
     </div>
 
     <div class="toast" id="toast"></div>
   </div>
 
-<script>
-(() => {
-  const $ = (id) => document.getElementById(id);
+  <script>
+    (() => {
+      const $ = (id) => document.getElementById(id);
 
-  // UI
-  const modeDaily = $("modeDaily");
-  const modeRandom = $("modeRandom");
-  const spinBtn = $("spinBtn");
-  const wheel = $("wheel");
-  const wheelBig = $("wheelBig");
-  const wheelSub = $("wheelSub");
+      // UI
+      const category = $("category");
+      const difficulty = $("difficulty");
+      const variety = $("variety");
 
-  const category = $("category");
-  const difficulty = $("difficulty");
+      const diffPill = $("diffPill");
+      const modePill = $("modePill");
+      const catPill = $("catPill");
+      const dPill = $("dPill");
 
-  const challengeText = $("challengeText");
-  const miniHint = $("miniHint");
-  const mCat = $("mCat");
-  const mDiff = $("mDiff");
-  const mMode = $("mMode");
+      const wheelModePill = $("wheelModePill");
+      const wheelFilterPill = $("wheelFilterPill");
 
-  const where = $("where");
-  const who = $("who");
-  const note = $("note");
+      const modeDailyBtn = $("modeDailyBtn");
+      const modeRandomBtn = $("modeRandomBtn");
 
-  const acceptedBtn = $("acceptedBtn");
-  const rejectedBtn = $("rejectedBtn");
+      const spinBtn = $("spinBtn");
+      const wheel = $("wheel");
+      const sliceLabels = $("sliceLabels");
+      const wheelCenterTitle = $("wheelCenterTitle");
+      const wheelCenterSub = $("wheelCenterSub");
 
-  const exportBtn = $("exportBtn");
-  const shareBtn = $("shareBtn");
-  const resetBtn = $("resetBtn");
-  const copyLinkBtn = $("copyLinkBtn");
+      const promptBox = $("promptBox");
+      const promptText = $("promptText");
+      const copyPromptLinkBtn = $("copyPromptLinkBtn");
 
-  const streakEl = $("streak");
-  const levelEl = $("level");
-  const xpEl = $("xp");
-  const logBody = $("logBody");
+      const where = $("where");
+      const who = $("who");
+      const note = $("note");
+      const acceptBtn = $("acceptBtn");
+      const rejectBtn = $("rejectBtn");
 
-  const milestoneText = $("milestoneText");
-  const streakProgress = $("streakProgress");
-  const progressLeft = $("progressLeft");
-  const progressRight = $("progressRight");
+      const copyAppBtn = $("copyAppBtn");
+      const exportBtn = $("exportBtn");
+      const resetBtn = $("resetBtn");
 
-  const badgesHost = $("badges");
+      const streakEl = $("streak");
+      const levelEl = $("level");
+      const xpEl = $("xp");
+      const xpFill = $("xpFill");
+      const xpText = $("xpText");
 
-  const shareCard = $("shareCard");
-  const shareStamp = $("shareStamp");
-  const shareText = $("shareText");
-  const shareCat = $("shareCat");
-  const shareDiff = $("shareDiff");
-  const copyImgBtn = $("copyImgBtn");
-  const downloadImgBtn = $("downloadImgBtn");
+      const comboText = $("comboText");
+      const comboFill = $("comboFill");
+      const comboHint = $("comboHint");
 
-  const toast = $("toast");
-  const confettiCanvas = $("confetti");
-  const ctx = confettiCanvas.getContext("2d");
+      const badgesEl = $("badges");
 
-  // Storage keys
-  const K_LOGS = "rc_logs_v3";
-  const K_STREAK = "rc_streak_v3";
-  const K_LAST_REJ_DAY = "rc_last_rej_day_v3";
-  const K_GAME = "rc_game_v3";
+      const bossWeekPill = $("bossWeekPill");
+      const bossMeta = $("bossMeta");
+      const bossReward = $("bossReward");
+      const bossText = $("bossText");
+      const bossHint = $("bossHint");
+      const loadBossBtn = $("loadBossBtn");
+      const markBossBtn = $("markBossBtn");
 
-  let mode = "daily"; // daily | random
-  let current = null;
-  let spinRotation = 0;
+      const logBody = $("logBody");
+      const totalEl = $("total");
+      const rateEl = $("rate");
+      const toast = $("toast");
 
-  function resizeConfetti(){
-    confettiCanvas.width = window.innerWidth;
-    confettiCanvas.height = window.innerHeight;
-  }
-  window.addEventListener("resize", resizeConfetti);
-  resizeConfetti();
+      const shareCard = $("shareCard");
+      const sharePrompt = $("sharePrompt");
+      const shareMeta = $("shareMeta");
+      const shareWeek = $("shareWeek");
+      const shareUrlShort = $("shareUrlShort");
+      const shareStamp = $("shareStamp");
+      const copyImageBtn = $("copyImageBtn");
+      const downloadImageBtn = $("downloadImageBtn");
 
-  function toastMsg(msg){
-    toast.textContent = msg;
-    toast.style.display = "block";
-    clearTimeout(toast._t);
-    toast._t = setTimeout(() => toast.style.display = "none", 1800);
-  }
+      // Storage keys
+      const LOGS_KEY = "rej_logs_v2";
+      const STREAK_KEY = "rej_streak_v2";
+      const LAST_REJ_DAY_KEY = "rej_last_rej_day_v2";
 
-  function dayKey(d = new Date()){ return d.toISOString().slice(0,10); }
+      const GAME_KEY = "rej_game_v2";
+      const DECK_KEY = "rej_deck_v2"; // anti-repeat deck by filter key
 
-  function hash32(str){
-    let h = 2166136261;
-    for (let i=0;i<str.length;i++){
-      h ^= str.charCodeAt(i);
-      h = Math.imul(h, 16777619);
-    }
-    return h >>> 0;
-  }
-  function seededIndex(n, seed){
-    const s = hash32(seed);
-    const x = (Math.imul(s, 1664525) + 1013904223) >>> 0;
-    return n ? (x % n) : 0;
-  }
+      const BOSS_KEY = "rej_boss_v2";
 
-  function loadJSON(key, fallback){
-    try { return JSON.parse(localStorage.getItem(key) || "null") ?? fallback; }
-    catch { return fallback; }
-  }
-  function saveJSON(key, value){
-    localStorage.setItem(key, JSON.stringify(value));
-  }
+      // State
+      let mode = "random"; // default to random to avoid "same prompt" confusion
+      let current = null;
 
-  const challenges = [
-    {cat:"food", diff:1, text:"Ask the barista to recommend something that is not on the menu."},
-    {cat:"food", diff:2, text:"Ask if they can make your drink less sweet."},
-    {cat:"food", diff:3, text:"Ask for a surprise under $5 and let them pick."},
-    {cat:"food", diff:4, text:"Ask for a small customization (swap a side). If no, say thanks and move on."},
-    {cat:"food", diff:5, text:"Ask for a small free add-on. If no, smile and end it."},
+      // Categories (wheel segments)
+      const CATS = [
+        {key:"food", label:"food", color:"#ffb36a"},
+        {key:"social", label:"social", color:"#ff6f4c"},
+        {key:"help", label:"help", color:"#38d39f"},
+        {key:"negotiation", label:"deal", color:"#ff5575"},
+        {key:"weird", label:"weird", color:"#b7a1ff"},
+        {key:"career", label:"career", color:"#7dd3ff"}
+      ];
 
-    {cat:"social", diff:1, text:"Give a sincere compliment to a stranger and walk away."},
-    {cat:"social", diff:2, text:"Ask someone where they got an item because you like it."},
-    {cat:"social", diff:3, text:"Ask a stranger to rate your outfit 1 to 10. Thank them either way."},
-    {cat:"social", diff:4, text:"Ask someone to take a quick photo of you. Offer to return the favor."},
-    {cat:"social", diff:5, text:"Ask a group if you can join for 60 seconds to practice small talk, then leave."},
+      // Prompts: multiple per cat+diff so strict filters can still vary
+      // (This is the key fix: strict used to have "1 prompt" pools.)
+      const PROMPTS = [];
+      function add(cat,diff,texts){ texts.forEach(t => PROMPTS.push({id: cat+"_"+diff+"_"+hash32(t), cat, diff, text:t})); }
 
-    {cat:"help", diff:1, text:"Ask for directions to a place you already know."},
-    {cat:"help", diff:2, text:"Ask someone for a nearby recommendation they actually like."},
-    {cat:"help", diff:3, text:"Ask to borrow a pen for 30 seconds."},
-    {cat:"help", diff:4, text:"Ask an employee to help you choose between two options and why."},
-    {cat:"help", diff:5, text:"Ask someone to hear your 15-second intro and give one note."},
+      add("food",1,[
+        "Ask for a recommendation that is not the top seller.",
+        "Ask if there is a favorite item the staff orders.",
+        "Ask what they would order if they had to choose one thing."
+      ]);
+      add("food",2,[
+        "Ask if they can make your order less sweet.",
+        "Ask if they can do half syrup (or lighter seasoning).",
+        "Ask if there is a milder or less sweet version."
+      ]);
+      add("food",3,[
+        "Ask for a small swap (side or topping).",
+        "Ask if they can change one ingredient (if possible).",
+        "Ask if they can leave one ingredient out."
+      ]);
+      add("food",4,[
+        "Ask them to pick a surprise under $5 and go with it.",
+        "Ask them to choose something you would not normally pick.",
+        "Ask for a surprise recommendation and commit to it."
+      ]);
+      add("food",5,[
+        "Ask for a small extra (ice, sauce, topping). If no, say thanks and move on.",
+        "Ask if they can throw in a small add-on. If no, end it politely.",
+        "Ask if they can upgrade the size once. If no, accept it and leave it there."
+      ]);
 
-    {cat:"negotiation", diff:1, text:"Ask if there is a student discount."},
-    {cat:"negotiation", diff:2, text:"Ask if they can waive a small add-on fee once."},
-    {cat:"negotiation", diff:3, text:"Ask for a small upgrade (size, add-on, seat)."},
-    {cat:"negotiation", diff:4, text:"Ask for $1 to $2 off a small purchase. If no, end it."},
-    {cat:"negotiation", diff:5, text:"Ask for a free extra. If no, say thanks and stop."},
+      add("social",1,[
+        "Give a sincere compliment to someone and leave.",
+        "Tell someone one specific thing you like (then walk away).",
+        "Compliment something small (shoes, jacket, hair) and keep moving."
+      ]);
+      add("social",2,[
+        "Ask someone where they got something you like.",
+        "Ask what brand something is because you like it.",
+        "Ask if they would recommend where they bought it."
+      ]);
+      add("social",3,[
+        "Ask someone to rate your outfit from 1 to 10.",
+        "Ask someone: does my haircut look fine today? Quick answer.",
+        "Ask a stranger: am I giving more 'coffee' or 'tea' energy today?"
+      ]);
+      add("social",4,[
+        "Ask a stranger to take a quick photo of you.",
+        "Ask someone to take a quick picture and offer to return the favor.",
+        "Ask someone to take a photo and give them a simple thank you."
+      ]);
+      add("social",5,[
+        "Ask a group if you can join for 60 seconds to practice small talk, then leave.",
+        "Ask someone to introduce you to one person nearby (if appropriate).",
+        "Ask a table if you can ask one quick question for a class project (then leave)."
+      ]);
 
-    {cat:"weird", diff:1, text:"Ask someone a harmless silly question: do pigeons have a leader?"},
-    {cat:"weird", diff:2, text:"Ask a cashier: is today more of a 7 or a 9?"},
-    {cat:"weird", diff:3, text:"Ask for a 10-second pep talk."},
-    {cat:"weird", diff:4, text:"Ask someone for one life hack that saves time."},
-    {cat:"weird", diff:5, text:"Ask for a 5-second 'you got this' video (only with consent)."},
+      add("help",1,[
+        "Ask for directions to a place you already know.",
+        "Ask someone which way is north (even if you know).",
+        "Ask where the nearest restroom is (even if you already found it)."
+      ]);
+      add("help",2,[
+        "Ask for a nearby spot they genuinely like.",
+        "Ask what coffee shop they would recommend nearby.",
+        "Ask what they would do in the area if they had one hour."
+      ]);
+      add("help",3,[
+        "Ask to borrow a pen for 30 seconds.",
+        "Ask if someone has a charger you can use for one minute.",
+        "Ask if they can hold your seat for 30 seconds."
+      ]);
+      add("help",4,[
+        "Ask someone to help you pick between two options and say why.",
+        "Ask for a quick recommendation between two items and follow it.",
+        "Ask an employee to recommend one option and commit to it."
+      ]);
+      add("help",5,[
+        "Ask someone to listen to a 10-second intro and give one improvement.",
+        "Ask someone for one blunt tip on how you come across.",
+        "Ask for one quick piece of feedback on your voice/energy (10 seconds)."
+      ]);
 
-    {cat:"career", diff:1, text:"Ask someone what they do for work and what they like about it."},
-    {cat:"career", diff:2, text:"Ask for one piece of advice for someone early in their career."},
-    {cat:"career", diff:3, text:"Ask if they are open to a 10-minute coffee chat sometime."},
-    {cat:"career", diff:4, text:"Ask if they know one person you should meet and why."},
-    {cat:"career", diff:5, text:"Ask a professional for feedback on your 15-second intro, on the spot."}
-  ];
+      add("negotiation",1,[
+        "Ask if there is a student discount.",
+        "Ask if there is any discount or deal today.",
+        "Ask if there is a cheaper option for the same thing."
+      ]);
+      add("negotiation",2,[
+        "Ask if a fee can be waived once.",
+        "Ask if they can remove one small fee if you do not need it.",
+        "Ask if there is a promo or discount code you can use."
+      ]);
+      add("negotiation",3,[
+        "Ask for a small upgrade (size, add-on, seat).",
+        "Ask if they can do a small add-on for free this time.",
+        "Ask for a tiny upgrade and accept no without pushing."
+      ]);
+      add("negotiation",4,[
+        "Ask for a small discount ($1–$2) on a small purchase.",
+        "Ask if they can match a posted price (if applicable).",
+        "Ask if they can round down the price. If no, end it."
+      ]);
+      add("negotiation",5,[
+        "Ask for a free add-on. If no, thank them and end it.",
+        "Ask if they can throw in something small. If no, you stop.",
+        "Ask if they can waive an upgrade fee once. If no, accept it."
+      ]);
 
-  function pool(){
-    const cat = category.value;
-    const diff = parseInt(difficulty.value, 10);
-    let p = challenges.filter(c => c.diff === diff);
-    if (cat !== "any") p = p.filter(c => c.cat === cat);
-    if (!p.length){
-      p = challenges.slice();
-      if (cat !== "any") p = p.filter(c => c.cat === cat);
-      if (!p.length) p = challenges.slice();
-    }
-    return p;
-  }
+      add("weird",1,[
+        "Ask someone a harmless silly question: which animal runs this city?",
+        "Ask someone: what is the most underrated snack?",
+        "Ask someone: if today had a soundtrack, what is the first song?"
+      ]);
+      add("weird",2,[
+        "Ask a cashier: is today more of a 7 or a 9?",
+        "Ask someone: are you having a 6 day or an 8 day?",
+        "Ask someone: quick vote, sunrise or sunset?"
+      ]);
+      add("weird",3,[
+        "Ask for a 10-second pep talk.",
+        "Ask someone to say one encouraging sentence.",
+        "Ask someone: what is one thing you would tell your past self?"
+      ]);
+      add("weird",4,[
+        "Ask for one life hack that saves time.",
+        "Ask someone: what is one habit that changed your life?",
+        "Ask someone: what is one thing you do to stay calm?"
+      ]);
+      add("weird",5,[
+        "Ask for a 5-second voice note saying 'you’ve got this' (only if they’re comfortable).",
+        "Ask someone to record one line of advice (only if they’re comfortable).",
+        "Ask someone to do a 3-second 'good luck' clip (only if they want)."
+      ]);
 
-  function pick(){
-    const p = pool();
-    if (mode === "daily"){
-      const seed = dayKey() + "|" + category.value + "|" + difficulty.value;
-      return p[seededIndex(p.length, seed)];
-    }
-    return p[Math.floor(Math.random() * p.length)];
-  }
+      add("career",1,[
+        "Ask what someone does for work and what they enjoy about it.",
+        "Ask what they are working on lately (one question).",
+        "Ask what skill matters most in their role."
+      ]);
+      add("career",2,[
+        "Ask for one piece of advice for someone early in their career.",
+        "Ask what mistake most beginners make in their field.",
+        "Ask what they would learn if they started over."
+      ]);
+      add("career",3,[
+        "Ask if they’d be open to a 10-minute coffee chat sometime.",
+        "Ask if you can ask one quick question about their path.",
+        "Ask if they can share one tip on breaking into their space."
+      ]);
+      add("career",4,[
+        "Ask if they know one person you should meet and why.",
+        "Ask for one recommendation of who to learn from.",
+        "Ask if there is one event or group you should join."
+      ]);
+      add("career",5,[
+        "Ask a professional for one blunt improvement for your intro.",
+        "Ask for one brutal tip on your presence (10 seconds).",
+        "Ask for one thing to change in how you introduce yourself."
+      ]);
 
-  function encodeChallenge(ch){
-    const payload = {cat: ch.cat, diff: ch.diff, text: ch.text, mode, fCat: category.value, fDiff: difficulty.value};
-    const b64 = btoa(unescape(encodeURIComponent(JSON.stringify(payload))));
-    return b64.replaceAll("=","");
-  }
-  function decodeChallenge(str){
-    try{
-      const pad = str + "===".slice((str.length % 4) || 4);
-      const json = decodeURIComponent(escape(atob(pad)));
-      const obj = JSON.parse(json);
-      if (!obj || !obj.text) return null;
-      return obj;
-    } catch { return null; }
-  }
+      // Utils
+      const dayKey = (d=new Date()) => d.toISOString().slice(0,10);
 
-  function syncMeta(){
-    mCat.textContent = "category: " + category.value;
-    mDiff.textContent = "difficulty: " + difficulty.value;
-    mMode.textContent = "mode: " + mode;
-
-    shareStamp.textContent = mode;
-    shareCat.textContent = "category:" + category.value;
-    shareDiff.textContent = "d" + difficulty.value;
-  }
-
-  function setMode(next){
-    mode = next;
-    modeDaily.classList.toggle("on", mode === "daily");
-    modeRandom.classList.toggle("on", mode === "random");
-
-    wheelSub.textContent = (mode === "daily")
-      ? "Daily: same prompt today (same filters)"
-      : "Random: fresh roll each spin";
-
-    syncMeta();
-  }
-
-  // Confetti (small, tasteful)
-  let confetti = [];
-  function burstConfetti(){
-    const w = confettiCanvas.width;
-    const h = confettiCanvas.height;
-    const n = 90;
-    confetti = [];
-    for (let i=0;i<n;i++){
-      confetti.push({
-        x: w*0.5 + (Math.random()*80 - 40),
-        y: h*0.18 + (Math.random()*40 - 20),
-        vx: (Math.random()*6 - 3),
-        vy: (Math.random()*-8 - 4),
-        g: 0.22 + Math.random()*0.12,
-        r: 3 + Math.random()*3,
-        life: 120 + Math.floor(Math.random()*40)
-      });
-    }
-    animateConfetti();
-  }
-
-  function animateConfetti(){
-    let frames = 0;
-    const tick = () => {
-      frames++;
-      ctx.clearRect(0,0,confettiCanvas.width, confettiCanvas.height);
-
-      confetti.forEach(p => {
-        p.vy += p.g;
-        p.x += p.vx;
-        p.y += p.vy;
-        p.life -= 1;
-
-        const a = Math.max(0, Math.min(1, p.life / 140));
-        ctx.globalAlpha = a;
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
-        ctx.fillStyle = (frames % 3 === 0) ? "rgba(255,184,107,.95)" : (frames % 3 === 1) ? "rgba(255,122,89,.95)" : "rgba(83,226,176,.95)";
-        ctx.fill();
-      });
-
-      ctx.globalAlpha = 1;
-
-      confetti = confetti.filter(p => p.life > 0 && p.y < confettiCanvas.height + 30);
-      if (confetti.length && frames < 170){
-        requestAnimationFrame(tick);
-      } else {
-        ctx.clearRect(0,0,confettiCanvas.width, confettiCanvas.height);
+      function toastMsg(msg){
+        toast.textContent = msg;
+        toast.style.display = "block";
+        clearTimeout(toast._t);
+        toast._t = setTimeout(()=> toast.style.display="none", 1600);
       }
-    };
-    requestAnimationFrame(tick);
-  }
 
-  function spin(){
-    challengeText.textContent = "Spinning...";
-    miniHint.textContent = "Prompt appears here and in the wheel center.";
-    wheelBig.textContent = "Rolling...";
+      function hash32(str){
+        let h = 2166136261;
+        for (let i=0;i<str.length;i++){
+          h ^= str.charCodeAt(i);
+          h = Math.imul(h, 16777619);
+        }
+        return h >>> 0;
+      }
 
-    const ch = pick();
-    current = ch;
+      function base64urlEncode(obj){
+        const json = JSON.stringify(obj);
+        const b64 = btoa(unescape(encodeURIComponent(json)));
+        return b64.replaceAll("+","-").replaceAll("/","_").replaceAll("=","");
+      }
 
-    const extra = 1080 + Math.floor(Math.random() * 720);
-    spinRotation = (spinRotation + extra) % 3600;
-    wheel.style.transform = `rotate(${spinRotation}deg)`;
+      function base64urlDecode(str){
+        try{
+          const padLen = (4 - (str.length % 4)) % 4;
+          const padded = str + "=".repeat(padLen);
+          const b64 = padded.replaceAll("-","+").replaceAll("_","/");
+          const json = decodeURIComponent(escape(atob(b64)));
+          return JSON.parse(json);
+        }catch{
+          return null;
+        }
+      }
 
-    setTimeout(() => {
-      challengeText.textContent = ch.text;
-      wheelBig.textContent = ch.text;
-      shareText.textContent = ch.text;
-      miniHint.textContent = "Do it, then log accepted or rejected.";
+      function loadLogs(){
+        try{ return JSON.parse(localStorage.getItem(LOGS_KEY) || "[]"); }
+        catch{ return []; }
+      }
+      function saveLogs(x){ localStorage.setItem(LOGS_KEY, JSON.stringify(x)); }
 
-      const url = new URL(location.href);
-      url.searchParams.set("c", encodeChallenge(ch));
-      history.replaceState(null, "", url.toString());
+      function loadStreak(){
+        try{ return JSON.parse(localStorage.getItem(STREAK_KEY) || "0"); }
+        catch{ return 0; }
+      }
+      function saveStreak(n){ localStorage.setItem(STREAK_KEY, JSON.stringify(n)); }
 
-      toastMsg("Prompt ready.");
-    }, 720);
-  }
+      function loadGame(){
+        try{
+          return JSON.parse(localStorage.getItem(GAME_KEY) || "null") || {xp:0, badges:{}, comboDay:null, comboCount:0, bossDoneWeek:null};
+        }catch{
+          return {xp:0, badges:{}, comboDay:null, comboCount:0, bossDoneWeek:null};
+        }
+      }
+      function saveGame(g){ localStorage.setItem(GAME_KEY, JSON.stringify(g)); }
 
-  function loadLogs(){ return loadJSON(K_LOGS, []); }
-  function saveLogs(v){ saveJSON(K_LOGS, v); }
+      function loadDecks(){
+        try{ return JSON.parse(localStorage.getItem(DECK_KEY) || "{}"); }
+        catch{ return {}; }
+      }
+      function saveDecks(d){ localStorage.setItem(DECK_KEY, JSON.stringify(d)); }
 
-  function loadStreak(){ return loadJSON(K_STREAK, 0); }
-  function saveStreak(v){ saveJSON(K_STREAK, v); }
+      function xpToLevel(xp){
+        let level = 1;
+        let need = 100;
+        let spent = 0;
+        while(xp >= spent + need){
+          spent += need;
+          level++;
+          need = Math.floor(need * 1.22) + 30;
+        }
+        return {level, into: xp - spent, need};
+      }
 
-  function loadGame(){ return loadJSON(K_GAME, {xp:0, level:1}); }
-  function saveGame(g){ saveJSON(K_GAME, g); }
+      function isoWeekKey(date = new Date()){
+        const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+        const dayNum = d.getUTCDay() || 7;
+        d.setUTCDate(d.getUTCDate() + 4 - dayNum);
+        const yearStart = new Date(Date.UTC(d.getUTCFullYear(),0,1));
+        const weekNo = Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
+        return `${d.getUTCFullYear()}-W${String(weekNo).padStart(2,"0")}`;
+      }
 
-  function levelForXP(xp){
-    let lvl = 1, need = 120, spent = 0;
-    while (xp >= spent + need){
-      spent += need;
-      lvl += 1;
-      need = Math.floor(need * 1.22) + 25;
-    }
-    return {level:lvl};
-  }
+      // Filters + variety behavior
+      function setMeta(){
+        diffPill.textContent = difficulty.value;
+        modePill.textContent = "mode: " + mode;
+        catPill.textContent = "cat: " + category.value;
+        dPill.textContent = "d" + difficulty.value;
 
-  function updateStreakOnRejection(){
-    const today = dayKey();
-    const last = localStorage.getItem(K_LAST_REJ_DAY);
-    let s = loadStreak();
+        wheelModePill.textContent = "mode: " + mode;
+        wheelFilterPill.textContent = (variety.value === "smart") ? "smart variety" : "strict";
+      }
 
-    if (!last) s = 1;
-    else {
-      const d0 = new Date(last+"T00:00:00");
-      const d1 = new Date(today+"T00:00:00");
-      const diff = Math.round((d1 - d0) / 86400000);
-      if (diff === 0) {}
-      else if (diff === 1) s += 1;
-      else s = 1;
-    }
-    localStorage.setItem(K_LAST_REJ_DAY, today);
-    saveStreak(s);
-  }
+      // Build pool with smart widening to avoid "same prompt forever"
+      function poolSmart(){
+        const cat = category.value;
+        const d = parseInt(difficulty.value, 10);
+        const strict = (variety.value === "strict");
 
-  function awardXP(entry){
-    const g = loadGame();
-    const base = (entry.result === "rejected") ? 30 : 12;
-    const diffBonus = (entry.diff || 3) * 7;
-    const catBonus = (entry.cat === "negotiation" || entry.cat === "career") ? 8 : 0;
-    const add = base + diffBonus + catBonus;
+        const exact = PROMPTS.filter(p => (cat==="any" || p.cat===cat) && p.diff===d);
+        if (strict) return exact;
 
-    const beforeLevel = g.level;
-    g.xp += add;
-    g.level = levelForXP(g.xp).level;
-    saveGame(g);
+        // Smart widening: if exact is too small, widen gradually
+        if (exact.length >= 3) return exact;
 
-    if (g.level > beforeLevel){
-      toastMsg("Level up.");
-      burstConfetti();
-    } else {
-      toastMsg("Logged +" + add + " XP");
-    }
-  }
+        // widen 1: if cat is specific, allow same cat across all diffs
+        let widened = [];
+        if (cat !== "any"){
+          widened = PROMPTS.filter(p => p.cat===cat);
+        } else {
+          // if cat is any, allow all cats at that difficulty
+          widened = PROMPTS.filter(p => p.diff===d);
+        }
+        if (widened.length >= 4) return widened;
 
-  // Badge definitions + checks
-  const badgeDefs = [
-    {id:"b_first_no", title:"First No", desc:"Log your first rejection.", icon:"bolt"},
-    {id:"b_streak_3", title:"3-day streak", desc:"Reach a 3-day rejection streak.", icon:"flame"},
-    {id:"b_streak_7", title:"7-day streak", desc:"Reach a 7-day rejection streak.", icon:"crown"},
-    {id:"b_neg_5", title:"Negotiator", desc:"Log 5 negotiation reps.", icon:"handshake"},
-    {id:"b_career_5", title:"Networker", desc:"Log 5 career reps.", icon:"node"},
-    {id:"b_social_10", title:"Social 10", desc:"Log 10 social reps.", icon:"spark"}
-  ];
+        // widen 2: allow all prompts (full variety)
+        return PROMPTS.slice();
+      }
 
-  function getBadgeState(logs, streak){
-    const negCount = logs.filter(l => l.cat === "negotiation").length;
-    const careerCount = logs.filter(l => l.cat === "career").length;
-    const socialCount = logs.filter(l => l.cat === "social").length;
+      // Non-repeat deck per filter key
+      function filterKey(){
+        return `${mode}|${category.value}|${difficulty.value}|${variety.value}`;
+      }
 
-    return {
-      b_first_no: logs.some(l => l.result === "rejected"),
-      b_streak_3: streak >= 3,
-      b_streak_7: streak >= 7,
-      b_neg_5: negCount >= 5,
-      b_career_5: careerCount >= 5,
-      b_social_10: socialCount >= 10
-    };
-  }
+      function shuffle(arr){
+        for (let i=arr.length-1; i>0; i--){
+          const j = Math.floor(Math.random()*(i+1));
+          [arr[i],arr[j]] = [arr[j],arr[i]];
+        }
+        return arr;
+      }
 
-  function iconSvg(name){
-    const stroke = "rgba(255,242,234,.92)";
-    const s2 = "rgba(255,242,234,.72)";
-    if (name === "bolt") return `
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-        <path d="M13 2L3 14h8l-1 8 11-14h-8l0-6z" stroke="${stroke}" stroke-width="2" stroke-linejoin="round"/>
-      </svg>`;
-    if (name === "flame") return `
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-        <path d="M12 2c2 4-1 5 2 8 2 2 4 3 4 7a6 6 0 0 1-12 0c0-3 2-5 4-7 2-2 0-4 2-8z" stroke="${stroke}" stroke-width="2"/>
-      </svg>`;
-    if (name === "crown") return `
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-        <path d="M4 8l4 4 4-7 4 7 4-4v10H4V8z" stroke="${stroke}" stroke-width="2" stroke-linejoin="round"/>
-        <path d="M4 18h16" stroke="${s2}" stroke-width="2" stroke-linecap="round"/>
-      </svg>`;
-    if (name === "handshake") return `
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-        <path d="M8 12l2 2c1 1 3 1 4 0l2-2" stroke="${stroke}" stroke-width="2" stroke-linecap="round"/>
-        <path d="M3 12l4-4 4 4-4 4-4-4z" stroke="${s2}" stroke-width="2" stroke-linejoin="round"/>
-        <path d="M21 12l-4-4-4 4 4 4 4-4z" stroke="${s2}" stroke-width="2" stroke-linejoin="round"/>
-      </svg>`;
-    if (name === "node") return `
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-        <path d="M7 12a2 2 0 1 0 0 .01" stroke="${stroke}" stroke-width="2"/>
-        <path d="M17 7a2 2 0 1 0 0 .01" stroke="${stroke}" stroke-width="2"/>
-        <path d="M17 17a2 2 0 1 0 0 .01" stroke="${stroke}" stroke-width="2"/>
-        <path d="M9 12l6-4" stroke="${s2}" stroke-width="2" stroke-linecap="round"/>
-        <path d="M9 12l6 4" stroke="${s2}" stroke-width="2" stroke-linecap="round"/>
-      </svg>`;
-    return `
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-        <path d="M12 3l1.6 4.8L18 9l-4.4 1.2L12 15l-1.6-4.8L6 9l4.4-1.2L12 3z" stroke="${stroke}" stroke-width="2" stroke-linejoin="round"/>
-      </svg>`;
-  }
+      function nextFromDeck(list){
+        const key = filterKey();
+        const decks = loadDecks();
+        let deck = decks[key];
 
-  function renderBadges(logs, streak){
-    const have = getBadgeState(logs, streak);
-    badgesHost.innerHTML = badgeDefs.map(b => {
-      const ok = !!have[b.id];
-      return `
-        <div class="badge ${ok ? "" : "locked"}" title="${b.desc}">
-          <div class="badgeIcon">${iconSvg(b.icon)}</div>
-          <div class="badgeText">
-            <div class="t">${b.title}</div>
-            <div class="d">${b.desc}</div>
-          </div>
-        </div>
-      `;
-    }).join("");
-  }
+        if (!Array.isArray(deck) || deck.length === 0){
+          deck = shuffle(list.map(p => p.id));
+        }
 
-  function streakMilestone(streak){
-    // Friendly progression for the bar
-    const milestones = [3, 7, 14, 30];
-    for (const m of milestones){
-      if (streak < m) return m;
-    }
-    return 30;
-  }
+        // Avoid immediate repetition with current
+        if (current && deck.length > 1 && deck[0] === current.id){
+          const idx = deck.findIndex(x => x !== current.id);
+          if (idx > 0){
+            const picked = deck.splice(idx,1)[0];
+            deck.unshift(picked);
+          }
+        }
 
-  function render(){
-    const logs = loadLogs();
-    const streak = loadStreak();
-    const g = loadGame();
+        const id = deck.shift();
+        decks[key] = deck;
+        saveDecks(decks);
 
-    streakEl.textContent = streak;
-    levelEl.textContent = g.level;
-    xpEl.textContent = g.xp;
+        return list.find(p => p.id === id) || list[Math.floor(Math.random()*list.length)];
+      }
 
-    // Streak progress bar toward next milestone
-    const next = streakMilestone(streak);
-    const pct = Math.max(0, Math.min(100, Math.round((streak / next) * 100)));
-    streakProgress.style.width = pct + "%";
-    milestoneText.textContent = "Next milestone: " + next + "-day streak";
-    progressLeft.textContent = streak + " / " + next;
+      function pickDailyPrompt(list){
+        const seed = dayKey() + "|" + category.value + "|" + difficulty.value + "|" + variety.value;
+        const idx = hash32(seed) % list.length;
+        // Daily is deterministic, but still respects smart widening.
+        return list[idx];
+      }
 
-    const last = localStorage.getItem(K_LAST_REJ_DAY);
-    if (!last) progressRight.textContent = "Log a rejection to start the streak.";
-    else if (last === dayKey()) progressRight.textContent = "Streak counted today. Another rep is bonus.";
-    else progressRight.textContent = "Streak continues only if you log a rejection today.";
+      function makePromptLink(p){
+        const url = new URL(location.href);
+        url.searchParams.set("p", base64urlEncode({
+          id: p.id, cat:p.cat, diff:p.diff, text:p.text, mode, v: variety.value
+        }));
+        return url.toString();
+      }
 
-    // Logs table
-    const show = logs.slice().reverse().slice(0, 10);
-    if (!show.length){
-      logBody.innerHTML = `<tr><td colspan="3" style="color:var(--muted)">No logs yet.</td></tr>`;
-    } else {
-      logBody.innerHTML = show.map(l => {
-        const dt = new Date(l.time);
-        const when = dt.toLocaleString([], {month:"short", day:"2-digit", hour:"2-digit", minute:"2-digit"});
-        const res = l.result === "rejected" ? "Rejected" : "Accepted";
-        return `
-          <tr>
-            <td>${when}<br><small>${l.cat} d${l.diff} • ${l.mode}</small></td>
-            <td style="font-weight:750">${l.challenge}</td>
-            <td>${res}</td>
-          </tr>
-        `;
-      }).join("");
-    }
+      function updateShareCard(p){
+        shareWeek.textContent = isoWeekKey(new Date());
+        shareMeta.textContent = `mode: ${mode} • cat: ${p ? p.cat : category.value} • d${p ? p.diff : difficulty.value}`;
+        sharePrompt.textContent = p ? p.text : "Spin to get a prompt.";
+        shareUrlShort.textContent = "open the link";
+        shareStamp.textContent = p ? "ready" : "empty";
+      }
 
-    // Badges
-    renderBadges(logs, streak);
-  }
+      function showPrompt(p, reason){
+        current = p;
 
-  function log(result){
-    if (!current){
-      toastMsg("Spin first.");
-      return;
-    }
+        promptText.classList.remove("show");
+        requestAnimationFrame(() => {
+          promptText.textContent = p.text;
+          promptText.classList.add("show");
+          promptBox.scrollIntoView({behavior:"smooth", block:"center"});
+        });
 
-    const logs = loadLogs();
-    const entry = {
-      time: new Date().toISOString(),
-      result,
-      mode,
-      cat: current.cat,
-      diff: current.diff,
-      challenge: current.text,
-      where: (where.value || "").trim(),
-      who: (who.value || "").trim(),
-      note: (note.value || "").trim()
-    };
+        // Update URL for sharing prompt
+        const url = new URL(location.href);
+        url.searchParams.set("p", base64urlEncode({id:p.id, cat:p.cat, diff:p.diff, text:p.text, mode, v: variety.value}));
+        history.replaceState(null, "", url.toString());
 
-    logs.push(entry);
-    saveLogs(logs);
+        updateShareCard(p);
 
-    if (result === "rejected"){
-      const before = loadStreak();
-      updateStreakOnRejection();
-      const afterS = loadStreak();
-      if (afterS > before) toastMsg("Rejected logged. Streak updated.");
-      else toastMsg("Rejected logged. Streak already counted today.");
-    } else {
-      toastMsg("Accepted logged.");
-    }
+        if (reason) toastMsg(reason);
+      }
 
-    awardXP(entry);
+      // Wheel rendering
+      function renderWheel(){
+        // Build a conic gradient wheel by categories
+        const parts = CATS.map((c,i) => {
+          const start = (i / CATS.length) * 100;
+          const end = ((i+1) / CATS.length) * 100;
+          return `${c.color} ${start}% ${end}%`;
+        }).join(", ");
+        wheel.style.background = `conic-gradient(${parts})`;
 
-    // Clear fields
-    where.value = "";
-    who.value = "";
-    note.value = "";
+        // Labels around wheel
+        sliceLabels.innerHTML = "";
+        const radius = 130;
+        for (let i=0;i<CATS.length;i++){
+          const angle = (i / CATS.length) * 360 - 90 + (180 / CATS.length);
+          const span = document.createElement("span");
+          span.textContent = CATS[i].label;
+          span.style.transform = `translate(-50%,-50%) rotate(${angle}deg) translate(${radius}px) rotate(${90}deg)`;
+          sliceLabels.appendChild(span);
+        }
+      }
 
-    render();
-  }
+      // Wheel spin mechanics
+      let wheelAngle = 0;
+      let spinning = false;
 
-  function exportCSV(){
-    const logs = loadLogs();
-    if (!logs.length){
-      toastMsg("Nothing to export.");
-      return;
-    }
+      function landedCategoryFromAngle(angle){
+        // Pointer at top. Determine segment index where pointer lands.
+        const normalized = ((angle % 360) + 360) % 360;
+        // At 0deg wheel rotation, pointer is at top. Conic starts at 0deg to the right;
+        // We'll map using pointer reference: top is -90deg in standard circle.
+        // We'll convert pointer angle to "conic angle" by adding 90.
+        const pointerConic = (360 - normalized + 90) % 360;
+        const segment = Math.floor(pointerConic / (360 / CATS.length));
+        return CATS[Math.min(CATS.length-1, Math.max(0, segment))].key;
+      }
 
-    const header = ["time_iso","result","mode","category","difficulty","challenge","where","who","note"];
-    const rows = logs.map(l => [
-      l.time, l.result, l.mode, l.cat, String(l.diff),
-      (l.challenge||"").replaceAll('"','""'),
-      (l.where||"").replaceAll('"','""'),
-      (l.who||"").replaceAll('"','""'),
-      (l.note||"").replaceAll('"','""')
-    ]);
+      function spin(){
+        if (spinning) return;
 
-    const csv = [header.join(","), ...rows.map(r => r.map(v => `"${v}"`).join(","))].join("\n");
-    const blob = new Blob([csv], {type:"text/csv;charset=utf-8"});
-    const url = URL.createObjectURL(blob);
+        spinning = true;
+        wheelCenterTitle.textContent = "Spinning";
+        wheelCenterSub.textContent = "hold";
 
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "rejection-challenge-logs.csv";
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    URL.revokeObjectURL(url);
-    toastMsg("Exported.");
-  }
+        // Choose rotation: 4-7 turns + random
+        const turns = 4 + Math.floor(Math.random()*4);
+        const extra = Math.floor(Math.random()*360);
+        const target = wheelAngle + turns*360 + extra;
 
-  async function shareApp(){
-    const url = location.origin + location.pathname;
-    if (navigator.share){
-      try { await navigator.share({title:"Rejection Challenge", text:"Try this:", url}); }
-      catch {}
-    } else {
-      try { await navigator.clipboard.writeText(url); toastMsg("App link copied."); }
-      catch { prompt("Copy this link:", url); }
-    }
-  }
+        wheelAngle = target;
+        wheel.style.transform = `rotate(${wheelAngle}deg)`;
 
-  async function copyLink(){
-    const url = location.href;
-    try { await navigator.clipboard.writeText(url); toastMsg("Link copied."); }
-    catch { prompt("Copy:", url); }
-  }
+        setTimeout(() => {
+          const landedCat = landedCategoryFromAngle(wheelAngle);
 
-  async function renderShareCard(){
-    await new Promise(r => setTimeout(r, 40));
-    return html2canvas(shareCard, {backgroundColor: null, scale: 2});
-  }
+          // If user chose "Any", let the wheel influence category for this spin (more fun).
+          // If they chose a specific category, keep it as is.
+          const originalCat = category.value;
+          const useWheelCat = (originalCat === "any");
+          if (useWheelCat) category.value = landedCat;
 
-  async function copyShareImage(){
-    if (!current){ toastMsg("Spin first."); return; }
-    try{
-      const canvas = await renderShareCard();
-      const blob = await new Promise(res => canvas.toBlob(res, "image/png"));
-      if (!blob) throw new Error("no blob");
+          setMeta();
 
-      if (navigator.clipboard && window.ClipboardItem){
-        await navigator.clipboard.write([new ClipboardItem({"image/png": blob})]);
-        toastMsg("Image copied.");
-      } else {
+          const list = poolSmart();
+          if (!list.length){
+            spinning = false;
+            toastMsg("No prompts found.");
+            return;
+          }
+
+          let picked;
+          if (mode === "daily"){
+            picked = pickDailyPrompt(list);
+          } else {
+            picked = nextFromDeck(list);
+          }
+
+          // Restore category if wheel was only a temporary influencer
+          if (useWheelCat) {
+            // keep the landed category (it feels better than snapping back)
+            // If you want it to snap back, uncomment next line:
+            // category.value = originalCat;
+          }
+
+          wheelCenterTitle.textContent = "Done";
+          wheelCenterSub.textContent = "log it";
+          showPrompt(picked, "Prompt ready.");
+
+          spinning = false;
+        }, 900);
+      }
+
+      // Streak (only updated on days with at least one rejection)
+      function updateRejStreak(){
+        const today = dayKey();
+        const last = localStorage.getItem(LAST_REJ_DAY_KEY);
+        let streak = loadStreak();
+
+        if(!last){
+          streak = 1;
+        }else{
+          const lastDate = new Date(last + "T00:00:00");
+          const todayDate = new Date(today + "T00:00:00");
+          const diffDays = Math.round((todayDate - lastDate) / 86400000);
+
+          if(diffDays === 0){
+            // already counted today
+          }else if(diffDays === 1){
+            streak += 1;
+          }else{
+            streak = 1;
+          }
+        }
+        localStorage.setItem(LAST_REJ_DAY_KEY, today);
+        saveStreak(streak);
+      }
+
+      // Combo system: counts logs per day. Bonus XP multiplier rises with each rep today.
+      function getComboMultiplier(g){
+        const today = dayKey();
+        if (g.comboDay !== today) return 1.0;
+        const c = g.comboCount || 0;
+        // starts at 1.00 then +0.10 per extra rep, capped at 1.60
+        return Math.min(1.60, 1.0 + Math.max(0, c-1)*0.10);
+      }
+
+      function bumpCombo(g){
+        const today = dayKey();
+        if (g.comboDay !== today){
+          g.comboDay = today;
+          g.comboCount = 1;
+        } else {
+          g.comboCount = (g.comboCount || 0) + 1;
+        }
+      }
+
+      function xpForLog(result, p){
+        const base = (result === "rejected") ? 28 : 14;
+        const diffBonus = (p.diff * 8);
+        const catBonus = (p.cat === "career" || p.cat === "negotiation") ? 8 : 0;
+        return base + diffBonus + catBonus;
+      }
+
+      function awardXP(amount, reason){
+        const g = loadGame();
+        const beforeLevel = xpToLevel(g.xp).level;
+
+        // combo multiplier
+        const mult = getComboMultiplier(g);
+        const final = Math.round(amount * mult);
+
+        g.xp += final;
+        saveGame(g);
+
+        const afterLevel = xpToLevel(g.xp).level;
+        if (afterLevel > beforeLevel){
+          toastMsg(`Level up: ${beforeLevel} -> ${afterLevel}`);
+        } else if (reason){
+          toastMsg(`${reason}: +${final} XP`);
+        }
+      }
+
+      function unlockBadge(id, name){
+        const g = loadGame();
+        if (!g.badges[id]){
+          g.badges[id] = {name, at: new Date().toISOString()};
+          saveGame(g);
+          toastMsg("Badge unlocked: " + name);
+        }
+      }
+
+      function renderBadges(){
+        const g = loadGame();
+        const all = [
+          {id:"first_no", name:"First No"},
+          {id:"streak_3", name:"Three-day streak"},
+          {id:"logs_10", name:"Ten reps"},
+          {id:"boss_week", name:"Boss cleared"},
+          {id:"neg_5", name:"Negotiator"},
+          {id:"career_5", name:"Networker"},
+          {id:"combo_4", name:"Combo 4"}
+        ];
+        badgesEl.innerHTML = all.map(b => {
+          const owned = !!g.badges[b.id];
+          return `<span class="pill mono" style="opacity:${owned?1:.38}">${b.name}</span>`;
+        }).join("");
+      }
+
+      // Boss system
+      function bossForWeek(){
+        const week = isoWeekKey(new Date());
+        const pool = PROMPTS.filter(p => p.diff >= 4 && (p.cat === "career" || p.cat === "negotiation" || p.cat === "social"));
+        const idx = hash32("boss|" + week) % pool.length;
+        const p = pool[idx];
+        const reward = 220 + p.diff * 45;
+        return {week, prompt:p, reward};
+      }
+
+      function loadBossUI(){
+        const b = bossForWeek();
+        bossWeekPill.textContent = b.week;
+        bossMeta.textContent = `boss • ${b.prompt.cat} • d${b.prompt.diff}`;
+        bossReward.textContent = `+${b.reward} XP`;
+
+        const g = loadGame();
+        const done = (g.bossDoneWeek === b.week);
+        bossText.textContent = done ? (b.prompt.text + " (completed)") : b.prompt.text;
+        bossHint.textContent = done ? "Boss done. New boss next week." : "One bigger ask per week. High reward.";
+
+        loadBossBtn.onclick = () => {
+          // Load boss into prompt
+          category.value = b.prompt.cat;
+          difficulty.value = String(b.prompt.diff);
+          setMeta();
+          showPrompt(b.prompt, "Boss loaded.");
+        };
+
+        markBossBtn.onclick = () => {
+          const gg = loadGame();
+          if (gg.bossDoneWeek === b.week){
+            toastMsg("Boss already completed this week.");
+            return;
+          }
+          gg.bossDoneWeek = b.week;
+          saveGame(gg);
+          awardXP(b.reward, "Boss cleared");
+          unlockBadge("boss_week", "Boss cleared");
+          loadBossUI();
+          renderAll();
+        };
+      }
+
+      // Logs rendering
+      function renderLogs(){
+        const logs = loadLogs();
+        if(!logs.length){
+          logBody.innerHTML = `<tr><td colspan="3" class="muted">No logs yet.</td></tr>`;
+          totalEl.textContent = "0";
+          rateEl.textContent = "0%";
+          return;
+        }
+
+        const rejected = logs.filter(l=>l.result==="rejected").length;
+        totalEl.textContent = String(logs.length);
+        rateEl.textContent = Math.round((rejected/logs.length)*100) + "%";
+
+        const rows = logs.slice().reverse().slice(0,10).map(l => {
+          const when = new Date(l.time).toLocaleString([], {month:"short", day:"2-digit", hour:"2-digit", minute:"2-digit"});
+          const res = l.result === "rejected" ? "Rejected" : "Accepted";
+          return `<tr><td>${when}</td><td>${escapeHtml(l.text)}</td><td>${res}</td></tr>`;
+        }).join("");
+        logBody.innerHTML = rows;
+      }
+
+      function escapeHtml(s){
+        return String(s)
+          .replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;")
+          .replaceAll('"',"&quot;").replaceAll("'","&#039;");
+      }
+
+      // Combo render
+      function renderCombo(){
+        const g = loadGame();
+        const today = dayKey();
+        const count = (g.comboDay === today) ? (g.comboCount || 0) : 0;
+        const mult = (g.comboDay === today) ? getComboMultiplier(g) : 1.0;
+
+        comboText.textContent = "x" + mult.toFixed(2);
+
+        const pct = Math.min(100, (count / 6) * 100); // 6 reps to fill bar
+        comboFill.style.width = pct + "%";
+
+        if (count === 0){
+          comboHint.textContent = "Do 1 rep to start a combo.";
+        } else {
+          comboHint.textContent = `Today: ${count} rep${count===1?"":"s"} • bonus active`;
+        }
+
+        if (count >= 4) unlockBadge("combo_4", "Combo 4");
+      }
+
+      // Main render
+      function renderAll(){
+        setMeta();
+
+        streakEl.textContent = String(loadStreak());
+
+        const g = loadGame();
+        const lv = xpToLevel(g.xp);
+        levelEl.textContent = String(lv.level);
+        xpEl.textContent = String(g.xp);
+
+        const pct = Math.round((lv.into / lv.need) * 100);
+        xpFill.style.width = pct + "%";
+        xpText.textContent = `${lv.into} / ${lv.need} to next level`;
+
+        renderCombo();
+        renderBadges();
+        renderLogs();
+        loadBossUI();
+
+        // share card metadata refresh
+        shareWeek.textContent = isoWeekKey(new Date());
+        if (!current) updateShareCard(null);
+      }
+
+      // Logging
+      function log(result){
+        if(!current){
+          toastMsg("Spin first.");
+          return;
+        }
+
+        const logs = loadLogs();
+        logs.push({
+          time: new Date().toISOString(),
+          result,
+          cat: current.cat,
+          diff: current.diff,
+          text: current.text,
+          where: where.value.trim(),
+          who: who.value.trim(),
+          note: note.value.trim(),
+          mode,
+          variety: variety.value
+        });
+        saveLogs(logs);
+
+        // streak only on rejected
+        if (result === "rejected") updateRejStreak();
+
+        // combo bump first, then XP (so multiplier applies)
+        const g = loadGame();
+        bumpCombo(g);
+        saveGame(g);
+
+        const baseXP = xpForLog(result, current);
+        awardXP(baseXP, "Logged");
+
+        // Badges based on totals
+        const all = loadLogs();
+        if (all.some(x => x.result === "rejected")) unlockBadge("first_no", "First No");
+        if (loadStreak() >= 3) unlockBadge("streak_3", "Three-day streak");
+        if (all.length >= 10) unlockBadge("logs_10", "Ten reps");
+        if (all.filter(x => x.cat === "negotiation").length >= 5) unlockBadge("neg_5", "Negotiator");
+        if (all.filter(x => x.cat === "career").length >= 5) unlockBadge("career_5", "Networker");
+
+        // clear fields
+        where.value = "";
+        who.value = "";
+        note.value = "";
+
+        renderAll();
+      }
+
+      // Export CSV
+      function exportCSV(){
+        const logs = loadLogs();
+        if (!logs.length){
+          toastMsg("Nothing to export yet.");
+          return;
+        }
+        const header = ["time_iso","result","mode","variety","category","difficulty","prompt","where","who","note"];
+        const rows = logs.map(l => [
+          l.time, l.result, l.mode, l.variety, l.cat, l.diff,
+          (l.text||"").replaceAll('"','""'),
+          (l.where||"").replaceAll('"','""'),
+          (l.who||"").replaceAll('"','""'),
+          (l.note||"").replaceAll('"','""')
+        ].map(x => `"${x}"`).join(","));
+        const csv = [header.join(","), ...rows].join("\n");
+        const blob = new Blob([csv], {type:"text/csv;charset=utf-8"});
         const url = URL.createObjectURL(blob);
         const a = document.createElement("a");
         a.href = url;
-        a.download = "rejection-card.png";
+        a.download = "rejection-challenge-logs.csv";
         document.body.appendChild(a);
         a.click();
         a.remove();
         URL.revokeObjectURL(url);
-        toastMsg("Downloaded.");
+        toastMsg("Exported CSV.");
       }
-    } catch {
-      toastMsg("Could not copy. Try download.");
-    }
-  }
 
-  async function downloadShareImage(){
-    if (!current){ toastMsg("Spin first."); return; }
-    const canvas = await renderShareCard();
-    const url = canvas.toDataURL("image/png");
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "rejection-card.png";
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    toastMsg("Downloaded.");
-  }
+      // Reset
+      function resetAll(){
+        if(!confirm("Reset logs, streak, XP, combo, boss, and decks on this device?")) return;
+        localStorage.removeItem(LOGS_KEY);
+        localStorage.removeItem(STREAK_KEY);
+        localStorage.removeItem(LAST_REJ_DAY_KEY);
+        localStorage.removeItem(GAME_KEY);
+        localStorage.removeItem(DECK_KEY);
+        localStorage.removeItem(BOSS_KEY);
 
-  function resetAll(){
-    if (!confirm("Reset logs and stats on this device?")) return;
-    localStorage.removeItem(K_LOGS);
-    localStorage.removeItem(K_STREAK);
-    localStorage.removeItem(K_LAST_REJ_DAY);
-    localStorage.removeItem(K_GAME);
+        const url = new URL(location.href);
+        url.searchParams.delete("p");
+        history.replaceState(null, "", url.toString());
 
-    history.replaceState(null,"", location.origin + location.pathname);
-    current = null;
+        current = null;
+        promptText.textContent = "Spin to roll a prompt.";
+        promptText.classList.add("show");
+        updateShareCard(null);
 
-    challengeText.textContent = "Your prompt will appear here.";
-    wheelBig.textContent = "Spin to roll a prompt";
-    shareText.textContent = "Spin to get a prompt.";
-    toastMsg("Reset.");
-    render();
-  }
+        renderAll();
+        toastMsg("Reset complete.");
+      }
 
-  function updateShareMeta(){
-    shareStamp.textContent = mode;
-    shareCat.textContent = "category:" + category.value;
-    shareDiff.textContent = "d" + difficulty.value;
-  }
+      // Copy helpers
+      async function copyText(text, okMsg){
+        try{
+          await navigator.clipboard.writeText(text);
+          toastMsg(okMsg);
+        }catch{
+          prompt("Copy this:", text);
+        }
+      }
 
-  function spinAndSet(){
-    challengeText.textContent = "Spinning...";
-    miniHint.textContent = "Prompt appears here and in the wheel center.";
-    wheelBig.textContent = "Rolling...";
+      function copyAppLink(){
+        const url = location.origin + location.pathname;
+        copyText(url, "App link copied.");
+      }
 
-    const ch = pick();
-    current = ch;
+      function copyPromptLink(){
+        if(!current){
+          toastMsg("Spin first.");
+          return;
+        }
+        copyText(makePromptLink(current), "Prompt link copied.");
+      }
 
-    const extra = 1080 + Math.floor(Math.random() * 720);
-    spinRotation = (spinRotation + extra) % 3600;
-    wheel.style.transform = `rotate(${spinRotation}deg)`;
+      // Post prompt: image
+      async function renderShareCardToCanvas(){
+        await new Promise(r => setTimeout(r, 50));
+        const canvas = await html2canvas(shareCard, {backgroundColor: null, scale: 2});
+        return canvas;
+      }
 
-    setTimeout(() => {
-      challengeText.textContent = ch.text;
-      wheelBig.textContent = ch.text;
-      shareText.textContent = ch.text;
-      miniHint.textContent = "Do it, then log accepted or rejected.";
+      async function copyShareImage(){
+        if(!current){
+          toastMsg("Spin first.");
+          return;
+        }
+        try{
+          const canvas = await renderShareCardToCanvas();
+          const blob = await new Promise(res => canvas.toBlob(res, "image/png"));
+          if(!blob) throw new Error("no blob");
+          if (navigator.clipboard && window.ClipboardItem){
+            await navigator.clipboard.write([new ClipboardItem({"image/png": blob})]);
+            toastMsg("Copied image.");
+          } else {
+            toastMsg("Clipboard image not supported here. Use Download PNG.");
+          }
+        }catch{
+          toastMsg("Could not copy image. Try Download PNG.");
+        }
+      }
 
-      const url = new URL(location.href);
-      url.searchParams.set("c", encodeChallenge(ch));
-      history.replaceState(null, "", url.toString());
+      async function downloadShareImage(){
+        if(!current){
+          toastMsg("Spin first.");
+          return;
+        }
+        const canvas = await renderShareCardToCanvas();
+        const url = canvas.toDataURL("image/png");
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "rejection-challenge-prompt.png";
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        toastMsg("Downloaded PNG.");
+      }
 
-      toastMsg("Prompt ready.");
-    }, 720);
-  }
+      // Mode toggles
+      function setMode(next){
+        mode = next;
+        modeDailyBtn.classList.toggle("primary", mode==="daily");
+        modeRandomBtn.classList.toggle("primary", mode==="random");
+        setMeta();
+        updateShareCard(current);
+        toastMsg("Mode: " + mode);
+      }
 
-  // Wire up
-  modeDaily.addEventListener("click", () => setMode("daily"));
-  modeRandom.addEventListener("click", () => setMode("random"));
+      // Wire events
+      spinBtn.addEventListener("click", spin);
+      acceptBtn.addEventListener("click", () => log("accepted"));
+      rejectBtn.addEventListener("click", () => log("rejected"));
 
-  spinBtn.addEventListener("click", spinAndSet);
-  wheel.addEventListener("click", spinAndSet);
+      exportBtn.addEventListener("click", exportCSV);
+      resetBtn.addEventListener("click", resetAll);
 
-  category.addEventListener("change", () => { syncMeta(); updateShareMeta(); });
-  difficulty.addEventListener("input", () => { syncMeta(); updateShareMeta(); });
+      copyAppBtn.addEventListener("click", copyAppLink);
+      copyPromptLinkBtn.addEventListener("click", copyPromptLink);
 
-  acceptedBtn.addEventListener("click", () => log("accepted"));
-  rejectedBtn.addEventListener("click", () => log("rejected"));
+      copyImageBtn.addEventListener("click", copyShareImage);
+      downloadImageBtn.addEventListener("click", downloadShareImage);
 
-  exportBtn.addEventListener("click", exportCSV);
-  shareBtn.addEventListener("click", shareApp);
-  resetBtn.addEventListener("click", resetAll);
-  copyLinkBtn.addEventListener("click", copyLink);
+      modeDailyBtn.addEventListener("click", () => setMode("daily"));
+      modeRandomBtn.addEventListener("click", () => setMode("random"));
 
-  copyImgBtn.addEventListener("click", copyShareImage);
-  downloadImgBtn.addEventListener("click", downloadShareImage);
+      category.addEventListener("change", () => { setMeta(); });
+      difficulty.addEventListener("input", () => { setMeta(); });
+      variety.addEventListener("change", () => { setMeta(); });
 
-  document.addEventListener("keydown", (e) => {
-    const k = e.key.toLowerCase();
-    if (k === " "){ e.preventDefault(); spinAndSet(); }
-    if (k === "r") log("rejected");
-    if (k === "a") log("accepted");
-  });
+      // Keyboard shortcuts
+      document.addEventListener("keydown", (e) => {
+        if (e.code === "Space"){
+          e.preventDefault();
+          spin();
+        }
+        const k = e.key.toLowerCase();
+        if (k === "r") log("rejected");
+        if (k === "a") log("accepted");
+      });
 
-  // Load from shared link
-  const params = new URLSearchParams(location.search);
-  const c = params.get("c");
-  if (c){
-    const decoded = decodeChallenge(c);
-    if (decoded){
-      setMode(decoded.mode === "random" ? "random" : "daily");
-      category.value = ["any","food","social","help","negotiation","weird","career"].includes(decoded.fCat) ? decoded.fCat : "any";
-      difficulty.value = String(Math.min(5, Math.max(1, parseInt(decoded.fDiff || 3, 10) || 3)));
+      // Load from shared prompt link
+      function loadFromUrlIfPresent(){
+        const params = new URLSearchParams(location.search);
+        const p = params.get("p");
+        if (!p) return;
 
-      current = {cat: decoded.cat, diff: decoded.diff, text: decoded.text};
-      challengeText.textContent = decoded.text;
-      wheelBig.textContent = decoded.text;
-      shareText.textContent = decoded.text;
-      miniHint.textContent = "Do it, then log accepted or rejected.";
-    }
-  }
+        const obj = base64urlDecode(p);
+        if (obj && obj.text){
+          mode = (obj.mode === "daily") ? "daily" : "random";
+          setMode(mode);
 
-  // Init
-  setMode("daily");
-  syncMeta();
-  updateShareMeta();
-  render();
+          if (obj.v) variety.value = (obj.v === "strict") ? "strict" : "smart";
+          category.value = ["food","social","help","negotiation","weird","career"].includes(obj.cat) ? obj.cat : "any";
+          difficulty.value = String(Math.min(5, Math.max(1, parseInt(obj.diff || 3,10) || 3)));
 
-})();
-</script>
+          setMeta();
+          const loaded = {id: obj.id || ("loaded_"+hash32(obj.text)), cat: obj.cat, diff: parseInt(obj.diff||3,10), text: obj.text};
+          showPrompt(loaded, "Loaded shared prompt.");
+        }
+      }
+
+      // Init
+      renderWheel();
+      setMode("random");     // default
+      setMeta();
+      updateShareCard(null);
+      loadFromUrlIfPresent();
+      renderAll();
+    })();
+  </script>
 </body>
 </html>
+
