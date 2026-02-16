@@ -4,581 +4,616 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Rejection Challenge</title>
-  <meta name="description" content="A public rejection practice challenge: spin a prompt, do it in person, log it, level up. No login." />
+  <meta name="description" content="Spin a quick in-person challenge. Log the result. Build a rejection streak. No login." />
 
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23120b08'/%3E%3Ctext x='50%25' y='56%25' text-anchor='middle' font-family='Arial' font-size='26' font-weight='700' fill='%23fff6f0'%3ERR%3C/text%3E%3C/svg%3E">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23150d0a'/%3E%3Ctext x='50%25' y='58%25' text-anchor='middle' font-family='Arial' font-size='24' fill='%23fff2ea'%3ERC%3C/text%3E%3C/svg%3E">
 
   <script defer src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 
   <style>
     :root{
-      --bg:#120b08;
-      --card:#1b120f;
-      --muted:#d2b7a9;
-      --text:#fff6f0;
+      --bg:#120807;
+      --card:#1a0f0d;
+      --text:#fff2ea;
+      --muted:rgba(255,242,234,.72);
+      --muted2:rgba(255,242,234,.55);
 
       --accent:#ff7a59;
       --accent2:#ffb86b;
-      --good:#4fd8a2;
-      --bad:#ff5a7a;
+      --mint:#53e2b0;
+      --pink:#ff5b85;
 
-      --border: rgba(255,246,240,.12);
-      --shadow: 0 14px 55px rgba(0,0,0,.45);
-      --radius:20px;
+      --border:rgba(255,242,234,.10);
+      --shadow: 0 18px 60px rgba(0,0,0,.45);
+      --shadow2: 0 10px 30px rgba(0,0,0,.35);
+      --r:18px;
 
       --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
       --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
     }
 
     *{box-sizing:border-box}
-    html{scroll-behavior:smooth}
+    html,body{height:100%}
     body{
-      margin:0;
-      font-family:var(--sans);
-      color:var(--text);
+      margin:0; font-family:var(--sans); color:var(--text);
       background:
-        radial-gradient(900px 520px at 8% 0%, rgba(255,122,89,.35), transparent 60%),
+        radial-gradient(900px 520px at 10% 0%, rgba(255,122,89,.35), transparent 60%),
         radial-gradient(900px 520px at 100% 10%, rgba(255,184,107,.22), transparent 55%),
-        radial-gradient(700px 420px at 40% 120%, rgba(79,216,162,.14), transparent 60%),
+        radial-gradient(700px 420px at 40% 120%, rgba(83,226,176,.12), transparent 60%),
         var(--bg);
-      min-height:100vh;
     }
-    a{color:inherit; text-decoration:none}
-    .wrap{max-width:1100px; margin:0 auto; padding:26px 16px 70px}
 
-    header{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
+    a{color:inherit; text-decoration:none}
+    .wrap{max-width:1120px; margin:0 auto; padding:22px 16px 80px}
+
+    /* Top bar */
+    .topbar{
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
       margin-bottom:14px;
-      flex-wrap:wrap;
     }
-    .brand{display:flex; flex-direction:column; gap:4px}
-    .titleRow{display:flex; gap:10px; align-items:center; flex-wrap:wrap}
+    .brand{
+      display:flex; align-items:center; gap:12px; flex-wrap:wrap;
+    }
+    .logo{
+      width:38px; height:38px; border-radius:14px;
+      background:
+        radial-gradient(18px 18px at 30% 30%, rgba(255,184,107,.55), transparent 70%),
+        radial-gradient(18px 18px at 70% 70%, rgba(255,122,89,.45), transparent 70%),
+        rgba(255,242,234,.08);
+      border:1px solid var(--border);
+      box-shadow: var(--shadow2);
+    }
     .title{
-      font-size:20px;
-      font-weight:850;
-      letter-spacing:.2px;
+      font-weight:950; letter-spacing:.2px;
+      display:flex; align-items:baseline; gap:10px; flex-wrap:wrap;
     }
-    .sub{
-      color:var(--muted);
-      font-size:13px;
-      line-height:1.35;
-      max-width:70ch;
-    }
+    .title .name{font-size:18px}
     .pill{
       font-family:var(--mono);
-      font-size:11px;
-      color:rgba(255,246,240,.92);
-      border:1px solid rgba(255,246,240,.14);
-      padding:4px 8px;
+      font-size:12px;
+      padding:5px 9px;
       border-radius:999px;
-      background:rgba(255,246,240,.06);
+      border:1px solid var(--border);
+      background:rgba(255,242,234,.06);
+      color:var(--muted);
       white-space:nowrap;
     }
+    .actions{display:flex; gap:10px; flex-wrap:wrap}
 
-    .row{display:flex; gap:10px; align-items:center; flex-wrap:wrap}
-    .row > *{flex: 1 1 auto}
-
-    .card{
-      background: linear-gradient(180deg, rgba(27,18,15,.94), rgba(27,18,15,.76));
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 16px;
+    /* Buttons */
+    .btn{
+      appearance:none; border:1px solid rgba(255,242,234,.14);
+      background:rgba(255,242,234,.08);
+      color:var(--text);
+      padding:10px 12px;
+      border-radius:14px;
+      font-weight:900;
+      cursor:pointer;
+      transition: transform .06s ease, filter .15s ease, background .15s ease;
+      user-select:none;
+    }
+    .btn:hover{filter:brightness(1.06)}
+    .btn:active{transform:translateY(1px) scale(.99)}
+    .btn.small{padding:8px 10px; font-size:13px}
+    .btn.primary{
+      border-color:rgba(255,184,107,.28);
+      background:linear-gradient(90deg, rgba(255,122,89,.95), rgba(255,184,107,.82));
+    }
+    .btn.good{
+      border-color:rgba(83,226,176,.32);
+      background:linear-gradient(90deg, rgba(83,226,176,.92), rgba(83,226,176,.62));
+    }
+    .btn.bad{
+      border-color:rgba(255,91,133,.32);
+      background:linear-gradient(90deg, rgba(255,91,133,.92), rgba(255,91,133,.62));
+    }
+    .btn.ghost{
+      background:rgba(255,242,234,.06);
     }
 
-    /* HERO */
-    .hero{
-      padding:18px 16px;
-      border-radius: var(--radius);
-      border:1px solid rgba(255,246,240,.14);
-      background:
-        radial-gradient(1000px 420px at 0% 0%, rgba(255,122,89,.24), transparent 60%),
-        radial-gradient(1000px 420px at 100% 0%, rgba(255,184,107,.18), transparent 60%),
-        rgba(27,18,15,.72);
+    /* Layout */
+    .grid{
+      display:grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap:14px;
+      margin-top:12px;
+    }
+    @media (max-width: 980px){
+      .grid{grid-template-columns:1fr}
+    }
+
+    .card{
+      border:1px solid var(--border);
+      border-radius:var(--r);
+      background: linear-gradient(180deg, rgba(26,15,13,.92), rgba(26,15,13,.72));
       box-shadow: var(--shadow);
+      padding:16px;
+    }
+
+    /* Hero */
+    .hero{
+      border-radius:var(--r);
+      border:1px solid rgba(255,242,234,.10);
+      background:
+        radial-gradient(1200px 420px at 0% 0%, rgba(255,122,89,.22), transparent 60%),
+        radial-gradient(1200px 420px at 100% 0%, rgba(255,184,107,.18), transparent 60%),
+        rgba(255,242,234,.04);
+      box-shadow: var(--shadow);
+      padding:16px;
+    }
+    .heroTop{
+      display:flex; align-items:flex-start; justify-content:space-between; gap:12px; flex-wrap:wrap;
     }
     .hero h1{
       margin:0;
-      font-size:34px;
+      font-size:30px;
       line-height:1.08;
       letter-spacing:.2px;
-      font-weight:900;
     }
     .hero p{
-      margin:10px 0 0;
+      margin:8px 0 0;
       color:var(--muted);
-      line-height:1.5;
-      max-width:72ch;
-      font-size:14px;
+      line-height:1.45;
+      max-width:64ch;
+    }
+    .hint{
+      color:var(--muted2);
+      font-size:12px;
+      margin-top:10px;
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    .toggle{
+      display:flex;
+      gap:8px;
+      align-items:center;
+      border:1px solid rgba(255,242,234,.12);
+      background:rgba(255,242,234,.06);
+      border-radius:999px;
+      padding:6px;
+    }
+    .chip{
+      border:0;
+      background:transparent;
+      color:var(--muted);
+      padding:8px 10px;
+      border-radius:999px;
+      font-weight:900;
+      cursor:pointer;
+    }
+    .chip.on{
+      color:var(--text);
+      background:rgba(255,242,234,.10);
+      border:1px solid rgba(255,242,234,.12);
     }
 
-    .ctaRow{display:flex; gap:10px; flex-wrap:wrap; margin-top:14px}
+    /* Wheel */
+    .wheelWrap{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:14px;
+      margin-top:14px;
+      align-items:center;
+    }
+    @media (max-width: 760px){
+      .wheelWrap{grid-template-columns:1fr}
+    }
+
+    .wheelBox{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:14px;
+      border-radius:var(--r);
+      border:1px solid rgba(255,242,234,.10);
+      background:rgba(0,0,0,.12);
+      position:relative;
+      overflow:hidden;
+      min-height:280px;
+    }
+    .pointer{
+      position:absolute;
+      top:12px;
+      left:50%;
+      transform:translateX(-50%);
+      width:0; height:0;
+      border-left:12px solid transparent;
+      border-right:12px solid transparent;
+      border-top:18px solid rgba(255,242,234,.92);
+      filter:drop-shadow(0 10px 10px rgba(0,0,0,.35));
+      z-index:3;
+    }
+
+    .wheel{
+      width:240px; height:240px;
+      border-radius:50%;
+      border:1px solid rgba(255,242,234,.14);
+      box-shadow: inset 0 0 0 8px rgba(0,0,0,.18), var(--shadow2);
+      background:
+        conic-gradient(
+          rgba(255,122,89,.92),
+          rgba(255,184,107,.92),
+          rgba(83,226,176,.92),
+          rgba(255,91,133,.92),
+          rgba(255,184,107,.92),
+          rgba(255,122,89,.92)
+        );
+      transform: rotate(0deg);
+      transition: transform 1.8s cubic-bezier(.12,.85,.18,1);
+    }
+    .wheelLabel{
+      position:absolute;
+      width:240px; height:240px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      padding:18px;
+      pointer-events:none;
+      z-index:2;
+    }
+    .wheelLabel .inside{
+      width:170px;
+      border-radius:16px;
+      border:1px solid rgba(255,242,234,.14);
+      background:rgba(18,8,7,.62);
+      box-shadow: var(--shadow2);
+      padding:10px 12px;
+      font-weight:950;
+      line-height:1.25;
+    }
+    .wheelLabel .inside span{
+      display:block;
+      margin-top:6px;
+      font-size:12px;
+      font-weight:800;
+      color:var(--muted);
+      font-family:var(--mono);
+    }
+
+    /* Challenge card */
+    .challenge{
+      border-radius:var(--r);
+      border:1px solid rgba(255,242,234,.12);
+      background:
+        radial-gradient(900px 260px at 0% 0%, rgba(255,122,89,.14), transparent 60%),
+        radial-gradient(900px 260px at 100% 0%, rgba(255,184,107,.12), transparent 60%),
+        rgba(0,0,0,.14);
+      padding:14px;
+    }
+    .challengeTop{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .meta{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      color:var(--muted);
+      font-size:12px;
+      font-family:var(--mono);
+    }
+    .tag{
+      border:1px solid rgba(255,242,234,.12);
+      background:rgba(255,242,234,.06);
+      padding:4px 8px;
+      border-radius:999px;
+    }
+    .challengeText{
+      margin:10px 0 0;
+      font-size:18px;
+      font-weight:950;
+      letter-spacing:.1px;
+      line-height:1.22;
+    }
+    .mini{
+      margin-top:8px;
+      color:var(--muted);
+      font-size:12px;
+    }
 
     /* Inputs */
-    label{display:block; font-size:12px; color:var(--muted); margin-bottom:6px}
-    select, input[type="range"], input[type="text"], textarea{
+    label{display:block; font-size:12px; color:var(--muted); margin:10px 0 6px}
+    select, input[type="text"], textarea, input[type="range"]{
       width:100%;
-      background:rgba(255,246,240,.06);
-      border:1px solid rgba(255,246,240,.14);
-      color:var(--text);
       border-radius:14px;
+      border:1px solid rgba(255,242,234,.12);
+      background:rgba(0,0,0,.18);
+      color:var(--text);
       padding:10px 12px;
       outline:none;
     }
     textarea{min-height:88px; resize:vertical}
 
-    /* Buttons */
-    .btn{
-      appearance:none;
-      border:1px solid rgba(255,246,240,.14);
-      cursor:pointer;
-      padding:10px 12px;
-      border-radius:14px;
-      font-weight:850;
-      color:var(--text);
-      background:rgba(255,246,240,.07);
-      transition:transform .07s ease, filter .15s ease, background .15s ease, box-shadow .15s ease;
-      user-select:none;
-      text-align:center;
-    }
-    .btn:hover{filter:brightness(1.05); box-shadow:0 10px 35px rgba(0,0,0,.22)}
-    .btn:active{transform:translateY(1px) scale(.99)}
-    .btn.small{padding:8px 10px; font-size:13px}
-    .btn.ghost{background:rgba(255,246,240,.05)}
-    .btn.primary{
-      background: linear-gradient(90deg, rgba(255,122,89,.98), rgba(255,184,107,.88));
-      border-color: rgba(255,184,107,.35);
-    }
-    .btn.good{
-      background: linear-gradient(90deg, rgba(79,216,162,.92), rgba(79,216,162,.62));
-      border-color: rgba(79,216,162,.40);
-    }
-    .btn.bad{
-      background: linear-gradient(90deg, rgba(255,90,122,.95), rgba(255,90,122,.62));
-      border-color: rgba(255,90,122,.42);
-    }
-
-    /* Layout */
-    .grid{display:grid; grid-template-columns:1.2fr .8fr; gap:14px; margin-top:14px}
-    @media (max-width: 980px){ .grid{grid-template-columns:1fr} }
-
-    /* Challenge */
-    .challenge{
-      border:1px solid rgba(255,246,240,.14);
-      border-radius:18px;
-      padding:14px;
-      background:
-        radial-gradient(700px 260px at 0% 0%, rgba(255,122,89,.18), transparent 60%),
-        radial-gradient(700px 260px at 100% 0%, rgba(255,184,107,.14), transparent 60%),
-        rgba(18,11,8,.55);
-      position:relative;
-      overflow:hidden;
-    }
-    .challenge .headline{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      flex-wrap:wrap
-    }
-    .challenge .text{
-      font-size:20px;
-      font-weight:900;
-      margin:10px 0 6px;
-      line-height:1.25
-    }
-    .meta{display:flex; gap:8px; flex-wrap:wrap; color:var(--muted); font-size:12px}
-    .tag{
-      border:1px solid rgba(255,246,240,.12);
-      background:rgba(255,246,240,.06);
-      padding:3px 8px;
-      border-radius:999px;
-      font-family:var(--mono);
-      font-size:12px;
-    }
-
-    /* Spin effect */
-    .spinOverlay{
-      position:absolute; inset:0;
-      background:linear-gradient(90deg, rgba(255,122,89,.08), rgba(255,184,107,.07));
-      opacity:0;
-      pointer-events:none;
-      transition:opacity .2s ease;
-    }
-    .spinning .spinOverlay{opacity:1}
-    .spinning .text{filter:blur(2px); opacity:.45}
-    .spinTicker{
-      position:absolute; right:14px; bottom:12px;
-      font-family:var(--mono);
-      font-size:12px;
-      color:rgba(255,246,240,.85);
-      opacity:0;
-      transform:translateY(4px);
-      transition:opacity .2s ease, transform .2s ease;
-    }
-    .spinning .spinTicker{opacity:1; transform:translateY(0)}
+    .row{display:flex; gap:10px; flex-wrap:wrap; align-items:center}
+    .row > *{flex:1 1 180px}
 
     /* Stats */
-    .statgrid{display:grid; grid-template-columns:repeat(3,1fr); gap:10px}
-    @media (max-width: 520px){ .statgrid{grid-template-columns:1fr} }
+    .statgrid{display:grid; grid-template-columns: repeat(3,1fr); gap:10px}
+    @media (max-width:520px){ .statgrid{grid-template-columns:1fr} }
     .stat{
+      border-radius:16px;
+      border:1px solid rgba(255,242,234,.10);
+      background:rgba(0,0,0,.16);
       padding:12px;
-      border-radius:16px;
-      background:rgba(255,246,240,.05);
-      border:1px solid rgba(255,246,240,.12);
     }
-    .stat .k{font-size:11px; color:var(--muted)}
-    .stat .v{font-size:20px; font-weight:900; margin-top:4px}
+    .stat .k{color:var(--muted); font-size:11px}
+    .stat .v{font-weight:950; font-size:20px; margin-top:6px}
 
-    /* XP bar */
-    .bar{
-      height:10px;
-      border-radius:999px;
-      border:1px solid rgba(255,246,240,.12);
-      background:rgba(255,246,240,.06);
-      overflow:hidden;
-      margin-top:8px;
-    }
-    .bar > div{
-      height:100%;
-      width:0%;
-      background:linear-gradient(90deg, rgba(79,216,162,.95), rgba(255,184,107,.90));
-    }
-    .muted{color:var(--muted)}
+    table{width:100%; border-collapse:collapse; font-size:13px; margin-top:10px}
+    th,td{border-bottom:1px solid rgba(255,242,234,.08); padding:10px 8px; vertical-align:top}
+    th{color:var(--muted); font-size:12px; text-align:left}
 
-    /* Table */
-    table{width:100%; border-collapse:collapse; margin-top:8px; font-size:13px}
-    th,td{padding:10px 8px; border-bottom:1px solid rgba(255,246,240,.10); vertical-align:top}
-    th{color:var(--muted); font-weight:800; text-align:left; font-size:12px}
-
-    /* Collapsibles */
+    /* Collapsible */
     details{
-      border:1px solid rgba(255,246,240,.12);
-      background:rgba(255,246,240,.05);
+      border:1px solid rgba(255,242,234,.10);
       border-radius:16px;
+      background:rgba(0,0,0,.14);
       padding:10px 12px;
     }
-    details summary{
+    summary{
       cursor:pointer;
-      font-weight:850;
-      color:rgba(255,246,240,.95);
+      font-weight:950;
       list-style:none;
     }
-    details summary::-webkit-details-marker{display:none}
-    details .inside{margin-top:10px; color:var(--muted); line-height:1.55; font-size:13px}
+    summary::-webkit-details-marker{display:none}
+    .smallList{margin:10px 0 0; padding-left:18px; color:var(--muted); line-height:1.5}
+    .smallList li{margin:6px 0}
 
-    /* Toast */
+    /* Toast + confetti canvas */
     .toast{
       position:fixed; left:50%; bottom:18px; transform:translateX(-50%);
-      background:rgba(27,18,15,.92);
-      border:1px solid rgba(255,246,240,.14);
-      padding:10px 12px; border-radius:999px;
-      box-shadow:var(--shadow);
+      padding:10px 12px;
+      border-radius:999px;
+      border:1px solid rgba(255,242,234,.14);
+      background:rgba(20,10,8,.85);
+      box-shadow: var(--shadow2);
       display:none;
-      font-size:13px;
       z-index:9999;
-      max-width:min(92vw, 720px);
+      max-width:min(92vw, 760px);
       text-align:center;
+      font-size:13px;
     }
-
-    /* Share card */
-    .shareCard{
-      border-radius:18px;
-      border:1px solid rgba(255,246,240,.14);
-      background:
-        radial-gradient(900px 400px at 0% 0%, rgba(255,122,89,.18), transparent 60%),
-        radial-gradient(900px 400px at 100% 0%, rgba(255,184,107,.14), transparent 60%),
-        rgba(18,11,8,.55);
-      padding:14px;
-    }
-    .shareCard .top{
-      display:flex; justify-content:space-between; gap:10px; align-items:flex-start; flex-wrap:wrap;
-    }
-    .shareCard .app{font-weight:900; letter-spacing:.2px; display:flex; gap:8px; align-items:center; flex-wrap:wrap;}
-    .shareCard .big{font-size:18px; font-weight:900; margin:10px 0 8px; line-height:1.25;}
-    .shareCard .small{font-size:12px; color:var(--muted); display:flex; gap:8px; flex-wrap:wrap; align-items:center;}
-
-    /* Confetti */
-    .confetti{
-      position:fixed;
-      inset:0;
+    #confetti{
+      position:fixed; inset:0;
       pointer-events:none;
       z-index:9998;
-      overflow:hidden;
     }
-    .confetti i{
-      position:absolute;
-      width:10px; height:14px;
-      border-radius:3px;
-      opacity:.95;
-      transform:translateY(-30px) rotate(0deg);
-      animation:fall 900ms linear forwards;
+
+    /* First-time modal */
+    .modalBack{
+      position:fixed; inset:0;
+      background:rgba(0,0,0,.55);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:16px;
+      z-index:9997;
     }
-    @keyframes fall{
-      to{ transform:translateY(110vh) rotate(260deg); opacity:1; }
+    .modal{
+      width:min(560px, 96vw);
+      border-radius:20px;
+      border:1px solid rgba(255,242,234,.14);
+      background:
+        radial-gradient(800px 320px at 0% 0%, rgba(255,122,89,.18), transparent 60%),
+        radial-gradient(800px 320px at 100% 0%, rgba(255,184,107,.14), transparent 60%),
+        rgba(26,15,13,.92);
+      box-shadow: var(--shadow);
+      padding:16px;
     }
+    .modal h3{margin:0; font-size:16px}
+    .modal p{margin:8px 0 0; color:var(--muted); line-height:1.45}
+    .modal .bul{
+      margin:10px 0 0;
+      padding-left:18px;
+      color:var(--muted);
+      line-height:1.5;
+    }
+    .modal .bul li{margin:6px 0}
+    .modal .row{margin-top:12px}
+
   </style>
 </head>
 
 <body>
+  <canvas id="confetti"></canvas>
+
   <div class="wrap">
-    <header>
+    <div class="topbar">
       <div class="brand">
-        <div class="titleRow">
-          <div class="title">Rejection Challenge</div>
+        <div class="logo" aria-hidden="true"></div>
+        <div class="title">
+          <span class="name">Rejection Challenge</span>
           <span class="pill">public</span>
           <span class="pill">no login</span>
-          <span class="pill">one rep/day</span>
+          <span class="pill">fast</span>
         </div>
-        <div class="sub">Spin a prompt. Do it in person. Log it. A “no” counts as a win here.</div>
       </div>
-      <div class="row" style="justify-content:flex-end; min-width:280px">
-        <button class="btn small" id="resetBtn" title="Clears everything">Reset</button>
-        <button class="btn small" id="exportBtn" title="Download CSV">Export</button>
-        <button class="btn small" id="shareAppBtn" title="Share the app">Share</button>
+      <div class="actions">
+        <button class="btn small" id="exportBtn" title="Download CSV of your logs">Export</button>
+        <button class="btn small" id="shareBtn" title="Share the app link">Share</button>
+        <button class="btn small" id="resetBtn" title="Clear everything">Reset</button>
       </div>
-    </header>
+    </div>
 
-    <section class="hero" id="top">
-      <h1>Get comfortable hearing “no”.</h1>
-      <p>One small ask a day. Keep it respectful. Log what happened. The streak only cares about rejections.</p>
-
-      <div class="ctaRow">
-        <a class="btn ghost" href="#tracker">Open tracker</a>
-        <button class="btn primary" id="spinBtn" type="button">Spin a prompt</button>
-        <button class="btn ghost" id="startTodayBtn" type="button">Today’s prompt</button>
-      </div>
-
-      <div class="row" style="margin-top:12px">
-        <details>
-          <summary>Quick rules</summary>
-          <div class="inside">
-            In person only. Be brief. A “no” ends it. No guilt, no pushback. Ask safe, legal things.
+    <div class="hero">
+      <div class="heroTop">
+        <div>
+          <h1>Spin a dare. Do it in person. Log it.</h1>
+          <p>
+            The “no” is the win. One small ask a day. Your streak only moves when you log a rejection.
+          </p>
+          <div class="hint">
+            <span class="pill">Tip: keep it polite, quick, and safe</span>
+            <details>
+              <summary>How it works</summary>
+              <ul class="smallList">
+                <li>Pick Daily or Random.</li>
+                <li>Spin to get a prompt.</li>
+                <li>Do it in person (no means stop).</li>
+                <li>Log Accepted or Rejected.</li>
+              </ul>
+            </details>
           </div>
-        </details>
-        <details>
-          <summary>Need words?</summary>
-          <div class="inside">
-            <div style="display:grid; gap:10px">
-              <div>
-                <b>Coffee chat:</b> “Quick one — would you be open to a 10-minute coffee chat sometime this week? Totally okay if not.”
-                <div><button class="btn small" data-copy="coffee" style="margin-top:8px">Copy</button></div>
-              </div>
-              <div>
-                <b>After a no:</b> “All good — thanks anyway. If you’re open to it, what’s one thing I could improve next time?”
-                <div><button class="btn small" data-copy="no" style="margin-top:8px">Copy</button></div>
-              </div>
+        </div>
+
+        <div class="toggle" role="group" aria-label="Mode toggle">
+          <button class="chip on" id="modeDaily">Daily</button>
+          <button class="chip" id="modeRandom">Random</button>
+        </div>
+      </div>
+
+      <div class="wheelWrap">
+        <div class="wheelBox">
+          <div class="pointer" aria-hidden="true"></div>
+          <div class="wheel" id="wheel"></div>
+          <div class="wheelLabel">
+            <div class="inside" id="wheelInside">
+              Spin for a prompt
+              <span id="wheelSub">Daily = same for everyone today</span>
             </div>
           </div>
-        </details>
-      </div>
-    </section>
-
-    <div class="grid" id="tracker" style="margin-top:14px">
-      <!-- Left -->
-      <div class="card">
-        <div class="row" style="justify-content:space-between; align-items:center">
-          <h2 style="margin:0; font-size:15px; font-weight:900">Tracker</h2>
-          <span class="pill">local-only</span>
         </div>
 
-        <div class="row" style="margin-top:10px">
-          <div style="min-width:210px">
-            <label for="pack">Pack</label>
-            <select id="pack">
-              <option value="all" selected>Mixed</option>
-              <option value="beginner">Beginner</option>
-              <option value="networking">Networking</option>
-              <option value="wholesome">Wholesome</option>
-              <option value="negotiation">Negotiation</option>
-            </select>
-          </div>
-
-          <div style="min-width:210px">
-            <label for="category">Category</label>
-            <select id="category">
-              <option value="any">Any</option>
-              <option value="food">Food</option>
-              <option value="social">Social</option>
-              <option value="help">Help</option>
-              <option value="negotiation">Negotiation</option>
-              <option value="weird">Weird</option>
-              <option value="career">Career</option>
-            </select>
-          </div>
-
-          <div style="min-width:210px">
-            <label for="difficulty">Difficulty <span id="diffLabel" class="pill">3</span></label>
-            <input id="difficulty" type="range" min="1" max="5" value="3" />
-          </div>
-
-          <div style="min-width:210px">
-            <label for="timebox">Timer</label>
-            <select id="timebox">
-              <option value="0">Off</option>
-              <option value="5">5 min</option>
-              <option value="10">10 min</option>
-              <option value="15" selected>15 min</option>
-              <option value="30">30 min</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="challenge" style="margin-top:12px" id="challengeBox">
-          <div class="spinOverlay"></div>
-          <div class="spinTicker" id="spinTicker">spinning…</div>
-
-          <div class="headline">
+        <div class="challenge">
+          <div class="challengeTop">
             <div class="meta">
-              <span class="tag" id="tagPack">pack: all</span>
-              <span class="tag" id="tagCat">any</span>
-              <span class="tag" id="tagDiff">d3</span>
-              <span class="tag" id="tagMode">random</span>
+              <span class="tag" id="mCat">category: any</span>
+              <span class="tag" id="mDiff">difficulty: 3</span>
+              <span class="tag" id="mMode">mode: daily</span>
             </div>
             <div class="row" style="flex:0 0 auto">
               <button class="btn small" id="copyLinkBtn">Copy link</button>
-              <button class="btn small" id="todayBtn" title="Same prompt for everyone today">Today</button>
-              <button class="btn primary" id="newBtn">Generate</button>
+              <button class="btn primary" id="spinBtn">Spin</button>
             </div>
           </div>
-          <div class="text" id="challengeText">Hit Generate.</div>
-          <div class="muted" id="timerText" style="margin-top:6px"></div>
-        </div>
 
-        <div style="margin-top:12px">
-          <div class="row">
-            <div style="min-width:220px">
-              <label for="where">Where (optional)</label>
-              <input id="where" type="text" placeholder="cafe, campus, gym" />
+          <div class="challengeText" id="challengeText">Your prompt will show up here.</div>
+          <div class="mini" id="miniHint">Then log the result below.</div>
+
+          <div class="row" style="margin-top:10px">
+            <div>
+              <label for="category">Category</label>
+              <select id="category">
+                <option value="any" selected>Any</option>
+                <option value="food">Food / cafe</option>
+                <option value="social">Social</option>
+                <option value="help">Ask for help</option>
+                <option value="negotiation">Negotiation</option>
+                <option value="weird">Wholesome weird</option>
+                <option value="career">Career</option>
+              </select>
             </div>
-            <div style="min-width:220px">
+            <div>
+              <label for="difficulty">Difficulty</label>
+              <input id="difficulty" type="range" min="1" max="5" value="3" />
+            </div>
+          </div>
+
+          <div class="row" style="margin-top:6px">
+            <div>
+              <label for="where">Where (optional)</label>
+              <input id="where" type="text" placeholder="coffee shop, campus, gym" />
+            </div>
+            <div>
               <label for="who">Who (optional)</label>
               <input id="who" type="text" placeholder="barista, stranger, classmate" />
             </div>
           </div>
 
-          <div class="row" style="margin-top:10px">
-            <div style="min-width:220px">
-              <label for="before">Before <span id="beforeLabel" class="pill">3</span></label>
-              <input id="before" type="range" min="1" max="5" value="3" />
-            </div>
-            <div style="min-width:220px">
-              <label for="after">After <span id="afterLabel" class="pill">3</span></label>
-              <input id="after" type="range" min="1" max="5" value="3" />
-            </div>
-          </div>
-
-          <div style="margin-top:10px">
-            <label for="note">Note (optional)</label>
-            <textarea id="note" placeholder="What happened?"></textarea>
-          </div>
+          <label for="note">Note (optional)</label>
+          <textarea id="note" placeholder="Quick detail. Keep it short."></textarea>
 
           <div class="row" style="margin-top:10px">
             <button class="btn good" id="acceptedBtn">Accepted</button>
             <button class="btn bad" id="rejectedBtn">Rejected</button>
           </div>
-
-          <div class="muted" style="font-size:12px; margin-top:10px">
-            Keyboard: G generate • T today • R log rejected
-          </div>
-        </div>
-
-        <div style="margin-top:14px" class="card">
-          <h2 style="margin:0 0 8px; font-size:14px; font-weight:900">Share card</h2>
-          <div class="muted" style="font-size:12px; margin-top:-4px">Make a screenshot-style card. No backend.</div>
-
-          <div id="shareCard" class="shareCard" style="margin-top:10px">
-            <div class="top">
-              <div class="app">Rejection Challenge <span class="pill" id="shareStamp">today</span></div>
-              <div class="small">
-                <span class="tag" id="sharePack">pack: all</span>
-                <span class="tag" id="shareCat">any</span>
-                <span class="tag" id="shareDiff">d3</span>
-              </div>
-            </div>
-            <div class="big" id="shareText">Generate a prompt.</div>
-            <div class="small">
-              <span class="tag">be polite</span>
-              <span class="tag">accept no</span>
-              <span class="tag">in person</span>
-            </div>
-          </div>
-
-          <div class="row" style="margin-top:10px">
-            <button class="btn small" id="copyImageBtn">Copy image</button>
-            <button class="btn small" id="downloadImageBtn">Download</button>
-          </div>
         </div>
       </div>
+    </div>
 
-      <!-- Right -->
+    <div class="grid">
       <div class="card">
-        <h2 style="margin:0 0 10px; font-size:15px; font-weight:900">Progress</h2>
-
         <div class="statgrid">
           <div class="stat">
-            <div class="k">Rejection streak</div>
+            <div class="k">Rejection streak (days)</div>
             <div class="v" id="streak">0</div>
-            <div class="muted" style="font-size:11px; margin-top:6px" id="streakHint">Log 1 rejection today to extend.</div>
           </div>
-
           <div class="stat">
             <div class="k">Level</div>
-            <div class="v"><span id="level">1</span></div>
-            <div class="muted" style="font-size:11px; margin-top:6px"><span id="xp">0</span> XP</div>
-            <div class="bar"><div id="xpFill"></div></div>
-            <div class="muted" style="font-size:11px; margin-top:6px"><span id="xpInto">0</span>/<span id="xpNeed">100</span></div>
+            <div class="v" id="level">1</div>
           </div>
-
           <div class="stat">
-            <div class="k">Shields</div>
-            <div class="v"><span id="shields">0</span></div>
-            <div class="muted" style="font-size:11px; margin-top:6px">Weekly bonus.</div>
+            <div class="k">XP</div>
+            <div class="v" id="xp">0</div>
           </div>
         </div>
 
-        <div class="card" style="margin-top:12px">
-          <h2 style="margin:0 0 8px; font-size:14px; font-weight:900">Daily quests</h2>
-          <div id="quests" style="display:grid; gap:10px"></div>
-        </div>
+        <details style="margin-top:12px">
+          <summary>Rules (quick)</summary>
+          <ul class="smallList">
+            <li>In person only.</li>
+            <li>No means stop. No pushback.</li>
+            <li>Skip anything unsafe / weird in your setting.</li>
+            <li>Ask for consent for photos/video.</li>
+          </ul>
+        </details>
 
-        <div class="card" style="margin-top:12px">
-          <h2 style="margin:0 0 8px; font-size:14px; font-weight:900">Badges</h2>
-          <div id="badges" style="display:flex; gap:8px; flex-wrap:wrap"></div>
-        </div>
-
-        <div class="muted" style="font-size:12px; margin-top:12px; line-height:1.4">
-          Stored in your browser. No account.
-        </div>
-
-        <h2 style="margin:14px 0 6px; font-size:14px; font-weight:900">Recent logs</h2>
-        <div style="overflow:auto; margin-top:6px">
+        <div style="margin-top:12px">
+          <h3 style="margin:0; font-size:14px">Recent logs</h3>
           <table>
             <thead>
               <tr>
-                <th style="min-width:140px">Time</th>
-                <th>Challenge</th>
-                <th style="min-width:120px">Result</th>
+                <th style="min-width:160px">Time</th>
+                <th>Prompt</th>
+                <th style="min-width:110px">Result</th>
               </tr>
             </thead>
             <tbody id="logBody">
-              <tr><td colspan="3" class="muted">No logs yet.</td></tr>
+              <tr><td colspan="3" style="color:var(--muted)">No logs yet.</td></tr>
             </tbody>
           </table>
         </div>
+      </div>
+
+      <div class="card">
+        <h3 style="margin:0; font-size:14px">Share card</h3>
+        <div style="color:var(--muted); font-size:12px; margin-top:6px">
+          Generate a prompt, then export an image.
+        </div>
+
+        <div id="shareCard" style="
+          margin-top:12px;
+          border-radius:18px;
+          border:1px solid rgba(255,242,234,.12);
+          background:
+            radial-gradient(900px 320px at 0% 0%, rgba(255,122,89,.20), transparent 60%),
+            radial-gradient(900px 320px at 100% 0%, rgba(255,184,107,.16), transparent 60%),
+            rgba(0,0,0,.14);
+          padding:14px;
+        ">
+          <div style="display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap; align-items:flex-start">
+            <div style="font-weight:950">Rejection Challenge</div>
+            <div class="pill" id="shareStamp">daily</div>
+          </div>
+          <div style="margin-top:10px; font-weight:950; font-size:18px; line-height:1.25" id="shareText">
+            Spin to get a prompt.
+          </div>
+          <div style="margin-top:10px; display:flex; gap:8px; flex-wrap:wrap; color:var(--muted); font-family:var(--mono); font-size:12px">
+            <span class="tag" id="shareCat">category:any</span>
+            <span class="tag" id="shareDiff">d3</span>
+            <span class="tag">rule:no means stop</span>
+          </div>
+        </div>
 
         <div class="row" style="margin-top:10px">
-          <div class="stat" style="flex:1 1 auto">
-            <div class="k">Total logs</div>
-            <div class="v" id="total">0</div>
-          </div>
-          <div class="stat" style="flex:1 1 auto">
-            <div class="k">Rejection rate</div>
-            <div class="v" id="rate">0%</div>
-          </div>
+          <button class="btn small" id="copyImgBtn">Copy image</button>
+          <button class="btn small" id="downloadImgBtn">Download</button>
         </div>
       </div>
     </div>
@@ -586,106 +621,91 @@
     <div class="toast" id="toast"></div>
   </div>
 
+  <div class="modalBack" id="modalBack" role="dialog" aria-modal="true" aria-label="Quick start">
+    <div class="modal">
+      <h3>Quick start</h3>
+      <p>Spin once. Do the ask in person. Log the outcome. That’s it.</p>
+      <ul class="bul">
+        <li>Rejected counts for streak.</li>
+        <li>Keep it polite and fast.</li>
+        <li>Skip anything that feels unsafe.</li>
+      </ul>
+      <div class="row">
+        <button class="btn primary" id="modalGo">Got it</button>
+        <button class="btn ghost" id="modalSkip">Do not show again</button>
+      </div>
+    </div>
+  </div>
+
 <script>
 (() => {
   const $ = (id) => document.getElementById(id);
 
-  const pack = $("pack");
+  // UI
+  const modeDaily = $("modeDaily");
+  const modeRandom = $("modeRandom");
+  const spinBtn = $("spinBtn");
+  const wheel = $("wheel");
+
   const category = $("category");
   const difficulty = $("difficulty");
-  const timebox = $("timebox");
-
-  const diffLabel = $("diffLabel");
-  const tagPack = $("tagPack");
-  const tagCat = $("tagCat");
-  const tagDiff = $("tagDiff");
-  const tagMode = $("tagMode");
 
   const challengeText = $("challengeText");
-  const timerText = $("timerText");
-  const challengeBox = $("challengeBox");
-  const spinTicker = $("spinTicker");
+  const mCat = $("mCat");
+  const mDiff = $("mDiff");
+  const mMode = $("mMode");
 
   const where = $("where");
   const who = $("who");
-  const before = $("before");
-  const after = $("after");
-  const beforeLabel = $("beforeLabel");
-  const afterLabel = $("afterLabel");
   const note = $("note");
 
-  const newBtn = $("newBtn");
-  const todayBtn = $("todayBtn");
-  const spinBtn = $("spinBtn");
-  const startTodayBtn = $("startTodayBtn");
   const acceptedBtn = $("acceptedBtn");
   const rejectedBtn = $("rejectedBtn");
+
   const exportBtn = $("exportBtn");
+  const shareBtn = $("shareBtn");
   const resetBtn = $("resetBtn");
   const copyLinkBtn = $("copyLinkBtn");
-  const shareAppBtn = $("shareAppBtn");
-  const copyImageBtn = $("copyImageBtn");
-  const downloadImageBtn = $("downloadImageBtn");
-
-  const shareCard = $("shareCard");
-  const shareStamp = $("shareStamp");
-  const sharePack = $("sharePack");
-  const shareCat = $("shareCat");
-  const shareDiff = $("shareDiff");
-  const shareText = $("shareText");
 
   const streakEl = $("streak");
-  const totalEl = $("total");
-  const rateEl = $("rate");
+  const levelEl = $("level");
+  const xpEl = $("xp");
   const logBody = $("logBody");
   const toast = $("toast");
 
-  const levelEl = $("level");
-  const xpEl = $("xp");
-  const xpFill = $("xpFill");
-  const xpIntoEl = $("xpInto");
-  const xpNeedEl = $("xpNeed");
-  const shieldsEl = $("shields");
-  const streakHint = $("streakHint");
+  const shareCard = $("shareCard");
+  const shareStamp = $("shareStamp");
+  const shareText = $("shareText");
+  const shareCat = $("shareCat");
+  const shareDiff = $("shareDiff");
+  const copyImgBtn = $("copyImgBtn");
+  const downloadImgBtn = $("downloadImgBtn");
 
-  const STORAGE_KEY = "rr_logs_v5";
-  const STREAK_KEY = "rr_rej_streak_v5";
-  const LAST_REJ_DAY_KEY = "rr_last_rej_day_v5";
-  const GAME_KEY = "rr_game_v2";
+  const modalBack = $("modalBack");
+  const modalGo = $("modalGo");
+  const modalSkip = $("modalSkip");
 
-  let currentChallenge = null;
-  let currentMode = "random";
-  let timer = null;
-  let timerEndsAt = null;
+  // Storage keys
+  const K_LOGS = "rc_logs_v1";
+  const K_STREAK = "rc_streak_v1";
+  const K_LAST_REJ_DAY = "rc_last_rej_day_v1";
+  const K_GAME = "rc_game_v1";
+  const K_HIDE_MODAL = "rc_hide_modal_v1";
 
-  function nowISO(){ return new Date().toISOString(); }
-  function dayKey(d=new Date()){ return d.toISOString().slice(0,10); }
+  // State
+  let mode = "daily"; // daily | random
+  let current = null;
 
+  // Helpers
+  function dayKey(d = new Date()){
+    return d.toISOString().slice(0,10);
+  }
   function toastMsg(msg){
     toast.textContent = msg;
     toast.style.display = "block";
     clearTimeout(toast._t);
-    toast._t = setTimeout(()=> toast.style.display="none", 1800);
+    toast._t = setTimeout(() => toast.style.display = "none", 1800);
   }
-
-  function confettiBurst(){
-    const host = document.createElement("div");
-    host.className = "confetti";
-    document.body.appendChild(host);
-
-    const colors = ["#ff7a59","#ffb86b","#4fd8a2","#fff6f0","#ff5a7a"];
-    const n = 22;
-    for(let i=0;i<n;i++){
-      const p = document.createElement("i");
-      p.style.left = Math.random()*100 + "vw";
-      p.style.background = colors[(Math.random()*colors.length)|0];
-      p.style.animationDuration = (700 + Math.random()*600) + "ms";
-      p.style.transform = `translateY(-30px) rotate(${Math.random()*120}deg)`;
-      host.appendChild(p);
-    }
-    setTimeout(()=> host.remove(), 1200);
-  }
-
   function hash32(str){
     let h = 2166136261;
     for (let i=0;i<str.length;i++){
@@ -694,117 +714,85 @@
     }
     return h >>> 0;
   }
-  function seededIndex(n, seedStr){
-    const seed = hash32(seedStr);
-    const x = (Math.imul(seed, 1664525) + 1013904223) >>> 0;
+  function seededIndex(n, seed){
+    const s = hash32(seed);
+    const x = (Math.imul(s, 1664525) + 1013904223) >>> 0;
     return n ? (x % n) : 0;
   }
 
-  function escapeHtml(s){
-    return String(s)
-      .replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;")
-      .replaceAll('"',"&quot;").replaceAll("'","&#039;");
+  function loadJSON(key, fallback){
+    try { return JSON.parse(localStorage.getItem(key) || "null") ?? fallback; }
+    catch { return fallback; }
+  }
+  function saveJSON(key, value){
+    localStorage.setItem(key, JSON.stringify(value));
   }
 
-  function loadLogs(){
-    try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]"); }
-    catch { return []; }
-  }
-  function saveLogs(logs){ localStorage.setItem(STORAGE_KEY, JSON.stringify(logs)); }
-
-  function loadStreak(){
-    try { return JSON.parse(localStorage.getItem(STREAK_KEY) || "0"); }
-    catch { return 0; }
-  }
-  function saveStreak(n){ localStorage.setItem(STREAK_KEY, JSON.stringify(n)); }
-
-  function defaultGame(){
-    return {
-      xp: 0,
-      level: 1,
-      shields: 1,
-      lastShieldWeek: null,
-      badges: {},
-      questDay: null,
-      quests: [],
-      questDone: {}
-    };
-  }
-  function loadGame(){
-    try { return JSON.parse(localStorage.getItem(GAME_KEY) || "null") || defaultGame(); }
-    catch { return defaultGame(); }
-  }
-  function saveGame(g){ localStorage.setItem(GAME_KEY, JSON.stringify(g)); }
-
-  function isoWeekKey(date = new Date()){
-    const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
-    const dayNum = d.getUTCDay() || 7;
-    d.setUTCDate(d.getUTCDate() + 4 - dayNum);
-    const yearStart = new Date(Date.UTC(d.getUTCFullYear(),0,1));
-    const weekNo = Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
-    return `${d.getUTCFullYear()}-W${String(weekNo).padStart(2,"0")}`;
-  }
-
-  function maybeGrantWeeklyShield(){
-    const g = loadGame();
-    const wk = isoWeekKey(new Date());
-    if (g.lastShieldWeek !== wk){
-      g.lastShieldWeek = wk;
-      g.shields = (g.shields || 0) + 1;
-      saveGame(g);
-    }
-  }
-
-  const packFilters = {
-    all: (c) => true,
-    beginner: (c) => c.diff <= 2,
-    networking: (c) => c.cat === "career" || (c.cat === "social" && c.diff <= 4),
-    wholesome: (c) => c.cat === "weird" || (c.cat === "social"),
-    negotiation: (c) => c.cat === "negotiation"
-  };
-
+  // Content
   const challenges = [
-    {cat:"food", diff:1, text:"Ask the cashier what they would order if they were paying."},
-    {cat:"food", diff:2, text:"Ask if they can do your drink less sweet. If not, say thanks and move on."},
+    {cat:"food", diff:1, text:"Ask the barista to recommend something that is not on the menu."},
+    {cat:"food", diff:2, text:"Ask if they can make your drink less sweet."},
     {cat:"food", diff:3, text:"Ask for a surprise under $5 and let them pick."},
-    {cat:"food", diff:4, text:"Ask for a small swap on an item. If it’s a no, it’s a no."},
-    {cat:"food", diff:5, text:"Ask for an off-menu recommendation. Keep it short and polite."},
+    {cat:"food", diff:4, text:"Ask for a small customization (swap a side). If no, say thanks and move on."},
+    {cat:"food", diff:5, text:"Ask for a small free add-on. If no, smile and end it."},
 
-    {cat:"social", diff:1, text:"Give a sincere compliment and leave immediately."},
-    {cat:"social", diff:2, text:"Ask where someone got an item you like."},
-    {cat:"social", diff:3, text:"Ask someone to rate your outfit 1–10. Thank them either way."},
-    {cat:"social", diff:4, text:"Ask a stranger to take a quick photo of you."},
-    {cat:"social", diff:5, text:"Ask a small group if you can join for 60 seconds to practice small talk."},
+    {cat:"social", diff:1, text:"Give a sincere compliment to a stranger and walk away."},
+    {cat:"social", diff:2, text:"Ask someone where they got an item because you like it."},
+    {cat:"social", diff:3, text:"Ask a stranger to rate your outfit 1–10. Thank them either way."},
+    {cat:"social", diff:4, text:"Ask someone to take a quick photo of you. Offer to return the favor."},
+    {cat:"social", diff:5, text:"Ask a group if you can join for 60 seconds to practice small talk, then leave."},
 
     {cat:"help", diff:1, text:"Ask for directions to a place you already know."},
-    {cat:"help", diff:2, text:"Ask someone for a nearby recommendation they genuinely like."},
-    {cat:"help", diff:3, text:"Ask to borrow a pen for 20 seconds."},
-    {cat:"help", diff:4, text:"Ask an employee to help you choose between two options."},
+    {cat:"help", diff:2, text:"Ask someone for a nearby recommendation they actually like."},
+    {cat:"help", diff:3, text:"Ask to borrow a pen for 30 seconds."},
+    {cat:"help", diff:4, text:"Ask an employee to help you choose between two options and why."},
     {cat:"help", diff:5, text:"Ask someone to hear your 15-second intro and give one note."},
 
-    {cat:"negotiation", diff:1, text:"Ask if there’s a student discount."},
+    {cat:"negotiation", diff:1, text:"Ask if there is a student discount."},
     {cat:"negotiation", diff:2, text:"Ask if they can waive a small add-on fee once."},
-    {cat:"negotiation", diff:3, text:"Ask for a small upgrade (size, side, seat)."},
-    {cat:"negotiation", diff:4, text:"Ask for $1–$2 off a small purchase. If no, say thanks."},
-    {cat:"negotiation", diff:5, text:"Ask for an extra add-on for free. No pressure if no."},
+    {cat:"negotiation", diff:3, text:"Ask for a small upgrade (size, add-on, seat)."},
+    {cat:"negotiation", diff:4, text:"Ask for $1–$2 off a small purchase. If no, end it."},
+    {cat:"negotiation", diff:5, text:"Ask for a free extra. If no, say thanks and stop."},
 
-    {cat:"weird", diff:1, text:"Ask a harmless question: ‘Is today feeling more like a 7 or a 9?’"},
-    {cat:"weird", diff:2, text:"Ask for a 10-second pep talk."},
-    {cat:"weird", diff:3, text:"Ask for one time-saving life hack."},
-    {cat:"weird", diff:4, text:"Ask someone to recommend a ‘small win’ habit."},
-    {cat:"weird", diff:5, text:"Ask if someone will say ‘good luck’ on video (only if they’re clearly comfortable)."}
-    ,
-    {cat:"career", diff:1, text:"Ask what someone does for work, then ask what they actually enjoy about it."},
+    {cat:"weird", diff:1, text:"Ask someone a harmless silly question: do pigeons have a leader?"},
+    {cat:"weird", diff:2, text:"Ask a cashier: is today more of a 7 or a 9?"},
+    {cat:"weird", diff:3, text:"Ask for a 10-second pep talk. Time it."},
+    {cat:"weird", diff:4, text:"Ask someone for one life hack that saves time."},
+    {cat:"weird", diff:5, text:"Ask for a 5-second 'you got this' video (only with consent)."},
+    
+    {cat:"career", diff:1, text:"Ask someone what they do for work and what they like about it."},
     {cat:"career", diff:2, text:"Ask for one piece of advice for someone early in their career."},
-    {cat:"career", diff:3, text:"Ask if they’d be open to a 10-minute coffee chat this week."},
-    {cat:"career", diff:4, text:"Ask if they know one person you should meet — and why."},
-    {cat:"career", diff:5, text:"Ask for feedback on your 15-second intro on the spot."}
+    {cat:"career", diff:3, text:"Ask if they are open to a 10-minute coffee chat sometime."},
+    {cat:"career", diff:4, text:"Ask if they know one person you should meet and why."},
+    {cat:"career", diff:5, text:"Ask a professional for feedback on your 15-second intro, on the spot."}
   ];
 
+  function pool(){
+    const cat = category.value;
+    const diff = parseInt(difficulty.value, 10);
+    let p = challenges.filter(c => c.diff === diff);
+    if (cat !== "any") p = p.filter(c => c.cat === cat);
+    if (!p.length){
+      p = challenges.slice();
+      if (cat !== "any") p = p.filter(c => c.cat === cat) || challenges.slice();
+    }
+    return p.length ? p : challenges.slice();
+  }
+
+  function pick(){
+    const p = pool();
+    if (mode === "daily"){
+      const seed = dayKey() + "|" + category.value + "|" + difficulty.value;
+      return p[seededIndex(p.length, seed)];
+    }
+    return p[Math.floor(Math.random() * p.length)];
+  }
+
+  // Share link encoding
   function encodeChallenge(ch){
-    const payload = {cat:ch.cat, diff:ch.diff, text:ch.text, mode: currentMode, pack: pack.value};
+    const payload = {cat: ch.cat, diff: ch.diff, text: ch.text, mode, fCat: category.value, fDiff: difficulty.value};
     const b64 = btoa(unescape(encodeURIComponent(JSON.stringify(payload))));
-    return b64.replaceAll("=", "");
+    return b64.replaceAll("=","");
   }
   function decodeChallenge(str){
     try{
@@ -816,368 +804,271 @@
     } catch { return null; }
   }
 
-  function updateTags(){
-    diffLabel.textContent = difficulty.value;
-    beforeLabel.textContent = before.value;
-    afterLabel.textContent = after.value;
+  function syncMeta(){
+    mCat.textContent = "category: " + category.value;
+    mDiff.textContent = "difficulty: " + difficulty.value;
+    mMode.textContent = "mode: " + mode;
 
-    tagPack.textContent = "pack: " + pack.value;
-    tagCat.textContent = category.value;
-    tagDiff.textContent = "d" + difficulty.value;
-    tagMode.textContent = currentMode;
-
-    sharePack.textContent = "pack: " + pack.value;
-    shareCat.textContent = category.value;
+    shareStamp.textContent = mode;
+    shareCat.textContent = "category:" + category.value;
     shareDiff.textContent = "d" + difficulty.value;
-    shareStamp.textContent = (currentMode === "today") ? "today" : "random";
   }
 
-  function setChallenge(ch){
-    currentChallenge = ch;
-    challengeText.textContent = ch.text;
-    shareText.textContent = ch.text;
+  // Wheel spin (pure fun, still deterministic for daily)
+  let spinRotation = 0;
+  function spin(){
+    const ch = pick();
+    current = ch;
 
-    const share = new URL(location.href);
-    share.searchParams.set("c", encodeChallenge(ch));
-    history.replaceState(null, "", share.toString());
-  }
+    // add rotation
+    const extra = 1080 + Math.floor(Math.random() * 720); // 3–5 turns
+    spinRotation = (spinRotation + extra) % 3600;
+    wheel.style.transform = `rotate(${spinRotation}deg)`;
 
-  function filteredPool(){
-    const p = pack.value;
-    const cat = category.value;
-    const diff = parseInt(difficulty.value, 10);
+    // show text slightly after spin begins
+    setTimeout(() => {
+      challengeText.textContent = ch.text;
+      shareText.textContent = ch.text;
 
-    return challenges.filter(c => {
-      if (!packFilters[p](c)) return false;
-      if (cat !== "any" && c.cat !== cat) return false;
-      if (c.diff !== diff) return false;
-      return true;
-    });
-  }
-  function fallbackPool(){
-    const p = pack.value;
-    const cat = category.value;
-    return challenges.filter(c => {
-      if (!packFilters[p](c)) return false;
-      if (cat !== "any" && c.cat !== cat) return false;
-      return true;
-    });
+      const url = new URL(location.href);
+      url.searchParams.set("c", encodeChallenge(ch));
+      history.replaceState(null, "", url.toString());
+
+      toastMsg("Prompt ready.");
+    }, 650);
   }
 
-  function pickRandomChallenge(){
-    let pool = filteredPool();
-    if (!pool.length) pool = fallbackPool();
-    if (!pool.length) pool = challenges.slice();
-    return pool[Math.floor(Math.random() * pool.length)];
-  }
-  function pickTodaysChallenge(){
-    let pool = filteredPool();
-    if (!pool.length) pool = fallbackPool();
-    if (!pool.length) pool = challenges.slice();
-    const seedStr = dayKey() + "|" + pack.value + "|" + category.value + "|" + difficulty.value;
-    return pool[seededIndex(pool.length, seedStr)];
-  }
+  // Logs + game
+  function loadLogs(){ return loadJSON(K_LOGS, []); }
+  function saveLogs(v){ saveJSON(K_LOGS, v); }
 
-  function startTimer(){
-    stopTimer();
-    const minutes = parseInt(timebox.value, 10);
-    if (!minutes){ timerText.textContent = ""; return; }
-    timerEndsAt = Date.now() + minutes * 60 * 1000;
-    const tick = () => {
-      const ms = timerEndsAt - Date.now();
-      if (ms <= 0){
-        timerText.textContent = "Timer done. Go do it.";
-        stopTimer();
-        return;
-      }
-      const m = Math.floor(ms / 60000);
-      const s = Math.floor((ms % 60000) / 1000);
-      timerText.textContent = "Time left: " + m + ":" + String(s).padStart(2,"0");
-    };
-    tick();
-    timer = setInterval(tick, 250);
-  }
-  function stopTimer(){
-    if (timer) clearInterval(timer);
-    timer = null;
-    timerEndsAt = null;
-  }
+  function loadStreak(){ return loadJSON(K_STREAK, 0); }
+  function saveStreak(v){ saveJSON(K_STREAK, v); }
 
-  function updateRejectionStreakOnRejectedLog(){
-    const today = dayKey();
-    const last = localStorage.getItem(LAST_REJ_DAY_KEY);
-    let streak = loadStreak();
-
-    if (!last){
-      streak = 1;
-    } else {
-      const lastDate = new Date(last + "T00:00:00");
-      const todayDate = new Date(today + "T00:00:00");
-      const diffDays = Math.round((todayDate - lastDate) / (24*60*60*1000));
-      if (diffDays === 0){
-        // already counted today
-      } else if (diffDays === 1){
-        streak += 1;
-      } else {
-        streak = 1;
-      }
-    }
-    localStorage.setItem(LAST_REJ_DAY_KEY, today);
-    saveStreak(streak);
+  function loadGame(){
+    return loadJSON(K_GAME, {xp:0, level:1});
   }
-
-  function clearLogFields(){
-    where.value = "";
-    who.value = "";
-    note.value = "";
-    before.value = "3";
-    after.value = "3";
-    beforeLabel.textContent = "3";
-    afterLabel.textContent = "3";
-  }
-
-  function xpForLog(entry){
-    const base = (entry.result === "rejected") ? 25 : 10;
-    const diffBonus = (entry.diff || 3) * 6;
-    const catBonus = (entry.cat === "negotiation" || entry.cat === "career") ? 6 : 0;
-    return base + diffBonus + catBonus;
-  }
+  function saveGame(g){ saveJSON(K_GAME, g); }
 
   function levelForXP(xp){
-    let lvl = 1;
-    let need = 100;
-    let spent = 0;
+    let lvl = 1, need = 120, spent = 0;
     while (xp >= spent + need){
       spent += need;
       lvl += 1;
-      need = Math.floor(need * 1.2) + 20;
+      need = Math.floor(need * 1.22) + 25;
     }
-    return {level: lvl, into: xp - spent, need};
+    return {level:lvl};
   }
 
-  function unlockBadge(id, name){
-    const g = loadGame();
-    if (!g.badges[id]){
-      g.badges[id] = {name, at: nowISO()};
-      saveGame(g);
-      toastMsg("Badge: " + name);
-      confettiBurst();
+  function confettiBurst(){
+    const c = $("confetti");
+    const ctx = c.getContext("2d");
+    const W = c.width = window.innerWidth;
+    const H = c.height = window.innerHeight;
+
+    const parts = Array.from({length: 120}).map(() => ({
+      x: Math.random()*W,
+      y: -20 - Math.random()*H*0.2,
+      r: 3 + Math.random()*4,
+      vx: -2 + Math.random()*4,
+      vy: 3 + Math.random()*5,
+      a: 1,
+      spin: -0.2 + Math.random()*0.4
+    }));
+
+    let t = 0;
+    const colors = ["#ff7a59","#ffb86b","#53e2b0","#ff5b85","#fff2ea"];
+    function draw(){
+      t++;
+      ctx.clearRect(0,0,W,H);
+      for (const p of parts){
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vy += 0.03;
+        p.a -= 0.006;
+        ctx.globalAlpha = Math.max(0,p.a);
+        ctx.save();
+        ctx.translate(p.x,p.y);
+        ctx.rotate(t*p.spin);
+        ctx.fillStyle = colors[(Math.random()*colors.length)|0];
+        ctx.fillRect(-p.r, -p.r, p.r*2, p.r*2);
+        ctx.restore();
+      }
+      if (parts.some(p => p.a > 0 && p.y < H + 40)) requestAnimationFrame(draw);
+      else ctx.clearRect(0,0,W,H);
     }
+    draw();
   }
 
-  function awardXP(amount, reason){
+  function updateStreakOnRejection(){
+    const today = dayKey();
+    const last = localStorage.getItem(K_LAST_REJ_DAY);
+    let s = loadStreak();
+
+    if (!last) s = 1;
+    else {
+      const d0 = new Date(last+"T00:00:00");
+      const d1 = new Date(today+"T00:00:00");
+      const diff = Math.round((d1 - d0) / 86400000);
+      if (diff === 0) { /* no change */ }
+      else if (diff === 1) s += 1;
+      else s = 1;
+    }
+    localStorage.setItem(K_LAST_REJ_DAY, today);
+    saveStreak(s);
+  }
+
+  function awardXP(entry){
     const g = loadGame();
-    g.xp += amount;
+    const base = (entry.result === "rejected") ? 30 : 12;
+    const diffBonus = (entry.diff || 3) * 7;
+    const catBonus = (entry.cat === "negotiation" || entry.cat === "career") ? 8 : 0;
+    const add = base + diffBonus + catBonus;
+
     const before = g.level;
-    const lv = levelForXP(g.xp);
-    g.level = lv.level;
+    g.xp += add;
+    g.level = levelForXP(g.xp).level;
     saveGame(g);
 
     if (g.level > before){
-      toastMsg("Level up: " + before + " -> " + g.level);
       confettiBurst();
-    } else if (reason){
-      toastMsg(reason + " +" + amount + " XP");
+      toastMsg("Level up.");
+    } else {
+      toastMsg("Logged +" + add + " XP");
     }
   }
 
-  function buildDailyQuests(){
-    const today = dayKey();
+  function render(){
+    // stats
+    streakEl.textContent = loadStreak();
     const g = loadGame();
-    if (g.questDay === today && g.quests?.length) return;
+    levelEl.textContent = g.level;
+    xpEl.textContent = g.xp;
 
-    const seed = "quests|" + today;
-    const cats = ["social","help","food","career","negotiation","weird"];
-    const catPick = cats[seededIndex(cats.length, seed)];
-
-    g.questDay = today;
-    g.quests = [
-      {id:"q_rej", title:"Get 1 rejection", desc:"Log at least one Rejected result today.", reward: 60},
-      {id:"q_cat", title:"Try " + catPick, desc:"Log any result in the category of the day.", reward: 40, cat: catPick},
-      {id:"q_hard", title:"Do a 4+ rep", desc:"Log any result at difficulty 4 or 5.", reward: 50}
-    ];
-    g.questDone = g.questDone || {};
-    saveGame(g);
-  }
-
-  function checkQuestCompletionOnLog(){
-    const g = loadGame();
-    if (g.questDay !== dayKey()) buildDailyQuests();
-
-    const today = dayKey();
-    const doneKey = (qid) => `${today}:${qid}`;
-    const markDone = (qid) => { g.questDone[doneKey(qid)] = true; };
-
-    const logs = loadLogs();
-    const todayLogs = logs.filter(l => (l.time || "").slice(0,10) === today);
-
-    if (!g.questDone[doneKey("q_rej")] && todayLogs.some(l => l.result === "rejected")){
-      markDone("q_rej"); awardXP(60, "Quest"); 
-    }
-    const qCat = g.quests?.find(q => q.id === "q_cat")?.cat;
-    if (qCat && !g.questDone[doneKey("q_cat")] && todayLogs.some(l => l.cat === qCat)){
-      markDone("q_cat"); awardXP(40, "Quest");
-    }
-    if (!g.questDone[doneKey("q_hard")] && todayLogs.some(l => (l.diff || 0) >= 4)){
-      markDone("q_hard"); awardXP(50, "Quest");
-    }
-
-    saveGame(g);
-  }
-
-  function renderQuests(){
-    const host = $("quests");
-    if (!host) return;
-
-    buildDailyQuests();
-    const g = loadGame();
-    const today = dayKey();
-    const doneKey = (qid) => `${today}:${qid}`;
-
-    host.innerHTML = (g.quests || []).map(q => {
-      const done = !!g.questDone?.[doneKey(q.id)];
-      return `
-        <div style="padding:12px; border-radius:16px; background:rgba(255,246,240,.05); border:1px solid rgba(255,246,240,.12); display:flex; justify-content:space-between; gap:10px">
-          <div>
-            <div style="font-weight:900">${escapeHtml(q.title)}</div>
-            <div class="muted" style="font-size:12px; margin-top:4px">${escapeHtml(q.desc)} <span class="tag" style="margin-left:6px">+${q.reward} XP</span></div>
-          </div>
-          <div class="tag" style="min-width:70px; text-align:center">${done ? "done" : "open"}</div>
-        </div>
-      `;
-    }).join("");
-  }
-
-  function renderBadges(){
-    const host = $("badges");
-    if (!host) return;
-    const g = loadGame();
-    const all = [
-      {id:"b_first_no", name:"First No"},
-      {id:"b_three_streak", name:"3-day streak"},
-      {id:"b_neg_5", name:"Negotiator"},
-      {id:"b_career_5", name:"Networker"},
-      {id:"b_social_10", name:"Social machine"}
-    ];
-    host.innerHTML = all.map(b => {
-      const have = !!g.badges?.[b.id];
-      return `<span class="tag" style="opacity:${have?1:.45}">${escapeHtml(b.name)}</span>`;
-    }).join("");
-  }
-
-  function renderLevel(){
-    const g = loadGame();
-    const lv = levelForXP(g.xp);
-    levelEl.textContent = String(g.level);
-    xpEl.textContent = String(g.xp);
-    shieldsEl.textContent = String(g.shields || 0);
-
-    xpIntoEl.textContent = String(lv.into);
-    xpNeedEl.textContent = String(lv.need);
-    const pct = Math.max(0, Math.min(100, Math.round((lv.into / lv.need) * 100)));
-    xpFill.style.width = pct + "%";
-  }
-
-  function renderStreakHint(){
-    const today = dayKey();
-    const last = localStorage.getItem(LAST_REJ_DAY_KEY);
-    if (!last){ streakHint.textContent = "Log 1 rejection today to start."; return; }
-    if (last === today){ streakHint.textContent = "Counted for today. Want another one?"; return; }
-    const lastDate = new Date(last + "T00:00:00");
-    const todayDate = new Date(today + "T00:00:00");
-    const diffDays = Math.round((todayDate - lastDate) / (24*60*60*1000));
-    streakHint.textContent = (diffDays === 1) ? "Log 1 rejection today to extend." : "Log 1 rejection today to restart.";
-  }
-
-  function renderLogs(logs){
+    // logs
+    const logs = loadLogs().slice().reverse().slice(0, 10);
     if (!logs.length){
-      logBody.innerHTML = `<tr><td colspan="3" class="muted">No logs yet.</td></tr>`;
+      logBody.innerHTML = `<tr><td colspan="3" style="color:var(--muted)">No logs yet.</td></tr>`;
       return;
     }
-    const rows = logs.slice().reverse().slice(0, 12).map(l => {
+    logBody.innerHTML = logs.map(l => {
       const dt = new Date(l.time);
       const when = dt.toLocaleString([], {month:"short", day:"2-digit", hour:"2-digit", minute:"2-digit"});
-      const res = (l.result === "rejected") ? "Rejected" : "Accepted";
+      const res = l.result === "rejected" ? "Rejected" : "Accepted";
       return `
         <tr>
-          <td>${escapeHtml(when)}</td>
-          <td>
-            <div style="font-weight:900">${escapeHtml(l.challenge)}</div>
-            <div class="muted" style="margin-top:6px; display:flex; gap:6px; flex-wrap:wrap">
-              <span class="tag">${escapeHtml(l.cat)}</span>
-              <span class="tag">d${escapeHtml(String(l.diff))}</span>
-              ${l.where ? `<span class="tag">${escapeHtml(l.where)}</span>` : ""}
-            </div>
-            ${l.note ? `<div class="muted" style="margin-top:6px">${escapeHtml(l.note)}</div>` : ""}
-          </td>
+          <td>${when}</td>
+          <td style="font-weight:800">${l.challenge}</td>
           <td>${res}</td>
         </tr>
       `;
     }).join("");
-    logBody.innerHTML = rows;
   }
 
-  function updateStats(){
-    maybeGrantWeeklyShield();
+  function log(result){
+    if (!current){
+      toastMsg("Spin first.");
+      return;
+    }
     const logs = loadLogs();
-    totalEl.textContent = logs.length;
+    const entry = {
+      time: new Date().toISOString(),
+      result,
+      mode,
+      cat: current.cat,
+      diff: current.diff,
+      challenge: current.text,
+      where: where.value.trim(),
+      who: who.value.trim(),
+      note: note.value.trim()
+    };
+    logs.push(entry);
+    saveLogs(logs);
 
-    const rejected = logs.filter(x => x.result === "rejected").length;
-    const rate = logs.length ? Math.round((rejected / logs.length) * 100) : 0;
-    rateEl.textContent = rate + "%";
+    if (result === "rejected") updateStreakOnRejection();
+    awardXP(entry);
 
-    streakEl.textContent = loadStreak();
+    where.value = "";
+    who.value = "";
+    note.value = "";
 
-    renderLogs(logs);
-    renderLevel();
-    renderQuests();
-    renderBadges();
-    renderStreakHint();
+    render();
   }
 
-  async function copyCurrentLink(){
-    const url = location.href;
-    try{ await navigator.clipboard.writeText(url); toastMsg("Link copied."); }
-    catch { prompt("Copy this link:", url); }
+  // Export + share
+  function exportCSV(){
+    const logs = loadLogs();
+    if (!logs.length){ toastMsg("Nothing to export."); return; }
+
+    const header = ["time_iso","result","mode","category","difficulty","challenge","where","who","note"];
+    const rows = logs.map(l => [
+      l.time, l.result, l.mode, l.cat, String(l.diff),
+      (l.challenge||"").replaceAll('"','""'),
+      (l.where||"").replaceAll('"','""'),
+      (l.who||"").replaceAll('"','""'),
+      (l.note||"").replaceAll('"','""')
+    ]);
+
+    const csv = [header.join(","), ...rows.map(r => r.map(v => `"${v}"`).join(","))].join("\n");
+    const blob = new Blob([csv], {type:"text/csv;charset=utf-8"});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "rejection-challenge-logs.csv";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
   }
 
   async function shareApp(){
     const url = location.origin + location.pathname;
     if (navigator.share){
-      try{ await navigator.share({title:"Rejection Challenge", text:"Try this:", url}); } catch {}
+      try { await navigator.share({title:"Rejection Challenge", text:"Spin a prompt and log it:", url}); } catch {}
     } else {
-      try{ await navigator.clipboard.writeText(url); toastMsg("App link copied."); }
-      catch { prompt("Copy this app link:", url); }
+      try { await navigator.clipboard.writeText(url); toastMsg("Link copied."); }
+      catch { prompt("Copy this link:", url); }
     }
   }
 
-  async function renderShareCardToCanvas(){
-    await new Promise(r => setTimeout(r, 50));
-    const canvas = await html2canvas(shareCard, {backgroundColor: null, scale: 2});
-    return canvas;
+  async function copyLink(){
+    const url = location.href;
+    try { await navigator.clipboard.writeText(url); toastMsg("Copied."); }
+    catch { prompt("Copy:", url); }
   }
 
-  async function copyShareCardAsImage(){
-    if (!currentChallenge){ toastMsg("Generate a prompt first."); return; }
+  async function renderShareCard(){
+    await new Promise(r => setTimeout(r, 30));
+    return html2canvas(shareCard, {backgroundColor: null, scale: 2});
+  }
+  async function copyShareImage(){
+    if (!current){ toastMsg("Spin first."); return; }
     try{
-      const canvas = await renderShareCardToCanvas();
+      const canvas = await renderShareCard();
       const blob = await new Promise(res => canvas.toBlob(res, "image/png"));
-      if (!blob) throw new Error("No image blob");
+      if (!blob) throw new Error("no blob");
 
       if (navigator.clipboard && window.ClipboardItem){
         await navigator.clipboard.write([new ClipboardItem({"image/png": blob})]);
-        toastMsg("Copied.");
+        toastMsg("Image copied.");
       } else {
-        toastMsg("Clipboard not supported. Use Download.");
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "rejection-card.png";
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+        toastMsg("Downloaded.");
       }
     } catch {
-      toastMsg("Couldn’t copy. Use Download.");
+      toastMsg("Could not copy. Try download.");
     }
   }
-
-  async function downloadShareCard(){
-    if (!currentChallenge){ toastMsg("Generate a prompt first."); return; }
-    const canvas = await renderShareCardToCanvas();
+  async function downloadShareImage(){
+    if (!current){ toastMsg("Spin first."); return; }
+    const canvas = await renderShareCard();
     const url = canvas.toDataURL("image/png");
     const a = document.createElement("a");
     a.href = url;
@@ -1188,174 +1079,100 @@
     toastMsg("Downloaded.");
   }
 
-  function exportCSV(){
-    const logs = loadLogs();
-    if (!logs.length){ toastMsg("Nothing to export yet."); return; }
-
-    const header = ["time_iso","result","mode","pack","category","difficulty","challenge","where","who","before","after","note"];
-    const rows = logs.map(l => [
-      l.time, l.result, l.mode || "", l.pack || "", l.cat, String(l.diff),
-      (l.challenge || "").replaceAll('"','""'),
-      (l.where || "").replaceAll('"','""'),
-      (l.who || "").replaceAll('"','""'),
-      String(l.before ?? ""), String(l.after ?? ""),
-      (l.note || "").replaceAll('"','""')
-    ]);
-
-    const csv = [header.join(","), ...rows.map(r => r.map(v => `"${v}"`).join(","))].join("\n");
-    const blob = new Blob([csv], {type:"text/csv;charset=utf-8"});
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "rejection-logs.csv";
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    URL.revokeObjectURL(url);
-  }
-
-  function spinEffect(on){
-    challengeBox.classList.toggle("spinning", !!on);
-    spinTicker.textContent = on ? "spinning…" : "";
-  }
-
-  function generate(mode){
-    currentMode = mode;
-    updateTags();
-    const ch = (mode === "today") ? pickTodaysChallenge() : pickRandomChallenge();
-    setChallenge(ch);
-    startTimer();
-    updateTags();
-  }
-
-  function spinGenerate(){
-    spinEffect(true);
-    const steps = 9;
-    let i = 0;
-    const spin = () => {
-      i++;
-      const ch = pickRandomChallenge();
-      challengeText.textContent = ch.text;
-      shareText.textContent = ch.text;
-      if (i < steps){
-        setTimeout(spin, 70 + i*18);
-      } else {
-        spinEffect(false);
-        currentMode = "random";
-        setChallenge(ch);
-        startTimer();
-        updateTags();
-      }
-    };
-    spin();
-  }
-
-  function logResult(result){
-    if (!currentChallenge){ toastMsg("Generate a prompt first."); return; }
-    const logs = loadLogs();
-    const entry = {
-      time: nowISO(),
-      result,
-      mode: currentMode,
-      pack: pack.value,
-      cat: currentChallenge.cat,
-      diff: currentChallenge.diff,
-      challenge: currentChallenge.text,
-      where: where.value.trim(),
-      who: who.value.trim(),
-      before: parseInt(before.value,10),
-      after: parseInt(after.value,10),
-      note: note.value.trim()
-    };
-    logs.push(entry);
-    saveLogs(logs);
-
-    if (result === "rejected") updateRejectionStreakOnRejectedLog();
-
-    awardXP(xpForLog(entry), "Logged");
-    checkQuestCompletionOnLog();
-
-    const allLogs = loadLogs();
-    if (allLogs.some(l => l.result === "rejected")) unlockBadge("b_first_no", "First No");
-    if (loadStreak() >= 3) unlockBadge("b_three_streak", "3-day streak");
-    if (allLogs.filter(l => l.cat === "negotiation").length >= 5) unlockBadge("b_neg_5", "Negotiator");
-    if (allLogs.filter(l => l.cat === "career").length >= 5) unlockBadge("b_career_5", "Networker");
-    if (allLogs.filter(l => l.cat === "social").length >= 10) unlockBadge("b_social_10", "Social machine");
-
-    clearLogFields();
-    updateStats();
-  }
-
   function resetAll(){
-    if (!confirm("Reset everything?")) return;
-    localStorage.removeItem(STORAGE_KEY);
-    localStorage.removeItem(STREAK_KEY);
-    localStorage.removeItem(LAST_REJ_DAY_KEY);
-    localStorage.removeItem(GAME_KEY);
+    if (!confirm("Reset logs and stats?")) return;
+    localStorage.removeItem(K_LOGS);
+    localStorage.removeItem(K_STREAK);
+    localStorage.removeItem(K_LAST_REJ_DAY);
+    localStorage.removeItem(K_GAME);
+    history.replaceState(null,"", location.origin + location.pathname);
+    current = null;
+    challengeText.textContent = "Your prompt will show up here.";
+    shareText.textContent = "Spin to get a prompt.";
     toastMsg("Reset.");
-    updateStats();
+    render();
   }
 
-  function syncMeta(){ updateTags(); }
-  difficulty.addEventListener("input", syncMeta);
-  before.addEventListener("input", syncMeta);
-  after.addEventListener("input", syncMeta);
-  category.addEventListener("change", syncMeta);
-  pack.addEventListener("change", syncMeta);
-  timebox.addEventListener("change", () => startTimer());
+  // Mode toggle
+  function setMode(next){
+    mode = next;
+    modeDaily.classList.toggle("on", mode === "daily");
+    modeRandom.classList.toggle("on", mode === "random");
+    $("wheelSub").textContent = (mode === "daily")
+      ? "Daily = same for everyone today"
+      : "Random = fresh roll each time";
+    syncMeta();
+    if (current){
+      // update URL payload mode without forcing new prompt
+      const url = new URL(location.href);
+      url.searchParams.set("c", encodeChallenge(current));
+      history.replaceState(null, "", url.toString());
+    }
+  }
 
-  newBtn.addEventListener("click", () => generate("random"));
-  todayBtn.addEventListener("click", () => generate("today"));
-  spinBtn.addEventListener("click", spinGenerate);
-  startTodayBtn.addEventListener("click", () => { location.hash="#tracker"; generate("today"); });
+  // Wiring
+  modeDaily.addEventListener("click", () => { setMode("daily"); modeDaily.classList.add("on"); modeRandom.classList.remove("on"); });
+  modeRandom.addEventListener("click", () => { setMode("random"); modeRandom.classList.add("on"); modeDaily.classList.remove("on"); });
 
-  acceptedBtn.addEventListener("click", () => logResult("accepted"));
-  rejectedBtn.addEventListener("click", () => logResult("rejected"));
+  spinBtn.addEventListener("click", spin);
+  wheel.addEventListener("click", spin);
+
+  category.addEventListener("change", () => { syncMeta(); });
+  difficulty.addEventListener("input", () => { syncMeta(); });
+
+  acceptedBtn.addEventListener("click", () => log("accepted"));
+  rejectedBtn.addEventListener("click", () => log("rejected"));
+
   exportBtn.addEventListener("click", exportCSV);
+  shareBtn.addEventListener("click", shareApp);
   resetBtn.addEventListener("click", resetAll);
-  copyLinkBtn.addEventListener("click", copyCurrentLink);
-  shareAppBtn.addEventListener("click", shareApp);
-  copyImageBtn.addEventListener("click", copyShareCardAsImage);
-  downloadImageBtn.addEventListener("click", downloadShareCard);
+  copyLinkBtn.addEventListener("click", copyLink);
 
+  copyImgBtn.addEventListener("click", copyShareImage);
+  downloadImgBtn.addEventListener("click", downloadShareImage);
+
+  // Shortcuts
   document.addEventListener("keydown", (e) => {
     const k = e.key.toLowerCase();
-    if (k === "g") generate("random");
-    if (k === "t") generate("today");
-    if (k === "r") logResult("rejected");
+    if (k === " "){ e.preventDefault(); spin(); }
+    if (k === "r") log("rejected");
+    if (k === "a") log("accepted");
   });
 
-  document.querySelectorAll("button[data-copy]").forEach(btn => {
-    btn.addEventListener("click", async () => {
-      const key = btn.getAttribute("data-copy");
-      const map = {
-        coffee: "Quick one — would you be open to a 10-minute coffee chat sometime this week? Totally okay if not.",
-        no: "All good — thanks anyway. If you’re open to it, what’s one thing I could improve next time?"
-      };
-      const text = map[key] || "";
-      try{ await navigator.clipboard.writeText(text); toastMsg("Copied."); }
-      catch { prompt("Copy this:", text); }
-    });
-  });
+  // First-time modal
+  function showModal(){
+    if (localStorage.getItem(K_HIDE_MODAL) === "1") return;
+    modalBack.style.display = "flex";
+  }
+  function hideModal(perma){
+    modalBack.style.display = "none";
+    if (perma) localStorage.setItem(K_HIDE_MODAL, "1");
+  }
+  modalGo.addEventListener("click", () => hideModal(false));
+  modalSkip.addEventListener("click", () => hideModal(true));
+  modalBack.addEventListener("click", (e) => { if (e.target === modalBack) hideModal(false); });
 
+  // Load from shared link if present
   const params = new URLSearchParams(location.search);
   const c = params.get("c");
   if (c){
     const decoded = decodeChallenge(c);
     if (decoded){
-      currentChallenge = decoded;
+      mode = (decoded.mode === "random") ? "random" : "daily";
+      category.value = ["any","food","social","help","negotiation","weird","career"].includes(decoded.fCat) ? decoded.fCat : "any";
+      difficulty.value = String(Math.min(5, Math.max(1, parseInt(decoded.fDiff || 3, 10) || 3)));
+
+      current = {cat: decoded.cat, diff: decoded.diff, text: decoded.text};
       challengeText.textContent = decoded.text;
       shareText.textContent = decoded.text;
-
-      if (decoded.pack && packFilters[decoded.pack]) pack.value = decoded.pack;
-      category.value = ["food","social","help","negotiation","weird","career"].includes(decoded.cat) ? decoded.cat : "any";
-      difficulty.value = String(Math.min(5, Math.max(1, parseInt(decoded.diff || 3,10) || 3)));
-      currentMode = (decoded.mode === "today") ? "today" : "random";
     }
   }
 
-  updateTags();
-  updateStats();
+  // Init
+  syncMeta();
+  setMode(mode);
+  render();
+  showModal();
 })();
 </script>
 </body>
